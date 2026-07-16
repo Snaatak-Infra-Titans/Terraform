@@ -1,9 +1,9 @@
-aws_region  = "us-east-1"
+aws_region = "us-east-1"
 
 environment = "dev"
 
 application = "otms"
 
-owner        = "Infra-Titans"
+owner = "Infra-Titans"
 
-cost_center  = "Snaatak"
+cost_center = "Snaatak"
