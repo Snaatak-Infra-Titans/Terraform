@@ -1,0 +1,11 @@
+aws_region       = "us-east-1"
+environment      = "dev-otms"
+tag_application  = "Attendance-App"
+tag_owner        = "Bhawna"
+tag_costcenter   = "Dev-Cost-Center"
+instance_type    = "t2.micro"
+ami_id           = "ami-0f5ee92e2d63afc18"
+key_name         = "sprint_3.1"
+min_size         = 1
+max_size         = 3
+desired_capacity = 1
