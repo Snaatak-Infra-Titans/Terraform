@@ -1,0 +1,5 @@
+aws_region      = "us-east-1"
+environment     = "dev-otms"
+tag_application = "Attendance-App"
+tag_owner       = "Bhawna"
+tag_costcenter  = "Dev-Cost-Center"
