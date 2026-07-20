@@ -33,12 +33,17 @@ variable "application" {
   type        = string
 }
 
+variable "alb_name" {
+  description = "Name of the existing Application Load Balancer"
+  type        = string
+}
+
 variable "hosted_zone_name" {
-  description = "Name of the existing Route 53 hosted zone"
+  description = "Name of the public Route 53 hosted zone"
   type        = string
 }
 
 variable "domain_name" {
-  description = "Domain name that will point to the Application Load Balancer"
+  description = "DNS record that will point to the existing ALB"
   type        = string
 }
