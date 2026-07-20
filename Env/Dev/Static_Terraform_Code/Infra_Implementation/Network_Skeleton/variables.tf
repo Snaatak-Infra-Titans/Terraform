@@ -14,7 +14,7 @@ variable "application" {
 }
 
 variable "owner" {
-  description = "Name of the owner"
+  description = "Infrastructure owner"
   type        = string
 }
 
@@ -28,20 +28,62 @@ variable "vpc_name" {
   type        = string
 }
 
-variable "vpc_id" {
-  description = "Existing VPC ID. Use this if you want exact lookup"
+variable "public_subnet_a_name" {
+  description = "Name tag of existing public subnet A"
   type        = string
-  default     = ""
 }
 
-variable "subnet_newbits" {
-  description = "Number of bits to add for subnetting"
+variable "public_subnet_b_name" {
+  description = "Name tag of existing public subnet B"
+  type        = string
+}
+
+variable "frontend_port" {
+  description = "Frontend application port"
   type        = number
-  default     = 3
 }
 
-variable "azs" {
-  description = "Availability zones suffixes to use"
-  type        = list(string)
-  default     = ["a", "b"]
+variable "employee_port" {
+  description = "Employee API port"
+  type        = number
+}
+
+variable "attendance_port" {
+  description = "Attendance API port"
+  type        = number
+}
+
+variable "salary_port" {
+  description = "Salary API port"
+  type        = number
+}
+
+variable "notification_port" {
+  description = "Notification API port"
+  type        = number
+}
+
+variable "frontend_health_check" {
+  description = "Frontend target group health-check path"
+  type        = string
+}
+
+variable "employee_health_check" {
+  description = "Employee API target group health-check path"
+  type        = string
+}
+
+variable "attendance_health_check" {
+  description = "Attendance API target group health-check path"
+  type        = string
+}
+
+variable "salary_health_check" {
+  description = "Salary API target group health-check path"
+  type        = string
+}
+
+variable "notification_health_check" {
+  description = "Notification API target group health-check path"
+  type        = string
 }
