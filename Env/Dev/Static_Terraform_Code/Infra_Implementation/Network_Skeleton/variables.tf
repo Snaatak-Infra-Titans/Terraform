@@ -8,13 +8,8 @@ variable "environment" {
   type        = string
 }
 
-variable "vpc_cidr" {
-  description = "CIDR block for VPC"
-  type        = string
-}
-
 variable "vpc_name" {
-  description = "Name of the VPC"
+  description = "Name tag of the existing VPC"
   type        = string
 }
 
@@ -24,11 +19,29 @@ variable "owner" {
 }
 
 variable "cost_center" {
-  description = "Name of the owner"
+  description = "Cost center"
   type        = string
 }
 
 variable "application" {
-  description = "Name of the owner"
+  description = "Application name"
   type        = string
+}
+
+variable "vpc_id" {
+  description = "Existing VPC ID. Use this if you want exact lookup instead of tag lookup"
+  type        = string
+  default     = ""
+}
+
+variable "subnet_newbits" {
+  description = "Extra bits added to VPC CIDR for subnet sizing"
+  type        = number
+  default     = 3
+}
+
+variable "az_suffix" {
+  description = "Availability zone suffix like a, b, c"
+  type        = string
+  default     = "a"
 }
