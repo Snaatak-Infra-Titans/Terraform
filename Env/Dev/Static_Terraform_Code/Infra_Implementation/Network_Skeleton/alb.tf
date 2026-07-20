@@ -1,3 +1,4 @@
+# Existing VPC lookup using Name tag
 data "aws_vpc" "selected" {
   filter {
     name   = "tag:Name"
@@ -32,8 +33,8 @@ data "aws_subnet" "public_b" {
 }
 
 locals {
-  alb_name              = "${var.environment}-${var.application}-alb"
-  alb_security_group    = "${var.environment}-${var.application}-alb-sg"
+  alb_name           = "${var.environment}-${var.application}-alb"
+  alb_security_group = "${var.environment}-${var.application}-alb-sg"
 
   target_groups = {
     frontend = {
@@ -105,7 +106,7 @@ resource "aws_security_group" "alb" {
   }
 }
 
-# Allow HTTP from the internet
+# Allow HTTP traffic from the internet
 resource "aws_vpc_security_group_ingress_rule" "http" {
   security_group_id = aws_security_group.alb.id
   description       = "Allow HTTP traffic from the internet"
@@ -116,8 +117,7 @@ resource "aws_vpc_security_group_ingress_rule" "http" {
   ip_protocol = "tcp"
 }
 
-# Allow HTTPS from the internet
-# HTTPS listener will be added later
+# Allow HTTPS traffic from the internet
 resource "aws_vpc_security_group_ingress_rule" "https" {
   security_group_id = aws_security_group.alb.id
   description       = "Allow HTTPS traffic from the internet"
@@ -128,7 +128,7 @@ resource "aws_vpc_security_group_ingress_rule" "https" {
   ip_protocol = "tcp"
 }
 
-# Allow ALB outbound traffic
+# Allow outbound traffic from ALB
 resource "aws_vpc_security_group_egress_rule" "all" {
   security_group_id = aws_security_group.alb.id
   description       = "Allow outbound traffic from the ALB"
@@ -195,12 +195,32 @@ resource "aws_lb_target_group" "services" {
   }
 }
 
-# HTTP listener
-# Requests that do not match an API path go to frontend
+# HTTP listener redirects all traffic to HTTPS
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.this.arn
   port              = 80
   protocol          = "HTTP"
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}
+
+# HTTPS listener
+# Requests that do not match an API path go to frontend
+resource "aws_lb_listener" "https" {
+  load_balancer_arn = aws_lb.this.arn
+  port              = 443
+  protocol          = "HTTPS"
+
+  certificate_arn = var.certificate_arn
+  ssl_policy      = var.ssl_policy
 
   default_action {
     type             = "forward"
@@ -208,11 +228,11 @@ resource "aws_lb_listener" "http" {
   }
 }
 
-# Path-based listener rules
+# Path-based routing rules on HTTPS listener
 resource "aws_lb_listener_rule" "services" {
   for_each = local.listener_rules
 
-  listener_arn = aws_lb_listener.http.arn
+  listener_arn = aws_lb_listener.https.arn
   priority     = each.value.priority
 
   action {
