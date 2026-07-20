@@ -8,8 +8,8 @@ variable "environment" {
   type        = string
 }
 
-variable "vpc_name" {
-  description = "Name tag of the existing VPC"
+variable "application" {
+  description = "Application name"
   type        = string
 }
 
@@ -23,25 +23,25 @@ variable "cost_center" {
   type        = string
 }
 
-variable "application" {
-  description = "Application name"
+variable "vpc_name" {
+  description = "Name tag of the existing VPC"
   type        = string
 }
 
 variable "vpc_id" {
-  description = "Existing VPC ID. Use this if you want exact lookup instead of tag lookup"
+  description = "Existing VPC ID. Use this if you want exact lookup"
   type        = string
   default     = ""
 }
 
 variable "subnet_newbits" {
-  description = "Extra bits added to VPC CIDR for subnet sizing"
+  description = "Number of bits to add for subnetting"
   type        = number
   default     = 3
 }
 
-variable "az_suffix" {
-  description = "Availability zone suffix like a, b, c"
-  type        = string
-  default     = "a"
+variable "azs" {
+  description = "Availability zones suffixes to use"
+  type        = list(string)
+  default     = ["a", "b"]
 }
