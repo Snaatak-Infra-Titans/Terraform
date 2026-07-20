@@ -14,3 +14,6 @@ hosted_zone_name = "otms.online"
 
 # New DNS record pointing to the existing ALB
 domain_name = "www.otms.online"
+
+vpc_cidr  = "10.0.0.0/24"
+vpc_name  = "dev-otms-vpc"
