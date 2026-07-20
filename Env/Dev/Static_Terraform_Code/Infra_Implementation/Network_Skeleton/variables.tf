@@ -32,3 +32,13 @@ variable "application" {
   description = "Name of the owner"
   type        = string
 }
+
+variable "hosted_zone_name" {
+  description = "Name of the existing Route 53 hosted zone"
+  type        = string
+}
+
+variable "domain_name" {
+  description = "Domain name that will point to the Application Load Balancer"
+  type        = string
+}
