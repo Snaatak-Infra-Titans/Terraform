@@ -1,6 +1,5 @@
-############################################################
 # Existing VPC
-############################################################
+
 data "aws_vpc" "existing" {
   filter {
     name   = "tag:Name"
@@ -8,9 +7,8 @@ data "aws_vpc" "existing" {
   }
 }
 
-############################################################
 # Existing Internet Gateway
-############################################################
+
 data "aws_internet_gateway" "existing" {
   filter {
     name   = "attachment.vpc-id"
@@ -18,9 +16,9 @@ data "aws_internet_gateway" "existing" {
   }
 }
 
-############################################################
+
 # Existing Public Subnets
-############################################################
+
 data "aws_subnets" "public" {
   filter {
     name   = "vpc-id"
@@ -33,9 +31,9 @@ data "aws_subnets" "public" {
   }
 }
 
-############################################################
+
 # Existing Private Route Table
-############################################################
+
 data "aws_route_table" "private" {
   vpc_id = data.aws_vpc.existing.id
 
@@ -45,9 +43,9 @@ data "aws_route_table" "private" {
   }
 }
 
-############################################################
+
 # Elastic IP
-############################################################
+
 resource "aws_eip" "nat_eip" {
   domain = "vpc"
 
@@ -60,9 +58,9 @@ resource "aws_eip" "nat_eip" {
   }
 }
 
-############################################################
+
 # NAT Gateway
-############################################################
+
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.nat_eip.id
   subnet_id     = data.aws_subnets.public.ids[0]
@@ -78,9 +76,9 @@ resource "aws_nat_gateway" "nat" {
   depends_on = [data.aws_internet_gateway.existing]
 }
 
-############################################################
+
 # Default Route
-############################################################
+
 resource "aws_route" "private_nat_route" {
   route_table_id         = data.aws_route_table.private.id
   destination_cidr_block = "0.0.0.0/0"
