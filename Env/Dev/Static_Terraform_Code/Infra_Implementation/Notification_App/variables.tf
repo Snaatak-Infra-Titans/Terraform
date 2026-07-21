@@ -1,39 +1,31 @@
 variable "aws_region" {
-  type    = string
-  default = "us-east-1"
+  type = string
 }
 
 variable "environment" {
-  type    = string
-  default = "dev"
+  type = string
 }
 
 variable "application" {
-  type    = string
-  default = "otms"
+  type = string
 }
 
 variable "owner" {
-  type    = string
-  default = "Infra-Titans"
+  type = string
 }
 
 variable "cost_center" {
-  type    = string
-  default = "Snaatak"
+  type = string
 }
 
 variable "vpc_name" {
-  type    = string
-  default = "dev-otms-vpc"
+  type = string
 }
 
 variable "key_name" {
-  type    = string
-  default = "dev-otms-key"
+  type = string
 }
 
 variable "instance_type" {
-  type    = string
-  default = "t3.small"
-}
+  type = string
+}M avilaMessage Shivam Uniyal
