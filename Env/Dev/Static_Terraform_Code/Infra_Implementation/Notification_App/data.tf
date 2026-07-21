@@ -37,3 +37,18 @@ data "aws_ami" "ubuntu" {
     values = ["hvm"]
   }
 }
+
+# --- Shivam's New Data Sources ---
+data "aws_security_group" "alb_sg" {
+  filter {
+    name   = "tag:Name"
+    values = ["*alb*"]
+  }
+}
+
+data "aws_security_group" "bastion_sg" {
+  filter {
+    name   = "tag:Name"
+    values = ["*bastion*"]
+  }
+}
