@@ -49,3 +49,13 @@ variable "cpu_target_value" {
   type        = number
   description = "Target CPU utilization percentage for ASG scaling"
 }
+
+variable "app_host_header" {
+  type        = string
+  description = "Host header for routing traffic to the Notification app"
+}
+
+variable "listener_rule_priority" {
+  type        = number
+  description = "Priority for the ALB listener rule"
+}
