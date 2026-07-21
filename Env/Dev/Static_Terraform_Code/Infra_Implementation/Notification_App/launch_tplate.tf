@@ -15,7 +15,7 @@ resource "aws_launch_template" "notification_lt" {
     }
   }
 
-  # Terraform best practice: Naya template banane ke baad hi purana delete ho
+  
   lifecycle {
     create_before_destroy = true
   }
