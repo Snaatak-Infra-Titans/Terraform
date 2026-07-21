@@ -1,51 +1,6 @@
-# Existing VPC
-
-data "aws_vpc" "existing" {
-  filter {
-    name   = "tag:Name"
-    values = [var.vpc_name]
-  }
-}
-
-# Existing Internet Gateway
-
-data "aws_internet_gateway" "existing" {
-  filter {
-    name   = "attachment.vpc-id"
-    values = [data.aws_vpc.existing.id]
-  }
-}
-
-
-# Existing Public Subnets
-
-data "aws_subnets" "public" {
-  filter {
-    name   = "vpc-id"
-    values = [data.aws_vpc.existing.id]
-  }
-
-  filter {
-    name   = "tag:Tier"
-    values = ["public"]
-  }
-}
-
-
-# Existing Private Route Table
-
-data "aws_route_table" "private" {
-  vpc_id = data.aws_vpc.existing.id
-
-  filter {
-    name   = "tag:Tier"
-    values = ["private"]
-  }
-}
-
-
-# Elastic IP
-
+# -----------------------------------------------------------
+# Elastic IP for NAT Gateway
+# -----------------------------------------------------------
 resource "aws_eip" "nat_eip" {
   domain = "vpc"
 
@@ -58,12 +13,14 @@ resource "aws_eip" "nat_eip" {
   }
 }
 
-
+# -----------------------------------------------------------
 # NAT Gateway
-
+# -----------------------------------------------------------
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.nat_eip.id
-  subnet_id     = data.aws_subnets.public.ids[0]
+  
+  # Link directly to the FIRST public subnet Pawan created (index "a")
+  subnet_id     = aws_subnet.public["a"].id
 
   tags = {
     Name        = "${var.environment}_${var.application}_nat_gw"
@@ -73,14 +30,16 @@ resource "aws_nat_gateway" "nat" {
     CostCenter  = var.cost_center
   }
 
-  depends_on = [data.aws_internet_gateway.existing]
+  # EXPLICIT DEPENDENCY: NAT Gateway requires an IGW to exist in the VPC first!
+  depends_on = [aws_internet_gateway.main_igw]
 }
 
-
-# Default Route
-
+# -----------------------------------------------------------
+# Route: Point Private Traffic to the NAT Gateway
+# -----------------------------------------------------------
 resource "aws_route" "private_nat_route" {
-  route_table_id         = data.aws_route_table.private.id
+  # Link directly to Bhawna's private route table
+  route_table_id         = aws_route_table.private.id
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = aws_nat_gateway.nat.id
 }
