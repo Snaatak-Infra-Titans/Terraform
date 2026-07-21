@@ -6,3 +6,5 @@ owner       = "Infra-Titans"
 
 vpc_cidr    = "10.0.0.0/24"
 vpc_name    = "dev-otms-vpc"
+# --- DEEPAK'S IGW VARIABLES ---
+igw_name = "dev-otms-igw"
