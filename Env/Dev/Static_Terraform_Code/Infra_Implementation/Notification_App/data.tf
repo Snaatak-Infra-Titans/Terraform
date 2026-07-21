@@ -38,7 +38,6 @@ data "aws_ami" "ubuntu" {
   }
 }
 
-# --- Shivam's New Data Sources ---
 data "aws_security_group" "alb_sg" {
   filter {
     name   = "tag:Name"
