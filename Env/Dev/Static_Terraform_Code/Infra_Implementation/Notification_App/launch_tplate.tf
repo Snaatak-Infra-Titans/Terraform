@@ -1,6 +1,6 @@
 resource "aws_launch_template" "notification_lt" {
   name_prefix   = "${var.environment}-${var.application}-notification-lt-"
-  image_id      = data.aws_ami.ubuntu.id
+  image_id      = data.aws_ami.notification_app.id
   instance_type = var.instance_type
   key_name      = data.aws_key_pair.existing_key.key_name
 
