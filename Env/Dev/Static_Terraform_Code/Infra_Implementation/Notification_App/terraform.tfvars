@@ -7,5 +7,5 @@ vpc_name      = "dev-otms-vpc"
 key_name      = "dev-otms-key"
 instance_type = "t3.small"
 asg_min_size         = 1
-asg_max_size         = 3
-asg_desired_capacity = 2
+asg_max_size         = 1
+asg_desired_capacity = 1
