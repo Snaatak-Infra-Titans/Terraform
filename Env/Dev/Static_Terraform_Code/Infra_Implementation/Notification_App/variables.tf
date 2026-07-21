@@ -1,47 +1,39 @@
 variable "aws_region" {
-  type = string
-}
-
-variable "application" {
-  type = string
+  type    = string
+  default = "us-east-1"
 }
 
 variable "environment" {
-  type = string
+  type    = string
+  default = "dev"
+}
+
+variable "application" {
+  type    = string
+  default = "otms"
 }
 
 variable "owner" {
-  type = string
+  type    = string
+  default = "Infra-Titans"
 }
 
 variable "cost_center" {
-  type = string
+  type    = string
+  default = "Snaatak"
 }
 
-variable "instance_name" {
-  type = string
-}
-
-variable "ami_id" {
-  type = string
-}
-
-variable "instance_type" {
-  type = string
+variable "vpc_name" {
+  type    = string
+  default = "dev-otms-vpc"
 }
 
 variable "key_name" {
-  type = string
+  type    = string
+  default = "dev-otms-key"
 }
 
-variable "subnet_id" {
-  type = string
-}
-
-variable "security_group_ids" {
-  type = list(string)
-}
-
-variable "root_volume_size" {
-  type = number
+variable "instance_type" {
+  type    = string
+  default = "t3.small"
 }
