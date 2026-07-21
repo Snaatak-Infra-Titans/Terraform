@@ -23,3 +23,5 @@ employee_health_check     = "/"
 attendance_health_check   = "/"
 salary_health_check       = "/"
 notification_health_check = "/"
+# --- SHIVAM'S SSH KEY VARIABLES ---
+key_name = "dev-otms-key"
