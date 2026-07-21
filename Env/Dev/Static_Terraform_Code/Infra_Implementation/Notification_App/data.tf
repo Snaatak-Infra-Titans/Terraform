@@ -15,10 +15,6 @@ data "aws_subnets" "backend_subnets" {
   }
 }
 
-data "aws_lb_target_group" "notification_tg" {
-  name = "${var.environment}-${var.application}-notification-tg"
-}
-
 data "aws_key_pair" "existing_key" {
   key_name = var.key_name
 }
