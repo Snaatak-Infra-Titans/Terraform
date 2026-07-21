@@ -50,9 +50,9 @@ variable "cpu_target_value" {
   description = "Target CPU utilization percentage for ASG scaling"
 }
 
-variable "app_host_header" {
+variable "app_path_pattern" {
   type        = string
-  description = "Host header for routing traffic to the Notification app"
+  description = "Path pattern for routing API traffic to the Notification app"
 }
 
 variable "listener_rule_priority" {
