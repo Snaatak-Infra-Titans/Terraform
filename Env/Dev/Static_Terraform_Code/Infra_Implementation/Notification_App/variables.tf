@@ -44,3 +44,8 @@ variable "asg_desired_capacity" {
   type        = number
   description = "Desired number of instances in ASG"
 }
+
+variable "cpu_target_value" {
+  type        = number
+  description = "Target CPU utilization percentage for ASG scaling"
+}
