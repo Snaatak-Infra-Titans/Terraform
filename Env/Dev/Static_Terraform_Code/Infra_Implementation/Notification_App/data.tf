@@ -25,10 +25,10 @@ data "aws_key_pair" "existing_key" {
 
 data "aws_ami" "notification_app" {
   most_recent = true
-  owners      = ["547941801997"] # Tumhari exact Account ID
+  owners      = [var.ami_owner_id]
 
   filter {
     name   = "name"
-    values = ["notification-es-golden-v1"] # Golden AMI name
+    values = [var.ami_name]
   }
 }
