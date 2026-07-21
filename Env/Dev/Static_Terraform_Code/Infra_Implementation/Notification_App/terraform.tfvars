@@ -12,3 +12,5 @@ asg_desired_capacity = 1
 cpu_target_value = 60.0
 app_path_pattern       = "/notification/*"
 listener_rule_priority = 100
+ami_owner_id = "547941801997"
+ami_name     = "notification-es-golden-v1"
