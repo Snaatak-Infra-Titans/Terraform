@@ -19,18 +19,13 @@ data "aws_key_pair" "existing_key" {
   key_name = var.key_name
 }
 
-data "aws_ami" "ubuntu" {
+data "aws_ami" "notification_app" {
   most_recent = true
-  owners      = ["099720109477"]
+  owners      = [var.ami_owner_id]
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-noble-24.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
+    values = [var.ami_name]
   }
 }
 
@@ -40,6 +35,7 @@ data "aws_security_group" "alb_sg" {
     values = ["*alb*"]
   }
 }
+
 
 data "aws_security_group" "bastion_sg" {
   filter {
