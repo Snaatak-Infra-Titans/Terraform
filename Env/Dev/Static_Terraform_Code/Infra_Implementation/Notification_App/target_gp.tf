@@ -4,7 +4,6 @@ resource "aws_lb_target_group" "notification_tg" {
   protocol = "HTTP"
   vpc_id   = data.aws_vpc.network_vpc.id
 
-  # Health Check ensure karega ki traffic sirf healthy instances par jaye
   health_check {
     path                = "/"            # Ise apne app ke hisaab se update kar lena
     port                = "traffic-port"
