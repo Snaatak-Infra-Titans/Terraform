@@ -49,3 +49,13 @@ variable "cpu_target_value" {
   type        = number
   description = "Target CPU utilization percentage for ASG scaling"
 }
+
+variable "ami_owner_id" {
+  type        = string
+  description = "AWS Account ID of the Custom AMI owner"
+}
+
+variable "ami_name" {
+  type        = string
+  description = "Name of the golden AMI for the Notification app"
+}
