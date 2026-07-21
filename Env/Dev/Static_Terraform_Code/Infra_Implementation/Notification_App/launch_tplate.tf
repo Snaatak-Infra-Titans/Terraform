@@ -1,7 +1,6 @@
 resource "aws_launch_template" "notification_lt" {
   name_prefix   = "${var.environment}-${var.application}-notification-lt-"
 
-  # Yahan humne nayi AMI ko link kar diya hai
   image_id      = data.aws_ami.notification_app.id
 
   instance_type = var.instance_type
