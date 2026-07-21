@@ -1,14 +1,6 @@
-
-data "aws_vpc" "existing_vpc" {
-  filter {
-    name   = "tag:Name"
-    values = [var.vpc_name]
-  }
-}
-
-
 resource "aws_internet_gateway" "main_igw" {
-  vpc_id = data.aws_vpc.existing_vpc.id
+  # IMPLICIT DEPENDENCY: Terraform knows it MUST build the VPC first because we reference its ID here.
+  vpc_id = aws_vpc.main_vpc.id
 
   tags = {
     Name        = var.igw_name
