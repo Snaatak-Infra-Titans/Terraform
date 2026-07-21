@@ -36,4 +36,4 @@ data "aws_ami" "ubuntu" {
     name   = "virtualization-type"
     values = ["hvm"]
   }
-}
+}M avilaMessage Shivam Uniyal
