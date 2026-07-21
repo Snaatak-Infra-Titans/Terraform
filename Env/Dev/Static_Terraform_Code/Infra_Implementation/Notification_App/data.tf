@@ -47,3 +47,13 @@ data "aws_security_group" "bastion_sg" {
     values = ["*bastion*"]
   }
 }
+
+data "aws_lb" "existing_alb" {
+  # Apne actual Shared ALB ka naam yahan verify karke daalna
+  name = "${var.environment}-shared-alb"
+}
+
+data "aws_lb_listener" "app_listener" {
+  load_balancer_arn = data.aws_lb.existing_alb.arn
+  port              = 80 # Agar HTTPS use kar rahe ho toh isko 443 kar dena
+}
