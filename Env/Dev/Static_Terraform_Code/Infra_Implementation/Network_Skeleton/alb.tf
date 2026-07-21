@@ -1,101 +1,28 @@
-# Existing VPC lookup using Name tag
-data "aws_vpc" "selected" {
-  filter {
-    name   = "tag:Name"
-    values = [var.vpc_name]
-  }
-}
-
-# Existing public subnet A lookup using Name tag
-data "aws_subnet" "public_a" {
-  filter {
-    name   = "vpc-id"
-    values = [data.aws_vpc.selected.id]
-  }
-
-  filter {
-    name   = "tag:Name"
-    values = [var.public_subnet_a_name]
-  }
-}
-
-# Existing public subnet B lookup using Name tag
-data "aws_subnet" "public_b" {
-  filter {
-    name   = "vpc-id"
-    values = [data.aws_vpc.selected.id]
-  }
-
-  filter {
-    name   = "tag:Name"
-    values = [var.public_subnet_b_name]
-  }
-}
-
 locals {
   alb_name           = "${var.environment}-${var.application}-alb"
   alb_security_group = "${var.environment}-${var.application}-alb-sg"
 
   target_groups = {
-    frontend = {
-      name              = "${var.environment}-${var.application}-frontend-tg"
-      port              = var.frontend_port
-      health_check_path = var.frontend_health_check
-    }
-
-    employee = {
-      name              = "${var.environment}-${var.application}-employee-tg"
-      port              = var.employee_port
-      health_check_path = var.employee_health_check
-    }
-
-    attendance = {
-      name              = "${var.environment}-${var.application}-attendance-tg"
-      port              = var.attendance_port
-      health_check_path = var.attendance_health_check
-    }
-
-    salary = {
-      name              = "${var.environment}-${var.application}-salary-tg"
-      port              = var.salary_port
-      health_check_path = var.salary_health_check
-    }
-
-    notification = {
-      name              = "${var.environment}-${var.application}-notification-tg"
-      port              = var.notification_port
-      health_check_path = var.notification_health_check
-    }
+    frontend     = { name = "${var.environment}-${var.application}-frontend-tg",     port = var.frontend_port,     health_check_path = var.frontend_health_check }
+    employee     = { name = "${var.environment}-${var.application}-employee-tg",     port = var.employee_port,     health_check_path = var.employee_health_check }
+    attendance   = { name = "${var.environment}-${var.application}-attendance-tg",   port = var.attendance_port,   health_check_path = var.attendance_health_check }
+    salary       = { name = "${var.environment}-${var.application}-salary-tg",       port = var.salary_port,       health_check_path = var.salary_health_check }
+    notification = { name = "${var.environment}-${var.application}-notification-tg", port = var.notification_port, health_check_path = var.notification_health_check }
   }
 
   listener_rules = {
-    employee = {
-      priority = 10
-      paths    = ["/employee/*"]
-    }
-
-    attendance = {
-      priority = 20
-      paths    = ["/attendance/*"]
-    }
-
-    salary = {
-      priority = 30
-      paths    = ["/salary/*"]
-    }
-
-    notification = {
-      priority = 40
-      paths    = ["/notification/*"]
-    }
+    employee     = { priority = 10, paths = ["/employee/*"] }
+    attendance   = { priority = 20, paths = ["/attendance/*"] }
+    salary       = { priority = 30, paths = ["/salary/*"] }
+    notification = { priority = 40, paths = ["/notification/*"] }
   }
 }
 
-# ALB security group
+# ALB security group (Directly linked to Saransh's VPC)
 resource "aws_security_group" "alb" {
   name        = local.alb_security_group
   description = "Security group for ${local.alb_name}"
-  vpc_id      = data.aws_vpc.selected.id
+  vpc_id      = aws_vpc.main_vpc.id
 
   tags = {
     Name        = local.alb_security_group
@@ -110,31 +37,28 @@ resource "aws_security_group" "alb" {
 resource "aws_vpc_security_group_ingress_rule" "http" {
   security_group_id = aws_security_group.alb.id
   description       = "Allow HTTP traffic from the internet"
-
-  cidr_ipv4   = "0.0.0.0/0"
-  from_port   = 80
-  to_port     = 80
-  ip_protocol = "tcp"
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 80
+  to_port           = 80
+  ip_protocol       = "tcp"
 }
 
 # Allow HTTPS traffic from the internet
 resource "aws_vpc_security_group_ingress_rule" "https" {
   security_group_id = aws_security_group.alb.id
   description       = "Allow HTTPS traffic from the internet"
-
-  cidr_ipv4   = "0.0.0.0/0"
-  from_port   = 443
-  to_port     = 443
-  ip_protocol = "tcp"
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 443
+  to_port           = 443
+  ip_protocol       = "tcp"
 }
 
 # Allow outbound traffic from ALB
 resource "aws_vpc_security_group_egress_rule" "all" {
   security_group_id = aws_security_group.alb.id
   description       = "Allow outbound traffic from the ALB"
-
-  cidr_ipv4   = "0.0.0.0/0"
-  ip_protocol = "-1"
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
 }
 
 # Internet-facing Application Load Balancer
@@ -142,14 +66,12 @@ resource "aws_lb" "this" {
   name               = local.alb_name
   internal           = false
   load_balancer_type = "application"
+  security_groups    = [aws_security_group.alb.id]
 
-  security_groups = [
-    aws_security_group.alb.id
-  ]
-
+  # Directly linked to Pawan's Public Subnets (Index A and B)
   subnets = [
-    data.aws_subnet.public_a.id,
-    data.aws_subnet.public_b.id
+    aws_subnet.public["a"].id,
+    aws_subnet.public["b"].id
   ]
 
   enable_deletion_protection = false
@@ -163,7 +85,7 @@ resource "aws_lb" "this" {
   }
 }
 
-# Empty target groups
+# Target groups
 resource "aws_lb_target_group" "services" {
   for_each = local.target_groups
 
@@ -171,7 +93,9 @@ resource "aws_lb_target_group" "services" {
   port        = each.value.port
   protocol    = "HTTP"
   target_type = "instance"
-  vpc_id      = data.aws_vpc.selected.id
+  
+  # Directly linked to Saransh's VPC
+  vpc_id      = aws_vpc.main_vpc.id
 
   health_check {
     enabled             = true
@@ -203,7 +127,6 @@ resource "aws_lb_listener" "http" {
 
   default_action {
     type = "redirect"
-
     redirect {
       port        = "443"
       protocol    = "HTTPS"
@@ -212,8 +135,7 @@ resource "aws_lb_listener" "http" {
   }
 }
 
-# HTTPS listener
-# Requests that do not match an API path go to frontend
+# HTTPS listener (Requests that do not match an API path go to frontend)
 resource "aws_lb_listener" "https" {
   load_balancer_arn = aws_lb.this.arn
   port              = 443
