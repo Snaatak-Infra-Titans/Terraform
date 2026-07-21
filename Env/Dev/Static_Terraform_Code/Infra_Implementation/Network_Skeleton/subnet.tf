@@ -1,20 +1,4 @@
-data "aws_vpc" "selected_by_id" {
-  count = var.vpc_id != "" ? 1 : 0
-  id    = var.vpc_id
-}
-
-data "aws_vpc" "selected_by_name" {
-  count = var.vpc_id == "" ? 1 : 0
-
-  filter {
-    name   = "tag:Name"
-    values = [var.vpc_name]
-  }
-}
-
 locals {
-  selected_vpc = var.vpc_id != "" ? data.aws_vpc.selected_by_id[0] : data.aws_vpc.selected_by_name[0]
-
   subnet_plan = {
     public = {
       offset = 0
@@ -34,6 +18,7 @@ locals {
     }
   }
 }
+
 resource "aws_subnet" "public" {
   for_each = {
     for idx, az in var.azs : az => {
@@ -41,8 +26,9 @@ resource "aws_subnet" "public" {
     }
   }
 
-  vpc_id                  = local.selected_vpc.id
-  cidr_block              = cidrsubnet(local.selected_vpc.cidr_block, var.subnet_newbits, local.subnet_plan.public.offset + each.value.az_index)
+  # DIRECTLY REFERENCING SARANSH'S VPC:
+  vpc_id                  = aws_vpc.main_vpc.id
+  cidr_block              = cidrsubnet(aws_vpc.main_vpc.cidr_block, var.subnet_newbits, local.subnet_plan.public.offset + each.value.az_index)
   availability_zone       = "${var.aws_region}${each.key}"
   map_public_ip_on_launch = true
 
@@ -64,8 +50,8 @@ resource "aws_subnet" "frontend" {
     }
   }
 
-  vpc_id                  = local.selected_vpc.id
-  cidr_block              = cidrsubnet(local.selected_vpc.cidr_block, var.subnet_newbits, local.subnet_plan.frontend.offset + each.value.az_index)
+  vpc_id                  = aws_vpc.main_vpc.id
+  cidr_block              = cidrsubnet(aws_vpc.main_vpc.cidr_block, var.subnet_newbits, local.subnet_plan.frontend.offset + each.value.az_index)
   availability_zone       = "${var.aws_region}${each.key}"
   map_public_ip_on_launch = false
 
@@ -87,8 +73,8 @@ resource "aws_subnet" "backend" {
     }
   }
 
-  vpc_id                  = local.selected_vpc.id
-  cidr_block              = cidrsubnet(local.selected_vpc.cidr_block, var.subnet_newbits, local.subnet_plan.backend.offset + each.value.az_index)
+  vpc_id                  = aws_vpc.main_vpc.id
+  cidr_block              = cidrsubnet(aws_vpc.main_vpc.cidr_block, var.subnet_newbits, local.subnet_plan.backend.offset + each.value.az_index)
   availability_zone       = "${var.aws_region}${each.key}"
   map_public_ip_on_launch = false
 
@@ -110,8 +96,8 @@ resource "aws_subnet" "database" {
     }
   }
 
-  vpc_id                  = local.selected_vpc.id
-  cidr_block              = cidrsubnet(local.selected_vpc.cidr_block, var.subnet_newbits, local.subnet_plan.database.offset + each.value.az_index)
+  vpc_id                  = aws_vpc.main_vpc.id
+  cidr_block              = cidrsubnet(aws_vpc.main_vpc.cidr_block, var.subnet_newbits, local.subnet_plan.database.offset + each.value.az_index)
   availability_zone       = "${var.aws_region}${each.key}"
   map_public_ip_on_launch = false
 
