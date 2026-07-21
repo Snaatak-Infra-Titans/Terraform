@@ -25,3 +25,6 @@ salary_health_check       = "/"
 notification_health_check = "/"
 # --- SHIVAM'S SSH KEY VARIABLES ---
 key_name = "dev-otms-key"
+# --- ROUTE 53 VARIABLES ---
+hosted_zone_name = "otms.online"
+domain_name      = "www.otms.online"
