@@ -1,5 +1,5 @@
 ############################################
-# NACLs (Linked directly to Saransh's VPC)
+# NACLs
 ############################################
 
 resource "aws_network_acl" "public" {
@@ -35,7 +35,7 @@ resource "aws_network_acl" "database" {
 }
 
 ############################################
-# Associations (Looping directly over Pawan's Subnets)
+# Associations
 ############################################
 
 resource "aws_network_acl_association" "public" {
@@ -63,9 +63,12 @@ resource "aws_network_acl_association" "database" {
 }
 
 ############################################
-# Public Rules
+# Public NACL Rules
 ############################################
+
+####################
 # Inbound
+####################
 
 resource "aws_network_acl_rule" "public_http" {
   network_acl_id = aws_network_acl.public.id
@@ -74,8 +77,9 @@ resource "aws_network_acl_rule" "public_http" {
   protocol       = "6"
   rule_action    = "allow"
   cidr_block     = "0.0.0.0/0"
-  from_port      = 80
-  to_port        = 80
+
+  from_port = var.http_port
+  to_port   = var.http_port
 }
 
 resource "aws_network_acl_rule" "public_https" {
@@ -85,8 +89,9 @@ resource "aws_network_acl_rule" "public_https" {
   protocol       = "6"
   rule_action    = "allow"
   cidr_block     = "0.0.0.0/0"
-  from_port      = 443
-  to_port        = 443
+
+  from_port = var.https_port
+  to_port   = var.https_port
 }
 
 resource "aws_network_acl_rule" "public_frontend_ephemeral" {
@@ -95,9 +100,10 @@ resource "aws_network_acl_rule" "public_frontend_ephemeral" {
   egress         = false
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.32/28"
-  from_port      = 1024
-  to_port        = 65535
+  cidr_block     = var.frontend_cidr
+
+  from_port = var.ephemeral_from_port
+  to_port   = var.ephemeral_to_port
 }
 
 resource "aws_network_acl_rule" "public_backend_ephemeral" {
@@ -106,12 +112,15 @@ resource "aws_network_acl_rule" "public_backend_ephemeral" {
   egress         = false
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.64/27"
-  from_port      = 1024
-  to_port        = 65535
+  cidr_block     = var.backend_cidr
+
+  from_port = var.ephemeral_from_port
+  to_port   = var.ephemeral_to_port
 }
 
+####################
 # Outbound
+####################
 
 resource "aws_network_acl_rule" "public_to_frontend" {
   network_acl_id = aws_network_acl.public.id
@@ -119,9 +128,10 @@ resource "aws_network_acl_rule" "public_to_frontend" {
   egress         = true
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.32/28"
-  from_port      = 3000
-  to_port        = 3000
+  cidr_block     = var.frontend_cidr
+
+  from_port = var.frontend_port
+  to_port   = var.frontend_port
 }
 
 resource "aws_network_acl_rule" "public_to_employee" {
@@ -130,9 +140,10 @@ resource "aws_network_acl_rule" "public_to_employee" {
   egress         = true
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.64/27"
-  from_port      = 8080
-  to_port        = 8080
+  cidr_block     = var.backend_cidr
+
+  from_port = var.employee_port
+  to_port   = var.employee_port
 }
 
 resource "aws_network_acl_rule" "public_to_attendance" {
@@ -141,9 +152,10 @@ resource "aws_network_acl_rule" "public_to_attendance" {
   egress         = true
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.64/27"
-  from_port      = 8081
-  to_port        = 8081
+  cidr_block     = var.backend_cidr
+
+  from_port = var.attendance_port
+  to_port   = var.attendance_port
 }
 
 resource "aws_network_acl_rule" "public_to_salary" {
@@ -152,9 +164,10 @@ resource "aws_network_acl_rule" "public_to_salary" {
   egress         = true
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.64/27"
-  from_port      = 8082
-  to_port        = 8082
+  cidr_block     = var.backend_cidr
+
+  from_port = var.salary_port
+  to_port   = var.salary_port
 }
 
 resource "aws_network_acl_rule" "public_to_notification" {
@@ -163,25 +176,41 @@ resource "aws_network_acl_rule" "public_to_notification" {
   egress         = true
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.64/27"
-  from_port      = 8085
-  to_port        = 8085
+  cidr_block     = var.backend_cidr
+
+  from_port = var.notification_port
+  to_port   = var.notification_port
 }
 
-resource "aws_network_acl_rule" "public_ephemeral" {
+# Added for SSM / package downloads / HTTPS traffic
+resource "aws_network_acl_rule" "public_https_outbound" {
   network_acl_id = aws_network_acl.public.id
   rule_number    = 150
   egress         = true
   protocol       = "6"
   rule_action    = "allow"
   cidr_block     = "0.0.0.0/0"
-  from_port      = 1024
-  to_port        = 65535
+
+  from_port = var.https_port
+  to_port   = var.https_port
+}
+
+resource "aws_network_acl_rule" "public_ephemeral" {
+  network_acl_id = aws_network_acl.public.id
+  rule_number    = 160
+  egress         = true
+  protocol       = "6"
+  rule_action    = "allow"
+  cidr_block     = "0.0.0.0/0"
+
+  from_port = var.ephemeral_from_port
+  to_port   = var.ephemeral_to_port
 }
 
 ############################################
 # Frontend Rules
 ############################################
+
 # Inbound
 
 resource "aws_network_acl_rule" "frontend_alb" {
@@ -190,9 +219,10 @@ resource "aws_network_acl_rule" "frontend_alb" {
   egress         = false
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.0/27"
-  from_port      = 3000
-  to_port        = 3000
+  cidr_block     = var.public_cidr
+
+  from_port = var.frontend_port
+  to_port   = var.frontend_port
 }
 
 resource "aws_network_acl_rule" "frontend_ephemeral" {
@@ -201,49 +231,54 @@ resource "aws_network_acl_rule" "frontend_ephemeral" {
   egress         = false
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.0/27"
-  from_port      = 1024
-  to_port        = 65535
+  cidr_block     = var.public_cidr
+
+  from_port = var.ephemeral_from_port
+  to_port   = var.ephemeral_to_port
 }
 
-resource "aws_network_acl_rule" "frontend_ssm" {
+resource "aws_network_acl_rule" "frontend_https_inbound" {
   network_acl_id = aws_network_acl.frontend.id
   rule_number    = 120
   egress         = false
   protocol       = "6"
   rule_action    = "allow"
   cidr_block     = "0.0.0.0/0"
-  from_port      = 443
-  to_port        = 443
+
+  from_port = var.https_port
+  to_port   = var.https_port
 }
 
 # Outbound
 
-resource "aws_network_acl_rule" "frontend_return" {
+resource "aws_network_acl_rule" "frontend_ephemeral_outbound" {
   network_acl_id = aws_network_acl.frontend.id
   rule_number    = 100
   egress         = true
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.0/27"
-  from_port      = 1024
-  to_port        = 65535
+  cidr_block     = var.public_cidr
+
+  from_port = var.ephemeral_from_port
+  to_port   = var.ephemeral_to_port
 }
 
-resource "aws_network_acl_rule" "frontend_https" {
+resource "aws_network_acl_rule" "frontend_https_outbound" {
   network_acl_id = aws_network_acl.frontend.id
   rule_number    = 110
   egress         = true
   protocol       = "6"
   rule_action    = "allow"
   cidr_block     = "0.0.0.0/0"
-  from_port      = 443
-  to_port        = 443
+
+  from_port = var.https_port
+  to_port   = var.https_port
 }
 
 ############################################
 # Backend Rules
 ############################################
+
 # Inbound
 
 resource "aws_network_acl_rule" "backend_employee" {
@@ -252,9 +287,10 @@ resource "aws_network_acl_rule" "backend_employee" {
   egress         = false
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.0/27"
-  from_port      = 8080
-  to_port        = 8080
+  cidr_block     = var.public_cidr
+
+  from_port = var.employee_port
+  to_port   = var.employee_port
 }
 
 resource "aws_network_acl_rule" "backend_attendance" {
@@ -263,9 +299,10 @@ resource "aws_network_acl_rule" "backend_attendance" {
   egress         = false
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.0/27"
-  from_port      = 8081
-  to_port        = 8081
+  cidr_block     = var.public_cidr
+
+  from_port = var.attendance_port
+  to_port   = var.attendance_port
 }
 
 resource "aws_network_acl_rule" "backend_salary" {
@@ -274,9 +311,10 @@ resource "aws_network_acl_rule" "backend_salary" {
   egress         = false
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.0/27"
-  from_port      = 8082
-  to_port        = 8082
+  cidr_block     = var.public_cidr
+
+  from_port = var.salary_port
+  to_port   = var.salary_port
 }
 
 resource "aws_network_acl_rule" "backend_notification" {
@@ -285,31 +323,34 @@ resource "aws_network_acl_rule" "backend_notification" {
   egress         = false
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.0/27"
-  from_port      = 8085
-  to_port        = 8085
+  cidr_block     = var.public_cidr
+
+  from_port = var.notification_port
+  to_port   = var.notification_port
 }
 
-resource "aws_network_acl_rule" "backend_ephemeral" {
+resource "aws_network_acl_rule" "backend_ephemeral_inbound" {
   network_acl_id = aws_network_acl.backend.id
   rule_number    = 140
   egress         = false
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.0/27"
-  from_port      = 1024
-  to_port        = 65535
+  cidr_block     = var.public_cidr
+
+  from_port = var.ephemeral_from_port
+  to_port   = var.ephemeral_to_port
 }
 
-resource "aws_network_acl_rule" "backend_ssm" {
+resource "aws_network_acl_rule" "backend_https_inbound" {
   network_acl_id = aws_network_acl.backend.id
   rule_number    = 150
   egress         = false
   protocol       = "6"
   rule_action    = "allow"
   cidr_block     = "0.0.0.0/0"
-  from_port      = 443
-  to_port        = 443
+
+  from_port = var.https_port
+  to_port   = var.https_port
 }
 
 # Outbound
@@ -320,9 +361,10 @@ resource "aws_network_acl_rule" "backend_redis" {
   egress         = true
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.96/27"
-  from_port      = 6379
-  to_port        = 6379
+  cidr_block     = var.database_cidr
+
+  from_port = var.redis_port
+  to_port   = var.redis_port
 }
 
 resource "aws_network_acl_rule" "backend_postgres" {
@@ -331,9 +373,10 @@ resource "aws_network_acl_rule" "backend_postgres" {
   egress         = true
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.96/27"
-  from_port      = 5432
-  to_port        = 5432
+  cidr_block     = var.database_cidr
+
+  from_port = var.postgres_port
+  to_port   = var.postgres_port
 }
 
 resource "aws_network_acl_rule" "backend_scylla" {
@@ -342,46 +385,54 @@ resource "aws_network_acl_rule" "backend_scylla" {
   egress         = true
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.96/27"
-  from_port      = 9042
-  to_port        = 9042
+  cidr_block     = var.database_cidr
+
+  from_port = var.scylla_port
+  to_port   = var.scylla_port
 }
 
-resource "aws_network_acl_rule" "backend_return" {
+resource "aws_network_acl_rule" "backend_ephemeral_outbound" {
   network_acl_id = aws_network_acl.backend.id
   rule_number    = 130
   egress         = true
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.0/27"
-  from_port      = 1024
-  to_port        = 65535
+  cidr_block     = var.public_cidr
+
+  from_port = var.ephemeral_from_port
+  to_port   = var.ephemeral_to_port
 }
 
-resource "aws_network_acl_rule" "backend_https" {
+resource "aws_network_acl_rule" "backend_https_outbound" {
   network_acl_id = aws_network_acl.backend.id
   rule_number    = 140
   egress         = true
   protocol       = "6"
   rule_action    = "allow"
   cidr_block     = "0.0.0.0/0"
-  from_port      = 443
-  to_port        = 443
+
+  from_port = var.https_port
+  to_port   = var.https_port
 }
 
 ############################################
-# DataBase Rules
+# Database Rules
 ############################################
+
+####################
 # Inbound
+####################
+
 resource "aws_network_acl_rule" "database_redis" {
   network_acl_id = aws_network_acl.database.id
   rule_number    = 100
   egress         = false
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.64/27"
-  from_port      = 6379
-  to_port        = 6379
+  cidr_block     = var.backend_cidr
+
+  from_port = var.redis_port
+  to_port   = var.redis_port
 }
 
 resource "aws_network_acl_rule" "database_postgres" {
@@ -390,9 +441,10 @@ resource "aws_network_acl_rule" "database_postgres" {
   egress         = false
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.64/27"
-  from_port      = 5432
-  to_port        = 5432
+  cidr_block     = var.backend_cidr
+
+  from_port = var.postgres_port
+  to_port   = var.postgres_port
 }
 
 resource "aws_network_acl_rule" "database_scylla" {
@@ -401,42 +453,75 @@ resource "aws_network_acl_rule" "database_scylla" {
   egress         = false
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.64/27"
-  from_port      = 9042
-  to_port        = 9042
+  cidr_block     = var.backend_cidr
+
+  from_port = var.scylla_port
+  to_port   = var.scylla_port
 }
 
-resource "aws_network_acl_rule" "database_ssm" {
+# Return traffic from backend instances
+resource "aws_network_acl_rule" "database_ephemeral_inbound" {
   network_acl_id = aws_network_acl.database.id
   rule_number    = 130
   egress         = false
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "0.0.0.0/0"
-  from_port      = 443
-  to_port        = 443
+  cidr_block     = var.backend_cidr
+
+  from_port = var.ephemeral_from_port
+  to_port   = var.ephemeral_to_port
 }
 
+####################
 # Outbound
+####################
 
-resource "aws_network_acl_rule" "database_return" {
+resource "aws_network_acl_rule" "database_redis_outbound" {
   network_acl_id = aws_network_acl.database.id
   rule_number    = 100
   egress         = true
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "10.0.0.64/27"
-  from_port      = 1024
-  to_port        = 65535
+  cidr_block     = var.backend_cidr
+
+  from_port = var.redis_port
+  to_port   = var.redis_port
 }
 
-resource "aws_network_acl_rule" "database_https" {
+resource "aws_network_acl_rule" "database_postgres_outbound" {
   network_acl_id = aws_network_acl.database.id
   rule_number    = 110
   egress         = true
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = "0.0.0.0/0"
-  from_port      = 443
-  to_port        = 443
+  cidr_block     = var.backend_cidr
+
+  from_port = var.postgres_port
+  to_port   = var.postgres_port
 }
+
+resource "aws_network_acl_rule" "database_scylla_outbound" {
+  network_acl_id = aws_network_acl.database.id
+  rule_number    = 120
+  egress         = true
+  protocol       = "6"
+  rule_action    = "allow"
+  cidr_block     = var.backend_cidr
+
+  from_port = var.scylla_port
+  to_port   = var.scylla_port
+}
+
+# Return traffic back to backend
+resource "aws_network_acl_rule" "database_ephemeral_outbound" {
+  network_acl_id = aws_network_acl.database.id
+  rule_number    = 130
+  egress         = true
+  protocol       = "6"
+  rule_action    = "allow"
+  cidr_block     = var.backend_cidr
+
+  from_port = var.ephemeral_from_port
+  to_port   = var.ephemeral_to_port
+}
+
