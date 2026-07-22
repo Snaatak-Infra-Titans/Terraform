@@ -27,11 +27,6 @@ variable "ami_name" {
   description = "Name of the golden AMI for the Notification app"
 }
 
-variable "ssm_instance_profile" {
-  type        = string
-  description = "Name of the manually created IAM Instance Profile for SSM"
-}
-
 variable "ami_owner_id" {
   type        = string
   description = "AWS Account ID of the Custom AMI owner"
@@ -44,4 +39,9 @@ variable "key_name" {
 
 variable "instance_type" {
   type = string
+}
+
+variable "ssm_instance_profile" {
+  type        = string
+  description = "Name of the manually created IAM Instance Profile for SSM"
 }
