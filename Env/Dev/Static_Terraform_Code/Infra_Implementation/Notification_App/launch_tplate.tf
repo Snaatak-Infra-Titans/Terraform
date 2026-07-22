@@ -24,7 +24,8 @@ snap start amazon-ssm-agent || true
 snap restart amazon-ssm-agent || true
 
 # Set MTU if required
-ip link set dev eth0 mtu 1400 || true
+IFACE=$(ip route | awk '/default/ {print $5}')
+ip link set dev "$IFACE" mtu 1400 || true
 
 # Restart Notification API
 systemctl restart notification-api || true
