@@ -14,3 +14,4 @@ app_path_pattern       = "/notification/*"
 listener_rule_priority = 100
 ami_owner_id = "547941801997"
 ami_name     = "notification-es-golden-v1"
+ssm_instance_profile = "dev-otms-ssm-role"
