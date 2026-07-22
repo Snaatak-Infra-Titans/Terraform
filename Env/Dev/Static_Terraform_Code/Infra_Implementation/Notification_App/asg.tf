@@ -2,8 +2,8 @@ resource "aws_autoscaling_group" "notification_asg" {
   name_prefix         = "${var.environment}-${var.application}-notification-asg-"
   vpc_zone_identifier = data.aws_subnets.backend_subnets.ids
 
-  # Yahan hum 408 wale Target Group ko direct link kar rahe hain
-  target_group_arns   = [aws_lb_target_group.notification_tg.arn]
+  # Yusing data source for direct link
+  target_group_arns = [data.aws_lb_target_group.notification_tg.arn]
 
   desired_capacity          = var.asg_desired_capacity
   min_size                  = var.asg_min_size
