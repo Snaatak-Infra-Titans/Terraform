@@ -1,20 +1,20 @@
 resource "aws_autoscaling_group" "notification_asg" {
   name_prefix         = "${var.environment}-${var.application}-notification-asg-"
+  min_size            = var.asg_min_size
+  max_size            = var.asg_max_size
+  desired_capacity    = var.asg_desired_capacity
   vpc_zone_identifier = data.aws_subnets.backend_subnets.ids
 
-  # Yahan hum 408 wale Target Group ko direct link kar rahe hain
-  target_group_arns   = [aws_lb_target_group.notification_tg.arn]
-
-  desired_capacity          = var.asg_desired_capacity
-  min_size                  = var.asg_min_size
-  max_size                  = var.asg_max_size
-  health_check_type         = "ELB"
-  health_check_grace_period = 300
+  # Target Group created by Network Skeleton (fetched via data source)
+  target_group_arns = [data.aws_lb_target_group.notification_tg.arn]
 
   launch_template {
     id      = aws_launch_template.notification_lt.id
     version = "$Latest"
   }
+
+  health_check_type         = "ELB"
+  health_check_grace_period = 300
 
   tag {
     key                 = "Name"
