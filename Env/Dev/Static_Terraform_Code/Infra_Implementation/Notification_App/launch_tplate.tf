@@ -11,7 +11,7 @@ resource "aws_launch_template" "notification_lt" {
   tag_specifications {
     resource_type = "instance"
     tags = {
-      Name = "${var.environment}-${var.application}-notification-app"
+      Name = "${var.environment}-${var.application}-notification"
     }
   }
 
