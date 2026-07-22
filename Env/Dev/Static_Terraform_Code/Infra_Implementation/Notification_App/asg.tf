@@ -1,5 +1,5 @@
 resource "aws_autoscaling_group" "notification_asg" {
-  name_prefix         = "${var.environment}-${var.application}-notification-asg-"
+  name                = "${var.environment}-${var.application}-notification-asg-"
   vpc_zone_identifier = data.aws_subnets.backend_subnets.ids
 
   target_group_arns   = [data.aws_lb_target_group.notification_tg.arn]
