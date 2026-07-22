@@ -36,16 +36,17 @@ data "aws_security_group" "alb_sg" {
   }
 }
 
+/* 
 data "aws_security_group" "bastion_sg" {
   filter {
     name   = "tag:Name"
     values = ["*bastion*"]
   }
 }
+*/
 
 data "aws_lb" "existing_alb" {
-  # Apne actual Shared ALB ka naam yahan verify karke daalna
-  name = "${var.environment}-shared-alb"
+  name = "${var.environment}-${var.application}-alb" 
 }
 
 data "aws_lb_listener" "app_listener" {
