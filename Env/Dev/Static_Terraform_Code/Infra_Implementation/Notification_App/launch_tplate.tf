@@ -12,14 +12,10 @@ resource "aws_launch_template" "notification_lt" {
 
   user_data = base64encode(<<-EOF
     #!/bin/bash
-    cd /tmp
-    wget https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb
-    dpkg -i amazon-ssm-agent.deb
-    systemctl enable amazon-ssm-agent
-    systemctl start amazon-ssm-agent
-    rm amazon-ssm-agent.deb
+    systemctl enable snap.amazon-ssm-agent.amazon-ssm-agent
+    systemctl restart snap.amazon-ssm-agent.amazon-ssm-agent
     ip link set dev eth0 mtu 1400 || true
-    systemctl restart notification || systemctl start notification
+    systemctl restart notification-api
   EOF
   )
 
