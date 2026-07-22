@@ -32,7 +32,6 @@ data "aws_security_group" "alb_sg" {
 }
 
 /*
-# Fetching Bastion Security Group (Currently bypassed until Bastion is deployed)
 data "aws_security_group" "bastion_sg" {
   name = "${var.environment}-bastion-sg"
 }
