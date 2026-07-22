@@ -18,7 +18,7 @@ resource "aws_autoscaling_group" "notification_asg" {
 
   tag {
     key                 = "Name"
-    value               = "${var.environment}-${var.application}-asg-instance"
+    value               = "${var.environment}-${var.application}-notification"
     propagate_at_launch = true
   }
 
