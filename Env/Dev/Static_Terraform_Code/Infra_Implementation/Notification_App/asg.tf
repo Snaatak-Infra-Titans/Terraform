@@ -1,5 +1,5 @@
 resource "aws_autoscaling_group" "notification_asg" {
-  name_prefix         = "${var.environment}-${var.application}-notification-asg-"
+  name                = "${var.environment}-${var.application}-notification-asg"
   min_size            = var.asg_min_size
   max_size            = var.asg_max_size
   desired_capacity    = var.asg_desired_capacity
