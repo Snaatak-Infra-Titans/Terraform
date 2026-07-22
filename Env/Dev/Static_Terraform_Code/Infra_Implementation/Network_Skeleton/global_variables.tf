@@ -28,26 +28,6 @@ variable "https_port" {
   type = number
 }
 
-variable "frontend_port" {
-  type = number
-}
-
-variable "employee_port" {
-  type = number
-}
-
-variable "attendance_port" {
-  type = number
-}
-
-variable "salary_port" {
-  type = number
-}
-
-variable "notification_port" {
-  type = number
-}
-
 variable "redis_port" {
   type = number
 }
