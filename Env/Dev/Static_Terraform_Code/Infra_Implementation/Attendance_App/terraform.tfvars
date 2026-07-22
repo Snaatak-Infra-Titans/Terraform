@@ -3,4 +3,4 @@ environment   = "dev"
 application   = "otms"
 cost_center = "Snaatak"
 owner   = "Infra-Titans"
-vpc_name  = "dev-otms-vpc"
+
