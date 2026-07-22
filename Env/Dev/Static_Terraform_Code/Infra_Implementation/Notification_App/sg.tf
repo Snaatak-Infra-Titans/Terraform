@@ -5,12 +5,13 @@ resource "aws_security_group" "notification_sg" {
 
   ingress {
     description     = "Allow traffic from ALB"
-    from_port       = 8080
-    to_port         = 8080
+    from_port       = 8085
+    to_port         = 8085
     protocol        = "tcp"
     security_groups = [data.aws_security_group.alb_sg.id]
   }
 
+/*
   ingress {
     description     = "Allow SSH from Bastion"
     from_port       = 22
@@ -18,6 +19,7 @@ resource "aws_security_group" "notification_sg" {
     protocol        = "tcp"
     security_groups = [data.aws_security_group.bastion_sg.id]
   }
+*/
 
   egress {
     description = "Allow all outbound traffic"
