@@ -52,5 +52,11 @@ variable "ami_owner_id" {
 
 variable "ami_name" {
   type        = string
+
+variable "ssm_instance_profile" {
+  type        = string
+  description = "Name of the manually created IAM Instance Profile for SSM"
+}
+
   description = "Name of the golden AMI for the Notification app"
 }
