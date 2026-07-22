@@ -36,6 +36,7 @@ variable "ssm_instance_profile" {
   type        = string
   description = "Name of the manually created IAM Instance Profile for SSM"
 }
+
 variable "key_name" {
   type = string
 }
