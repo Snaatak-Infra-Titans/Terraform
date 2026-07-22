@@ -7,6 +7,9 @@ resource "aws_launch_template" "notification_lt" {
   
   vpc_security_group_ids = [aws_security_group.notification_sg.id]
 
+  iam_instance_profile {
+      name = var.ssm_instance_profile
+    }
 
   tag_specifications {
     resource_type = "instance"
