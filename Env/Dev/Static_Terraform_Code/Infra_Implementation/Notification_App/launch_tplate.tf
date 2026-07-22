@@ -12,7 +12,8 @@ resource "aws_launch_template" "notification_lt" {
     name = var.ssm_instance_profile
   }
 
-  user_data = base64encode(<<-EOF
+/*
+user_data = base64encode(<<-EOF
 #!/bin/bash
 set -euxo pipefail
 
@@ -32,7 +33,7 @@ ip link set dev "$NIC" mtu 1400 || true
 systemctl restart notification-api || true
 EOF
   )
-
+*/
   tag_specifications {
     resource_type = "instance"
 
