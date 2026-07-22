@@ -1,6 +1,6 @@
 resource "aws_lb_target_group" "notification_tg" {
   name     = "${var.environment}-${var.application}-notification-tg"
-  port     = 8080
+  port     = 8085
   protocol = "HTTP"
   vpc_id   = data.aws_vpc.network_vpc.id
 
