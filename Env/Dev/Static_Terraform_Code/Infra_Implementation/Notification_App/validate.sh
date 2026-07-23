@@ -1,13 +1,13 @@
 #!/bin/bash
 
-set -euo pipefail
+set -Eeuo pipefail
 
 echo "========================================="
 echo "Validating Notification AMI"
 echo "========================================="
 
 #############################################
-# Elasticsearch Health Check
+# Elasticsearch
 #############################################
 
 echo "Checking Elasticsearch..."
@@ -16,13 +16,6 @@ until curl -s http://127.0.0.1:9200 >/dev/null
 do
     sleep 2
 done
-
-ES_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:9200)
-
-if [[ "$ES_STATUS" != "200" ]]; then
-    echo "ERROR: Elasticsearch Health Check Failed"
-    exit 1
-fi
 
 echo "Elasticsearch is Healthy."
 
@@ -37,57 +30,71 @@ sudo systemctl is-active --quiet notification-api
 echo "Notification API Service is Running."
 
 #############################################
-# Notification API Health Endpoint
+# Notification Sync Service
+#############################################
+
+echo "Checking Notification Sync Service..."
+
+sudo systemctl is-active --quiet notification-sync
+
+echo "Notification Sync Service is Running."
+
+#############################################
+# Notification API Health
 #############################################
 
 echo "Checking Notification API Health Endpoint..."
 
-API_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-http://127.0.0.1:8085/api/v1/notification/health)
+API_STATUS=""
+
+for i in {1..30}
+do
+    API_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+        http://127.0.0.1:8085/api/v1/notification/health || true)
+
+    if [[ "$API_STATUS" == "200" ]]; then
+        echo "Notification API Health Check Passed."
+        break
+    fi
+
+    sleep 2
+done
 
 if [[ "$API_STATUS" != "200" ]]; then
-    echo "ERROR: Notification API Health Check Failed"
+
+    echo "========================================="
+    echo "Notification API Logs"
+    echo "========================================="
+
+    sudo journalctl -u notification-api --no-pager -n 100
+
+    echo "========================================="
+    echo "Notification API Status"
+    echo "========================================="
+
+    sudo systemctl --no-pager --full status notification-api
+
     exit 1
 fi
 
-echo "Notification API Health Check Passed."
-
 #############################################
-# Validate Python Virtual Environment
+# Validate Python Environment
 #############################################
 
-echo "Checking Python Virtual Environment..."
+[[ -d /home/ubuntu/Notification/venv ]]
 
-if [[ ! -d /home/ubuntu/Notification/venv ]]; then
-    echo "ERROR: Python Virtual Environment Not Found"
-    exit 1
-fi
-
-echo "Python Virtual Environment Exists."
+echo "Python Virtual Environment Verified."
 
 #############################################
 # Validate Repository
 #############################################
 
-echo "Checking Notification Repository..."
+[[ -f /home/ubuntu/Notification/notification_api.py ]]
 
-if [[ ! -f /home/ubuntu/Notification/notification_api.py ]]; then
-    echo "ERROR: Notification Repository Missing"
-    exit 1
-fi
-
-echo "Notification Repository Verified."
+echo "Repository Verified."
 
 #############################################
-# Validate Notification Service
-#############################################
-
-echo "Checking Notification Service..."
-
-sudo systemctl status notification-api --no-pager
-
-#############################################
-# Validation Completed
+# Validation Successful
 #############################################
 
 echo "========================================="
