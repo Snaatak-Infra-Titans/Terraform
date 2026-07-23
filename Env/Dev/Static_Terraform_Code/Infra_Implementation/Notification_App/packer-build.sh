@@ -3,46 +3,92 @@
 set -euo pipefail
 
 #############################################
-# Read Packer Variables
+# Configuration Files
 #############################################
 
 PACKER_VARS_FILE="packer.auto.pkrvars.hcl"
+TFVARS_FILE="terraform.tfvars"
 
-AWS_REGION=$(awk -F'"' '/aws_region/ {print $2}' ${PACKER_VARS_FILE})
-ENVIRONMENT=$(awk -F'"' '/environment/ {print $2}' ${PACKER_VARS_FILE})
-APPLICATION=$(awk -F'"' '/application/ {print $2}' ${PACKER_VARS_FILE})
-INSTANCE_TYPE=$(awk -F'"' '/instance_type/ {print $2}' ${PACKER_VARS_FILE})
-AMI_NAME=$(awk -F'"' '/ami_name/ {print $2}' ${PACKER_VARS_FILE})
-SSM_INSTANCE_PROFILE=$(awk -F'"' '/ssm_instance_profile/ {print $2}' ${PACKER_VARS_FILE})
+#############################################
+# Check Dependencies
+#############################################
+
+command -v aws >/dev/null 2>&1 || {
+    echo "ERROR: AWS CLI is not installed."
+    exit 1
+}
+
+command -v packer >/dev/null 2>&1 || {
+    echo "ERROR: Packer is not installed."
+    exit 1
+}
+
+#############################################
+# Read Packer Variables
+#############################################
+
+AWS_REGION=$(grep '^aws_region' "$PACKER_VARS_FILE" | cut -d '"' -f2)
+ENVIRONMENT=$(grep '^environment' "$PACKER_VARS_FILE" | cut -d '"' -f2)
+APPLICATION=$(grep '^application' "$PACKER_VARS_FILE" | cut -d '"' -f2)
+OWNER=$(grep '^owner' "$PACKER_VARS_FILE" | cut -d '"' -f2)
+COST_CENTER=$(grep '^cost_center' "$PACKER_VARS_FILE" | cut -d '"' -f2)
+INSTANCE_TYPE=$(grep '^instance_type' "$PACKER_VARS_FILE" | cut -d '"' -f2)
+AMI_NAME=$(grep '^ami_name' "$PACKER_VARS_FILE" | cut -d '"' -f2)
+SSM_INSTANCE_PROFILE=$(grep '^ssm_instance_profile' "$PACKER_VARS_FILE" | cut -d '"' -f2)
 
 #############################################
 # Read Terraform Variables
 #############################################
 
-TFVARS_FILE="terraform.tfvars"
-
-VPC_NAME=$(awk -F'"' '/vpc_name/ {print $2}' ${TFVARS_FILE})
+VPC_NAME=$(grep '^vpc_name' "$TFVARS_FILE" | cut -d '"' -f2)
 
 #############################################
-# Fetch VPC
+# Validate Variables
 #############################################
 
-echo "Fetching VPC..."
+for VAR in \
+AWS_REGION \
+ENVIRONMENT \
+APPLICATION \
+OWNER \
+COST_CENTER \
+INSTANCE_TYPE \
+AMI_NAME \
+SSM_INSTANCE_PROFILE \
+VPC_NAME
+do
+    if [[ -z "${!VAR}" ]]; then
+        echo "ERROR: $VAR is empty."
+        exit 1
+    fi
+done
+
+#############################################
+# Security Group Name
+#############################################
+
+NOTIFICATION_SG_NAME="${ENVIRONMENT}-${APPLICATION}-notification-sg"
+
+#############################################
+# Discover VPC
+#############################################
+
+echo "Discovering VPC..."
 
 VPC_ID=$(aws ec2 describe-vpcs \
-    --region ${AWS_REGION} \
+    --region "$AWS_REGION" \
     --filters "Name=tag:Name,Values=${VPC_NAME}" \
     --query "Vpcs[0].VpcId" \
     --output text)
 
 #############################################
-# Fetch Backend Subnet
+# Discover Backend Subnet
 #############################################
 
-echo "Fetching Backend Subnet..."
+echo "Discovering Backend Subnet..."
 
 SUBNET_ID=$(aws ec2 describe-subnets \
-    --region ${AWS_REGION} \
+    --region "$AWS_REGION" \
     --filters \
         "Name=vpc-id,Values=${VPC_ID}" \
         "Name=tag:Tier,Values=backend" \
@@ -50,67 +96,71 @@ SUBNET_ID=$(aws ec2 describe-subnets \
     --output text)
 
 #############################################
-# Fetch Notification Security Group
+# Discover Notification Security Group
 #############################################
 
-echo "Fetching Notification Security Group..."
+echo "Discovering Notification Security Group..."
 
 SECURITY_GROUP_ID=$(aws ec2 describe-security-groups \
-    --region ${AWS_REGION} \
+    --region "$AWS_REGION" \
     --filters \
-        "Name=tag:Name,Values=*notification*" \
+        "Name=tag:Name,Values=${NOTIFICATION_SG_NAME}" \
     --query "SecurityGroups[0].GroupId" \
     --output text)
 
 #############################################
-# Validation
+# Validate AWS Resources
 #############################################
 
 [[ "$VPC_ID" == "None" || -z "$VPC_ID" ]] && {
-    echo "ERROR: VPC not found"
+    echo "ERROR: Unable to find VPC."
     exit 1
 }
 
 [[ "$SUBNET_ID" == "None" || -z "$SUBNET_ID" ]] && {
-    echo "ERROR: Backend subnet not found"
+    echo "ERROR: Unable to find backend subnet."
     exit 1
 }
 
 [[ "$SECURITY_GROUP_ID" == "None" || -z "$SECURITY_GROUP_ID" ]] && {
-    echo "ERROR: Notification Security Group not found"
+    echo "ERROR: Unable to find Notification Security Group."
     exit 1
 }
 
 #############################################
-# Export Variables
+# Resource Summary
 #############################################
 
-export PKR_VAR_aws_region="${AWS_REGION}"
-export PKR_VAR_environment="${ENVIRONMENT}"
-export PKR_VAR_application="${APPLICATION}"
-export PKR_VAR_instance_type="${INSTANCE_TYPE}"
-export PKR_VAR_ami_name="${AMI_NAME}"
-export PKR_VAR_subnet_id="${SUBNET_ID}"
-export PKR_VAR_security_group_id="${SECURITY_GROUP_ID}"
-export PKR_VAR_ssm_instance_profile="${SSM_INSTANCE_PROFILE}"
+echo ""
+echo "=========================================="
+echo "Packer Build Configuration"
+echo "=========================================="
+
+echo "Region              : $AWS_REGION"
+echo "Environment         : $ENVIRONMENT"
+echo "Application         : $APPLICATION"
+echo "VPC                 : $VPC_ID"
+echo "Subnet              : $SUBNET_ID"
+echo "Security Group      : $SECURITY_GROUP_ID"
+echo "Instance Type       : $INSTANCE_TYPE"
+echo "AMI Name            : $AMI_NAME"
+
+echo "=========================================="
 
 #############################################
 # Build
 #############################################
 
-echo "Initializing Packer..."
 packer init .
 
-echo "Formatting..."
 packer fmt .
 
-echo "Validating..."
 packer validate \
-    -var-file=packer.auto.pkrvars.hcl \
+    -var-file="$PACKER_VARS_FILE" \
     notification.pkr.hcl
 
-echo "Building Notification AMI..."
-
 packer build \
-    -var-file=packer.auto.pkrvars.hcl \
+    -var-file="$PACKER_VARS_FILE" \
+    -var "subnet_id=$SUBNET_ID" \
+    -var "security_group_id=$SECURITY_GROUP_ID" \
     notification.pkr.hcl
