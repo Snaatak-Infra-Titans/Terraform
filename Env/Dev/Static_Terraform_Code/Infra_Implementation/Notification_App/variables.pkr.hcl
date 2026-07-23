@@ -28,3 +28,23 @@ variable "ami_name" {
   description = "Base name for the generated AMI"
   type        = string
 }
+
+variable "application" {
+  description = "Application name"
+  type        = string
+}
+
+variable "owner" {
+  description = "Resource owner"
+  type        = string
+}
+
+variable "cost_center" {
+  description = "Cost center"
+  type        = string
+}
+
+variable "ssm_instance_profile" {
+  description = "IAM Instance Profile used by the Packer builder instance"
+  type        = string
+}
