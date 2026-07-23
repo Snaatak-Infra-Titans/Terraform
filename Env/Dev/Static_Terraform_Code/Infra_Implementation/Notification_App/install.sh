@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+set -Eeuo pipefail
 
 echo "========================================="
 echo "Updating Ubuntu Packages"
@@ -40,22 +40,29 @@ sudo apt-get update -y
 sudo apt-get install -y elasticsearch
 
 echo "========================================="
+echo "Verifying Installed Versions"
+echo "========================================="
+
+python3 --version
+pip3 --version
+java -version
+git --version
+
+echo "========================================="
 echo "Cloning Notification Repository"
 echo "========================================="
 
 cd /home/ubuntu
 
-if [ -d "Notification" ]; then
-    sudo rm -rf Notification
-fi
+rm -rf Notification
 
 git clone -b main https://github.com/Snaatak-Infra-Titans/Notification.git
+
+cd Notification
 
 echo "========================================="
 echo "Creating Python Virtual Environment"
 echo "========================================="
-
-cd /home/ubuntu/Notification
 
 python3 -m venv venv
 
@@ -63,7 +70,9 @@ source venv/bin/activate
 
 pip install --upgrade pip
 
-pip install -r requirements.txt
+pip install --no-cache-dir -r requirements.txt
+
+pip check
 
 deactivate
 
