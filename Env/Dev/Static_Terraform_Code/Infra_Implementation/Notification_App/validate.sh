@@ -35,7 +35,7 @@ echo "Notification API Service is Running."
 
 echo "Checking Notification Sync Service..."
 
-sudo systemctl is-active --quiet notification-sync
+sudo systemctl is-enabled notification-sync >/dev/null
 
 echo "Notification Sync Service is Running."
 
