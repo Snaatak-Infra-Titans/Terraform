@@ -1,31 +1,10 @@
 variable "aws_region" {
-  description = "AWS Region for AMI creation"
-  type        = string
-}
-
-variable "instance_type" {
-  description = "EC2 instance type used by Packer to build the AMI"
-  type        = string
-  default     = "t3.small"
-}
-
-variable "subnet_id" {
-  description = "Subnet where the temporary EC2 instance will be launched"
-  type        = string
-}
-
-variable "security_group_id" {
-  description = "Security Group attached to the temporary EC2 instance"
+  description = "AWS Region where the AMI will be built"
   type        = string
 }
 
 variable "environment" {
-  description = "Deployment Environment"
-  type        = string
-}
-
-variable "ami_name" {
-  description = "Base name for the generated AMI"
+  description = "Deployment environment"
   type        = string
 }
 
@@ -44,7 +23,27 @@ variable "cost_center" {
   type        = string
 }
 
+variable "instance_type" {
+  description = "EC2 instance type used by Packer to build the AMI"
+  type        = string
+}
+
+variable "ami_name" {
+  description = "Base name of the AMI"
+  type        = string
+}
+
+variable "subnet_id" {
+  description = "Backend subnet where the temporary Packer instance will be launched"
+  type        = string
+}
+
+variable "security_group_id" {
+  description = "Security Group attached to the temporary Packer instance"
+  type        = string
+}
+
 variable "ssm_instance_profile" {
-  description = "IAM Instance Profile used by the Packer builder instance"
+  description = "IAM Instance Profile attached to the temporary Packer EC2 instance"
   type        = string
 }
