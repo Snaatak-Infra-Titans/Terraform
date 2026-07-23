@@ -63,11 +63,6 @@ build {
     destination = "/tmp/notification-api.service"
   }
 
-  provisioner "file" {
-    source      = "elasticsearch.yml"
-    destination = "/tmp/elasticsearch.yml"
-  }
-
   provisioner "shell" {
     script = "configure.sh"
   }
