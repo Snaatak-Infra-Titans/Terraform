@@ -15,6 +15,17 @@ data "aws_subnets" "backend_subnets" {
   }
 }
 
+data "aws_subnets" "public_subnets" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.network_vpc.id]
+  }
+
+  tags = {
+    Tier = "public"
+  }
+}
+
 # Fetching the existing ALB from Network Skeleton
 data "aws_lb" "existing_alb" {
   name = "${var.environment}-${var.application}-alb"
