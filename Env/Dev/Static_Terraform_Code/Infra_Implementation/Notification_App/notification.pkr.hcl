@@ -16,18 +16,23 @@ source "amazon-ebs" "notification" {
   ami_name = "${var.ami_name}-${formatdate("YYYYMMDD-HHmmss", timestamp())}"
 
   source_ami_filter {
+
     filters = {
       name                = "ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"
       virtualization-type = "hvm"
       root-device-type    = "ebs"
     }
 
-    owners      = ["099720109477"]
+    owners      = ["099720109477"] # Canonical
     most_recent = true
   }
 
-  subnet_id                   = var.subnet_id
-  security_group_id           = var.security_group_id
+  subnet_id = var.subnet_id
+
+  security_group_ids = [
+    var.security_group_id
+  ]
+
   associate_public_ip_address = true
 
   tags = {
@@ -67,4 +72,5 @@ build {
   provisioner "shell" {
     script = "validate.sh"
   }
+
 }
