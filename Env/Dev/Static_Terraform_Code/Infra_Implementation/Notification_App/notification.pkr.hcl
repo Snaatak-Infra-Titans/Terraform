@@ -16,14 +16,13 @@ source "amazon-ebs" "notification" {
   ami_name = "${var.ami_name}-${formatdate("YYYYMMDD-HHmmss", timestamp())}"
 
   source_ami_filter {
-
     filters = {
       name                = "ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"
       virtualization-type = "hvm"
       root-device-type    = "ebs"
     }
 
-    owners      = ["099720109477"] # Canonical
+    owners      = ["099720109477"] # Canonical Ubuntu Images
     most_recent = true
   }
 
@@ -33,13 +32,17 @@ source "amazon-ebs" "notification" {
     var.security_group_id
   ]
 
+  iam_instance_profile = var.ssm_instance_profile
+
   associate_public_ip_address = true
 
   tags = {
-    Name        = var.ami_name
-    Environment = var.environment
-    Application = "notification"
-    CreatedBy   = "Packer"
+    Name         = var.ami_name
+    Environment  = var.environment
+    Application  = var.application
+    Owner        = var.owner
+    Cost_Center  = var.cost_center
+    CreatedBy    = "Packer"
   }
 }
 
@@ -72,5 +75,4 @@ build {
   provisioner "shell" {
     script = "validate.sh"
   }
-
 }
