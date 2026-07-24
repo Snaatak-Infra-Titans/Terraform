@@ -66,10 +66,7 @@ resource "aws_network_acl_association" "database" {
 # Public NACL Rules
 ############################################
 
-####################
 # Inbound
-####################
-
 resource "aws_network_acl_rule" "public_http" {
   network_acl_id = aws_network_acl.public.id
   rule_number    = 100
@@ -118,10 +115,7 @@ resource "aws_network_acl_rule" "public_backend_ephemeral" {
   to_port   = var.ephemeral_to_port
 }
 
-####################
 # Outbound
-####################
-
 resource "aws_network_acl_rule" "public_to_frontend" {
   network_acl_id = aws_network_acl.public.id
   rule_number    = 100
@@ -182,7 +176,6 @@ resource "aws_network_acl_rule" "public_to_notification" {
   to_port   = var.notification_port
 }
 
-# Added for SSM / package downloads / HTTPS traffic
 resource "aws_network_acl_rule" "public_https_outbound" {
   network_acl_id = aws_network_acl.public.id
   rule_number    = 150
@@ -212,7 +205,6 @@ resource "aws_network_acl_rule" "public_ephemeral" {
 ############################################
 
 # Inbound
-
 resource "aws_network_acl_rule" "frontend_alb" {
   network_acl_id = aws_network_acl.frontend.id
   rule_number    = 100
@@ -250,7 +242,6 @@ resource "aws_network_acl_rule" "frontend_https_inbound" {
 }
 
 # Outbound
-
 resource "aws_network_acl_rule" "frontend_ephemeral_outbound" {
   network_acl_id = aws_network_acl.frontend.id
   rule_number    = 100
@@ -280,7 +271,6 @@ resource "aws_network_acl_rule" "frontend_https_outbound" {
 ############################################
 
 # Inbound
-
 resource "aws_network_acl_rule" "backend_employee" {
   network_acl_id = aws_network_acl.backend.id
   rule_number    = 100
@@ -354,7 +344,6 @@ resource "aws_network_acl_rule" "backend_https_inbound" {
 }
 
 # Outbound
-
 resource "aws_network_acl_rule" "backend_redis" {
   network_acl_id = aws_network_acl.backend.id
   rule_number    = 100
@@ -419,10 +408,7 @@ resource "aws_network_acl_rule" "backend_https_outbound" {
 # Database Rules
 ############################################
 
-####################
 # Inbound
-####################
-
 resource "aws_network_acl_rule" "database_redis" {
   network_acl_id = aws_network_acl.database.id
   rule_number    = 100
@@ -459,7 +445,6 @@ resource "aws_network_acl_rule" "database_scylla" {
   to_port   = var.scylla_port
 }
 
-# Return traffic from backend instances
 resource "aws_network_acl_rule" "database_ephemeral_inbound" {
   network_acl_id = aws_network_acl.database.id
   rule_number    = 130
@@ -472,10 +457,7 @@ resource "aws_network_acl_rule" "database_ephemeral_inbound" {
   to_port   = var.ephemeral_to_port
 }
 
-####################
 # Outbound
-####################
-
 resource "aws_network_acl_rule" "database_redis_outbound" {
   network_acl_id = aws_network_acl.database.id
   rule_number    = 100
@@ -512,7 +494,6 @@ resource "aws_network_acl_rule" "database_scylla_outbound" {
   to_port   = var.scylla_port
 }
 
-# Return traffic back to backend
 resource "aws_network_acl_rule" "database_ephemeral_outbound" {
   network_acl_id = aws_network_acl.database.id
   rule_number    = 130
@@ -524,4 +505,3 @@ resource "aws_network_acl_rule" "database_ephemeral_outbound" {
   from_port = var.ephemeral_from_port
   to_port   = var.ephemeral_to_port
 }
-
