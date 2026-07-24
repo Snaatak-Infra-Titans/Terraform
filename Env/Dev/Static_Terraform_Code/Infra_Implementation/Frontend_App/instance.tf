@@ -9,6 +9,6 @@ resource "aws_instance" "frontend" {
 
   # Only specify resource-specific tags here; default_tags handles the rest
   tags = {
-    Name = "dev-otms-frontend-instance"
+    Name = "dev-otms-frontend"
   }
 }
