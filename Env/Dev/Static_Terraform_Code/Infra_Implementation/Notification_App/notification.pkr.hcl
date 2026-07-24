@@ -34,11 +34,9 @@ source "amazon-ebs" "notification" {
     var.security_group_id
   ]
 
-  iam_instance_profile = var.ssm_instance_profile
+  
 
   associate_public_ip_address = true
-
-  shutdown_command = "sudo shutdown -P now"
 
   tags = {
     Name         = var.ami_name
