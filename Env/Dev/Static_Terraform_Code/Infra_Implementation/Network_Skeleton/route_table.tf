@@ -5,30 +5,22 @@ resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main_vpc.id
 
   tags = {
-    Name        = "${var.environment}_${var.application}_public_rt"
-    Environment = var.environment
-    Application = var.application
-    Owner       = var.owner
-    CostCenter  = var.cost_center
-    Tier        = "public"
+    Name = "${var.environment}_${var.application}_public_rt"
+    Tier = "public"
   }
 }
 
 resource "aws_route" "public_internet_access" {
   route_table_id         = aws_route_table.public.id
   destination_cidr_block = "0.0.0.0/0"
-  
-  # DIRECT LINK TO DEEPAK'S IGW
   gateway_id             = aws_internet_gateway.main_igw.id
 }
 
-# DIRECT LOOP OVER PAWAN'S PUBLIC SUBNETS
 resource "aws_route_table_association" "public" {
   for_each       = aws_subnet.public
   subnet_id      = each.value.id
   route_table_id = aws_route_table.public.id
 }
-
 
 # -----------------------------------------------------------
 # 2. PRIVATE ROUTE TABLE & ASSOCIATIONS
@@ -37,30 +29,23 @@ resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main_vpc.id
 
   tags = {
-    Name        = "${var.environment}_${var.application}_private_rt"
-    Environment = var.environment
-    Application = var.application
-    Owner       = var.owner
-    CostCenter  = var.cost_center
-    Tier        = "private"
+    Name = "${var.environment}_${var.application}_private_rt"
+    Tier = "private"
   }
 }
 
-# DIRECT LOOP OVER PAWAN'S FRONTEND SUBNETS
 resource "aws_route_table_association" "frontend" {
   for_each       = aws_subnet.frontend
   subnet_id      = each.value.id
   route_table_id = aws_route_table.private.id
 }
 
-# DIRECT LOOP OVER PAWAN'S BACKEND SUBNETS
 resource "aws_route_table_association" "backend" {
   for_each       = aws_subnet.backend
   subnet_id      = each.value.id
   route_table_id = aws_route_table.private.id
 }
 
-# DIRECT LOOP OVER PAWAN'S DATABASE SUBNETS
 resource "aws_route_table_association" "database" {
   for_each       = aws_subnet.database
   subnet_id      = each.value.id
