@@ -22,7 +22,7 @@ resource "aws_autoscaling_group" "notification_asg" {
     propagate_at_launch = true
   }
 
-tag {
+  tag {
     key                 = "Application"
     value               = var.application
     propagate_at_launch = true
