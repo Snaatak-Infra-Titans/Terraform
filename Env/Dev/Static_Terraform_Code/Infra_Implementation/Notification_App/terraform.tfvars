@@ -13,5 +13,5 @@ cpu_target_value = 60.0
 app_path_pattern       = "/notification/*"
 listener_rule_priority = 100
 ami_owner_id = "547941801997"
-ami_name     = "notification-es-golden-v1"
+ami_name     = "notification-es-golden-v1-20260724-015425"
 ssm_instance_profile = "dev-otms-ssm-role"
