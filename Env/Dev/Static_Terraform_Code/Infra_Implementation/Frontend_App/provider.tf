@@ -10,7 +10,7 @@ terraform {
 provider "aws" {
   region = "us-east-1"
 
-  # This automatically applies your common tags to EVERY resource
+
   default_tags {
     tags = var.common_tags
   }
