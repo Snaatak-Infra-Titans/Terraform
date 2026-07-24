@@ -34,7 +34,7 @@ variable "ami_name" {
 }
 
 variable "subnet_id" {
-  description = "Backend subnet where the temporary Packer instance will be launched"
+  description = "Subnet where the temporary Packer instance will be launched"
   type        = string
 }
 
