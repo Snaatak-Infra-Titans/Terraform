@@ -1,11 +1,3 @@
-
-data "aws_vpc" "existing" {
-  filter {
-    name   = "tag:Name"
-    values = [var.vpc_name]
-  }
-}
-
 locals {
   subnet_plan = {
     public   = { offset = 0, public = true }
@@ -19,8 +11,8 @@ locals {
 resource "aws_subnet" "public" {
   for_each = { for idx, az in var.azs : az => { az_index = idx } }
 
-  vpc_id                  = data.aws_vpc.existing.id
-  cidr_block              = cidrsubnet(data.aws_vpc.existing.cidr_block, var.subnet_newbits, local.subnet_plan.public.offset + each.value.az_index)
+  vpc_id                  = aws_vpc.main_vpc.id
+  cidr_block              = cidrsubnet(aws_vpc.main_vpc.cidr_block, var.subnet_newbits, local.subnet_plan.public.offset + each.value.az_index)
   availability_zone       = "${var.aws_region}${each.key}"
   map_public_ip_on_launch = true
 
@@ -38,8 +30,8 @@ resource "aws_subnet" "public" {
 resource "aws_subnet" "frontend" {
   for_each = { for idx, az in var.azs : az => { az_index = idx } }
 
-  vpc_id                  = data.aws_vpc.existing.id
-  cidr_block              = cidrsubnet(data.aws_vpc.existing.cidr_block, var.subnet_newbits, local.subnet_plan.frontend.offset + each.value.az_index)
+  vpc_id                  = aws_vpc.main_vpc.id
+  cidr_block              = cidrsubnet(aws_vpc.main_vpc.cidr_block, var.subnet_newbits, local.subnet_plan.frontend.offset + each.value.az_index)
   availability_zone       = "${var.aws_region}${each.key}"
   map_public_ip_on_launch = false
 
@@ -57,8 +49,8 @@ resource "aws_subnet" "frontend" {
 resource "aws_subnet" "backend" {
   for_each = { for idx, az in var.azs : az => { az_index = idx } }
 
-  vpc_id                  = data.aws_vpc.existing.id
-  cidr_block              = cidrsubnet(data.aws_vpc.existing.cidr_block, var.subnet_newbits, local.subnet_plan.backend.offset + each.value.az_index)
+  vpc_id                  = aws_vpc.main_vpc.id
+  cidr_block              = cidrsubnet(aws_vpc.main_vpc.cidr_block, var.subnet_newbits, local.subnet_plan.backend.offset + each.value.az_index)
   availability_zone       = "${var.aws_region}${each.key}"
   map_public_ip_on_launch = false
 
@@ -76,8 +68,8 @@ resource "aws_subnet" "backend" {
 resource "aws_subnet" "database" {
   for_each = { for idx, az in var.azs : az => { az_index = idx } }
 
-  vpc_id                  = data.aws_vpc.existing.id
-  cidr_block              = cidrsubnet(data.aws_vpc.existing.cidr_block, var.subnet_newbits, local.subnet_plan.database.offset + each.value.az_index)
+  vpc_id                  = aws_vpc.main_vpc.id
+  cidr_block              = cidrsubnet(aws_vpc.main_vpc.cidr_block, var.subnet_newbits, local.subnet_plan.database.offset + each.value.az_index)
   availability_zone       = "${var.aws_region}${each.key}"
   map_public_ip_on_launch = false
 
