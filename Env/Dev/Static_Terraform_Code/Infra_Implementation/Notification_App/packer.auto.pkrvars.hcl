@@ -1,13 +1,10 @@
 aws_region           = "us-east-1"
-
 environment          = "dev"
 application          = "otms"
-
 owner                = "Infra-Titans"
 cost_center          = "Snaatak"
-
 instance_type        = "t3.small"
-
 ami_name             = "notification-es-golden-v1"
-
 ssm_instance_profile = "dev-otms-ssm-role"
+subnet_id            = "subnet-0315113c2df0827d7"
+security_group_id    = "aws_security_group.packer_builder_sg.id"
