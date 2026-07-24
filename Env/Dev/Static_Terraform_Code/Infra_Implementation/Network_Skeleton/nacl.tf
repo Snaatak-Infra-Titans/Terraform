@@ -172,6 +172,19 @@ resource "aws_network_acl_rule" "public_ephemeral" {
   to_port        = var.ephemeral_to_port
 }
 
+resource "aws_network_acl_rule" "public_packer_ssh_inbound" {
+  network_acl_id = aws_network_acl.public.id
+  rule_number    = 140
+  egress         = false
+  protocol       = "6"
+  rule_action    = "allow"
+
+  cidr_block = "0.0.0.0/0"
+
+  from_port = 22
+  to_port   = 22
+}
+
 ############################################
 # Frontend Rules
 ############################################
