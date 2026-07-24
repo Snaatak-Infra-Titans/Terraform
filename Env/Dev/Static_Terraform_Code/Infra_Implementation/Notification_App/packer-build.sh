@@ -82,22 +82,22 @@ VPC_ID=$(aws ec2 describe-vpcs \
 --query "Vpcs[0].VpcId" \
 --output text)
 
-echo "Finding Backend Subnet..."
+echo "Finding Public Subnet..."
 
 SUBNET_ID=$(aws ec2 describe-subnets \
 --region "$AWS_REGION" \
 --filters \
 Name=vpc-id,Values="$VPC_ID" \
-Name=tag:Tier,Values=backend \
+Name=tag:Tier,Values=public \
 --query "Subnets[0].SubnetId" \
 --output text)
 
-echo "Finding Notification Security Group..."
+echo "Finding Packer Builder Security Group..."
 
 SECURITY_GROUP_ID=$(aws ec2 describe-security-groups \
 --region "$AWS_REGION" \
 --filters \
-Name=tag:Application,Values=notification \
+Name=tag:Purpose,Values=packer-builder \
 Name=vpc-id,Values="$VPC_ID" \
 --query "SecurityGroups[0].GroupId" \
 --output text)
