@@ -34,7 +34,7 @@ resource "aws_route53_record" "alb_alias_www" {
 # -----------------------------------------------------
 resource "aws_route53_record" "alb_alias_root" {
   zone_id = aws_route53_zone.main.zone_id
-  name    = var.hosted_zone_name  # "otms.online" (Leave empty string "" or use hosted_zone_name)
+  name    = var.hosted_zone_name  # "otms.online"
   type    = "A"
 
   alias {
