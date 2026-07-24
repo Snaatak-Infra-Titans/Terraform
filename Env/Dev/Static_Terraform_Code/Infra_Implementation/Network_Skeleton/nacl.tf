@@ -205,7 +205,7 @@ resource "aws_network_acl_rule" "frontend_ephemeral" {
   egress         = false
   protocol       = "6"
   rule_action    = "allow"
-  cidr_block     = var.public_cidr
+  cidr_block     = "0.0.0.0/0"
   from_port      = var.ephemeral_from_port
   to_port        = var.ephemeral_to_port
 }
