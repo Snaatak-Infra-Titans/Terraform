@@ -42,8 +42,3 @@ variable "security_group_id" {
   description = "Security Group attached to the temporary Packer instance"
   type        = string
 }
-
-variable "ssm_instance_profile" {
-  description = "IAM Instance Profile attached to the temporary Packer EC2 instance"
-  type        = string
-}
