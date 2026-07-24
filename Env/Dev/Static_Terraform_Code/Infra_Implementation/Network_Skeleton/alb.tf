@@ -11,10 +11,10 @@ locals {
   }
 
   listener_rules = {
-    employee     = { priority = 10, paths = ["/employee/*"] }
-    attendance   = { priority = 20, paths = ["/attendance/*"] }
-    salary       = { priority = 30, paths = ["/salary/*"] }
-    notification = { priority = 40, paths = ["/notification/*"] }
+    employee     = { priority = 10, paths = ["/api/v1/employee/*"] }
+    attendance   = { priority = 20, paths = ["/api/v1/attendance/*"] }
+    salary       = { priority = 30, paths = ["/actuator/*"] }
+    notification = { priority = 40, paths = ["/api/v1/notification/*"] }
   }
 }
 
