@@ -1,4 +1,4 @@
-# Fetch the network outputs from S3
+
 data "terraform_remote_state" "network" {
   backend = "s3"
   config = {
@@ -8,7 +8,7 @@ data "terraform_remote_state" "network" {
   }
 }
 
-# Fetch the existing SSM Instance Profile
+
 data "aws_iam_instance_profile" "ssm_profile" {
   name = "dev-otms-ssm-role"
 }
