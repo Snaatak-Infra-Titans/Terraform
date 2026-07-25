@@ -22,8 +22,8 @@ resource "aws_vpc_security_group_ingress_rule" "scylla_cql" {
 
   description = "Allow ScyllaDB CQL traffic from OTMS applications"
 
-  from_port   = 9042
-  to_port     = 9042
+  from_port = 9042
+  to_port   = 9042
 
   ip_protocol = "tcp"
 

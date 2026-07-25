@@ -23,7 +23,7 @@ variable "vpc_name" {
 }
 
 variable "database_subnet_name" {
-  type        = string
+  type = string
 }
 
 variable "key_name" {

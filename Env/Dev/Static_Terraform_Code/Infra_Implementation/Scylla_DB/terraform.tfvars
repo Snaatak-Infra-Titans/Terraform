@@ -1,21 +1,21 @@
-aws_region    = "us-east-1"
+aws_region = "us-east-1"
 
-environment   = "dev"
+environment = "dev"
 
-application   = "otms"
+application = "otms"
 
-owner          = "Infra-Titans"
+owner = "Infra-Titans"
 
-cost_center    = "Snaatak"
+cost_center = "Snaatak"
 
-vpc_name       = "dev-otms-vpc"
+vpc_name = "dev-otms-vpc"
 
 database_subnet_name = "dev_otms_database_subnet_a"
 
-key_name       = "dev-otms-key"
+key_name = "dev-otms-key"
 
-instance_type  = "t3.small"
+instance_type = "t3.small"
 
-ami_owner_id   = "099720109477"
+ami_owner_id = "099720109477"
 
-ami_name       = "ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"
+ami_name = "ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"
