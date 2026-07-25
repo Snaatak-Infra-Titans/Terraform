@@ -3,7 +3,7 @@ data "terraform_remote_state" "network" {
   config = {
     bucket = "otms-terraform-state-dev"
     key    = "network/full.tfstate"
-    region = var.aws_region
+    region = "us-east-1"
   }
 }
 
