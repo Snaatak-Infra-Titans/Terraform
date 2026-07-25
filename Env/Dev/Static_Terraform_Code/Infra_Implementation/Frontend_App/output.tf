@@ -22,3 +22,8 @@ output "frontend_asg_name" {
   description = "The Name of the Frontend Auto Scaling Group"
   value       = aws_autoscaling_group.frontend_asg.name
 }
+
+output "frontend_asg_policy_arn" {
+  description = "The ARN of the frontend Auto Scaling Policy"
+  value       = aws_autoscaling_policy.frontend_cpu_policy.arn
+}
