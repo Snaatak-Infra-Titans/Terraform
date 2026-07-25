@@ -28,7 +28,7 @@ resource "aws_instance" "scylladb" {
 
   tags = {
 
-    Name = "${var.environment}-scylla-ec2"
+    Name = "${var.environment}-${var.application}-scylla-ec2"
 
     Application = "otms"
 
