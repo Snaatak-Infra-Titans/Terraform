@@ -22,18 +22,20 @@ variable "vpc_name" {
   type = string
 }
 
-variable "instance_type" {
-  type = string
-}
-
 variable "key_name" {
   type = string
 }
 
-variable "ami_owner_id" {
+variable "instance_type" {
   type = string
 }
 
+variable "ami_owner_id" {
+  type        = string
+  description = "AWS Account ID of the AMI owner"
+}
+
 variable "ami_name" {
-  type = string
+  type        = string
+  description = "AMI name"
 }
