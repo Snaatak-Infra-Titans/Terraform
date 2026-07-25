@@ -1,18 +1,17 @@
 resource "aws_instance" "scylladb" {
 
-  ami                    = data.aws_ami.ubuntu.id
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = var.instance_type
 
-  instance_type          = var.instance_type
-
-  subnet_id              = data.aws_subnets.backend_subnets.ids[0]
+  subnet_id = data.aws_subnets.database_subnets.ids[0]
 
   vpc_security_group_ids = [
     data.aws_security_group.scylla_sg.id
   ]
 
-  key_name = data.aws_key_pair.existing_key.key_name
-
   iam_instance_profile = data.aws_iam_instance_profile.ssm.name
+
+  key_name = data.aws_key_pair.existing_key.key_name
 
   associate_public_ip_address = false
 
@@ -31,7 +30,7 @@ resource "aws_instance" "scylladb" {
 
     Name = "${var.environment}-scylla-ec2"
 
-    Application = "ScyllaDB"
+    Application = "otms"
 
     Environment = var.environment
 
@@ -39,4 +38,5 @@ resource "aws_instance" "scylladb" {
 
     CostCenter = var.cost_center
   }
+
 }
