@@ -1,4 +1,22 @@
-# ScyllaDB Ingress Rule
+resource "aws_security_group" "scylla_sg" {
+
+  name        = "${var.environment}-${var.application}-scylla-sg"
+  description = "Security Group for ScyllaDB EC2"
+
+  vpc_id = data.aws_vpc.network_vpc.id
+
+  tags = {
+    Name        = "${var.environment}-${var.application}-scylla-sg"
+    Application = var.application
+    Environment = var.environment
+    Owner       = var.owner
+    CostCenter  = var.cost_center
+  }
+}
+
+
+# Ingress Rule
+
 
 resource "aws_vpc_security_group_ingress_rule" "scylla_cql" {
 
@@ -8,12 +26,15 @@ resource "aws_vpc_security_group_ingress_rule" "scylla_cql" {
 
   from_port   = 9042
   to_port     = 9042
+
   ip_protocol = "tcp"
 
   cidr_ipv4 = data.aws_vpc.network_vpc.cidr_block
 }
 
-# ScyllaDB Egress Rule
+
+# Egress Rule
+
 
 resource "aws_vpc_security_group_egress_rule" "all_outbound" {
 
