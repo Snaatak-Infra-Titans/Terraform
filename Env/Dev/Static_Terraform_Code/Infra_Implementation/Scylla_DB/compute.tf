@@ -6,7 +6,7 @@ resource "aws_instance" "scylladb" {
   subnet_id = data.aws_subnet.database_subnet.id
 
   vpc_security_group_ids = [
-    data.aws_security_group.scylla_sg.id
+    aws_security_group.scylla_sg.id
   ]
 
   iam_instance_profile = data.aws_iam_instance_profile.ssm.name
