@@ -5,19 +5,16 @@ data "aws_vpc" "network_vpc" {
   }
 }
 
-data "aws_subnets" "database_subnets" {
+data "aws_subnet" "database_subnet" {
+
   filter {
     name   = "vpc-id"
     values = [data.aws_vpc.network_vpc.id]
   }
 
   filter {
-    name = "tag:Name"
-
-    values = [
-      "dev_otms_database_subnet_a",
-      "dev_otms_database_subnet_b"
-    ]
+    name   = "tag:Name"
+    values = [var.database_subnet_name]
   }
 }
 
