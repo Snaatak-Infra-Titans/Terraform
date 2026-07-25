@@ -5,23 +5,28 @@ data "aws_vpc" "network_vpc" {
   }
 }
 
-data "aws_subnets" "backend_subnets" {
+data "aws_subnets" "database_subnets" {
   filter {
     name   = "vpc-id"
     values = [data.aws_vpc.network_vpc.id]
   }
 
-  tags = {
-    Tier = "backend"
+  filter {
+    name = "tag:Name"
+
+    values = [
+      "dev_otms_database_subnet_a",
+      "dev_otms_database_subnet_b"
+    ]
   }
+}
+
+data "aws_security_group" "scylla_sg" {
+  name = "dev-otms-scylla-sg"
 }
 
 data "aws_key_pair" "existing_key" {
   key_name = var.key_name
-}
-
-data "aws_security_group" "scylla_sg" {
-  name = "${var.environment}-scylla-sg"
 }
 
 data "aws_iam_instance_profile" "ssm" {
@@ -29,6 +34,7 @@ data "aws_iam_instance_profile" "ssm" {
 }
 
 data "aws_ami" "ubuntu" {
+
   most_recent = true
 
   owners = [var.ami_owner_id]
