@@ -312,15 +312,15 @@ resource "aws_network_acl_rule" "backend_https_inbound" {
   to_port        = var.https_port
 }
 
-resource "aws_network_acl_rule" "backend_ephemeral_any_inbound" {
+resource "aws_network_acl_rule" "backend_ephemeral_port_inbound" {
   network_acl_id = aws_network_acl.backend.id
   rule_number    = 160
   egress         = false
   protocol       = "6"
   rule_action    = "allow"
   cidr_block     = "0.0.0.0/0"
-  from_port      = 1024
-  to_port        = 65535
+  from_port      = var.ephemeral_from_port
+  to_port        = var.ephemeral_to_port
 }
 
 resource "aws_network_acl_rule" "backend_redis" {
@@ -385,8 +385,8 @@ resource "aws_network_acl_rule" "backend_ephemeral_any_inbound" {
   protocol       = "6"
   rule_action    = "allow"
   cidr_block     = "0.0.0.0/0"
-  from_port      = 1024
-  to_port        = 65535
+  from_port      = var.ephemeral_from_port
+  to_port        = var.ephemeral_to_port
 }
 
 resource "aws_network_acl_rule" "backend_http_outbound" {
@@ -396,8 +396,8 @@ resource "aws_network_acl_rule" "backend_http_outbound" {
   protocol       = "6"
   rule_action    = "allow"
   cidr_block     = "0.0.0.0/0"
-  from_port      = 80
-  to_port        = 80
+  from_port      = var.http_port
+  to_port        = var.http_port
 }
 
 ############################################
