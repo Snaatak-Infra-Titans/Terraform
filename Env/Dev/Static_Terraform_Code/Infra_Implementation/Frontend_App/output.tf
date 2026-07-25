@@ -1,9 +1,14 @@
-output "frontend_instance_id" {
-  description = "The ID of the frontend EC2 instance"
-  value       = aws_instance.frontend.id
+output "frontend_launch_template_id" {
+  description = "The ID of the Frontend Launch Template"
+  value       = aws_launch_template.frontend.id
 }
 
-output "frontend_private_ip" {
-  description = "The private IP address of the frontend instance"
-  value       = aws_instance.frontend.private_ip
+output "frontend_launch_template_latest_version" {
+  description = "The latest version of the Frontend Launch Template"
+  value       = aws_launch_template.frontend.latest_version
+}
+
+output "frontend_security_group_id" {
+  description = "The ID of the Frontend Security Group"
+  value       = aws_security_group.frontend_sg.id
 }
