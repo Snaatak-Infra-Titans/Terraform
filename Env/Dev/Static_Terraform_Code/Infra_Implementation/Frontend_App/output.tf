@@ -14,6 +14,6 @@ output "frontend_security_group_id" {
 }
 
 output "frontend_tg_arn" {
-  description = "The ARN of the frontend Target Group"
-  value       = aws_lb_target_group.frontend_tg.arn
+  description = "The ARN of the frontend Target Group fetched from network state"
+  value       = data.terraform_remote_state.network.outputs.target_group_arns["frontend"]
 }
