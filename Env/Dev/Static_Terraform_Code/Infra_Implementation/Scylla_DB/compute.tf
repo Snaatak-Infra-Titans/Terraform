@@ -3,7 +3,7 @@ resource "aws_instance" "scylladb" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
 
-  subnet_id = data.aws_subnets.database_subnets.ids[0]
+  subnet_id = data.aws_subnet.database_subnet.id
 
   vpc_security_group_ids = [
     data.aws_security_group.scylla_sg.id
