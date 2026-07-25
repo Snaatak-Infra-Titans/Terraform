@@ -18,9 +18,6 @@ data "aws_subnet" "database_subnet" {
   }
 }
 
-data "aws_security_group" "scylla_sg" {
-  name = "dev-otms-scylla-sg"
-}
 
 data "aws_key_pair" "existing_key" {
   key_name = var.key_name
