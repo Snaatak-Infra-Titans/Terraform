@@ -23,12 +23,3 @@ resource "aws_instance" "employee_api" {
     }
   )
 }
-
-resource "aws_route53_record" "api_dns" {
-  zone_id = data.aws_route53_zone.private.zone_id
-  name    = "api.otms.internal"
-  type    = "A"
-  ttl     = 300
-  # Points the Route 53 record to the instance's private IP
-  records = [aws_instance.employee_api.private_ip] 
-}
