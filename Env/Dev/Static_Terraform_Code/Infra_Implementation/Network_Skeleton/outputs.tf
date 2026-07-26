@@ -73,3 +73,11 @@ output "private_key_pem" {
   value       = tls_private_key.rsa_key.private_key_pem
   sensitive   = true
 }
+
+# -----------------------------------------------------
+# ALB Listener Rule Outputs
+# -----------------------------------------------------
+output "listener_rule_arns" {
+  description = "Map of service names (e.g., employee, attendance) to their ALB Listener Rule ARNs"
+  value       = { for k, v in aws_lb_listener_rule.services : k => v.arn }
+}
