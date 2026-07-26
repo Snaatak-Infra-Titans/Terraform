@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket       = "otms-terraform-state-dev"
-    key          = "redis/sgtest.tfstate"
+    key          = "redis/sg.tfstate"
     region       = "us-east-1"
     encrypt      = true
     use_lockfile = true
