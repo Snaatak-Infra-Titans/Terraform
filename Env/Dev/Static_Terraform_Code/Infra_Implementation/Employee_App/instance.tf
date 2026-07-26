@@ -5,8 +5,8 @@ resource "aws_instance" "employee_api" {
   # Deploying into the first backend subnet fetched from the remote state
   subnet_id              = data.terraform_remote_state.network.outputs.backend_subnet_ids[0]
   
-  # Using the default SG fetched from data.tf
-  vpc_security_group_ids = [data.aws_security_group.default.id]
+ 
+  vpc_security_group_ids = [aws_security_group.api_sg.id]
   
   iam_instance_profile   = "dev-otms-ssm-role"
   key_name               = data.terraform_remote_state.network.outputs.key_pair_name
