@@ -7,3 +7,5 @@ owner                = "Infra-Titans"
 cost_center          = "Snaatak"
 
 vpc_name             = "dev-otms-vpc"
+
+database_subnet_name = "dev_otms_database_subnet_a"
