@@ -10,4 +10,9 @@ data "aws_subnet" "database_subnet" {
     name   = "vpc-id"
     values = [data.aws_vpc.network_vpc.id]
   }
+
+  filter {
+    name   = "tag:Name"
+    values = [var.database_subnet_name]
+  }
 }
