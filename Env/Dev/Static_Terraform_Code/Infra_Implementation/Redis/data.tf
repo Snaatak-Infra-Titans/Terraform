@@ -10,3 +10,4 @@ data "aws_subnet" "database_subnet" {
     name   = "vpc-id"
     values = [data.aws_vpc.network_vpc.id]
   }
+}
