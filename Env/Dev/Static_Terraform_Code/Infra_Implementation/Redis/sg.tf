@@ -19,7 +19,7 @@ resource "aws_vpc_security_group_ingress_rule" "redis" {
   from_port         = 6379
   to_port           = 6379
   ip_protocol       = "tcp"
-  cidr_ipv4         = data.aws_subnet.backend_subnet.cidr_block
+  cidr_ipv4         = data.aws_subnet.database_subnet.cidr_block
 }
 
 # Egress Rule
