@@ -33,7 +33,7 @@ certificate_arn = "arn:aws:acm:us-east-1:547941801997:certificate/c8cfc9e7-cca3-
 ssl_policy      = "ELBSecurityPolicy-TLS13-1-2-2021-06"
 
 frontend_health_check     = "/"
-employee_health_check     = "/"
+employee_health_check     = "/api/v1/employee/health"
 attendance_health_check   = "/"
 salary_health_check       = "/"
 notification_health_check = "/api/v1/notification/health/detail"
