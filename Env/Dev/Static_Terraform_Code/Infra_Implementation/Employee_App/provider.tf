@@ -10,8 +10,13 @@ terraform {
 provider "aws" {
   region = "us-east-1"
 
-
+ 
   default_tags {
-    tags = var.common_tags
+    tags = {
+      Application = "otms"
+      CostCenter  = "Snaatak"
+      Environment = "dev"
+      Owner       = "Infra-Titans"
+    }
   }
 }
