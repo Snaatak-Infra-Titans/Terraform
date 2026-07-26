@@ -2,7 +2,7 @@ resource "aws_launch_template" "employee_api" {
   name_prefix   = "dev-otms-employee-api-lt-"
   description   = "Launch template for the Employee API backend"
   image_id      = var.ami_id
-  instance_type = var.instance_type
+  instance_type = "t3.small"
 
   iam_instance_profile {
     name = "dev-otms-ssm-role"
