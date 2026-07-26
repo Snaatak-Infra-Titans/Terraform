@@ -15,3 +15,13 @@ output "employee_tg_arn" {
   description = "The ARN of the Employee Target Group fetched from network state"
   value       = data.terraform_remote_state.network.outputs.target_group_arns["employee"]
 }
+
+output "employee_api_asg_name" {
+  description = "The name of the Employee API Auto Scaling Group"
+  value       = aws_autoscaling_group.employee_api.name
+}
+
+output "employee_api_cpu_policy_arn" {
+  description = "The ARN of the CPU auto-scaling policy"
+  value       = aws_autoscaling_policy.cpu_scaling.arn
+}
