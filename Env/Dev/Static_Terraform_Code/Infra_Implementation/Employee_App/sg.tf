@@ -3,7 +3,7 @@ resource "aws_security_group" "api_sg" {
   description = "Security Group for the Employee API backend service"
   vpc_id      = data.terraform_remote_state.network.outputs.vpc_id
 
-  
+
   ingress {
     description     = "Allow HTTP traffic from the ALB on port 8080"
     from_port       = 8080
