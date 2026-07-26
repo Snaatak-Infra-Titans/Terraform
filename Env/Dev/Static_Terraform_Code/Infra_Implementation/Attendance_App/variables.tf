@@ -1,6 +1,6 @@
 variable "aws_region" {
   type    = string
-  default = "ap-south-1"
+  default = "us-east-1"
 }
 
 variable "environment" {
@@ -8,17 +8,29 @@ variable "environment" {
   default = "dev"
 }
 
-variable "tag_application" {
+variable "application" {
   type    = string
-  default = "Attendance-App"
+  default = "otms"
 }
 
-variable "tag_owner" {
+variable "owner" {
   type    = string
-  default = "Bhawna"
+  default = "Infra-Titans"
 }
 
-variable "tag_costcenter" {
+variable "cost_center" {
   type    = string
-  default = "Dev-Cost-Center"
+  default = "Snaatak"
+}
+
+variable "ingress_rules" {
+  type = list(object({
+    port = number
+    cidr = list(string)
+  }))
+  default = [
+    { port = 8080, cidr = ["vpc"] },
+    { port = 22, cidr = ["0.0.0.0/0"] }
+  ]
+  description = "List of ingress rules with port and cidr blocks. Use 'vpc' as a placeholder for the VPC CIDR block."
 }
