@@ -40,10 +40,6 @@ variable "vpc_name" {
 }
 
 
-variable "key_name" {
-  type = string
-}
-
 variable "instance_type" {
   type = string
 }
