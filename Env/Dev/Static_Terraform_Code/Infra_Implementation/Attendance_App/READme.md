@@ -5,7 +5,7 @@
 **Cloud Infra Implementation Dev via Static Terraform | Setup Attendance App infra in dev env via terraform static code | Terraform static code to configure Listener Rules of ALB**
 
 **Ticket Link:**  
-<JIRA_TICKET_LINK>
+https://faisalakhan98-newbatch.atlassian.net/browse/SCRUM-393
 
 ---
 
