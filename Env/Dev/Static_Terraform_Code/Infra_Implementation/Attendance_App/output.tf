@@ -27,3 +27,4 @@ output "attendance_api_cpu_policy_arn" {
   description = "The ARN of the Attendance API CPU auto-scaling policy"
   value       = aws_autoscaling_policy.attendance_cpu_scaling.arn
 }
+
