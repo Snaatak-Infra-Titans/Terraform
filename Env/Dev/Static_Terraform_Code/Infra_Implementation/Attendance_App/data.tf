@@ -63,3 +63,17 @@ data "aws_ami" "attendance_app" {
     values = [var.ami_id]
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
