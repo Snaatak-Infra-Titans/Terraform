@@ -3,7 +3,7 @@ resource "aws_launch_template" "attendance_api" {
   description = "Launch template for the Attendance API backend"
 
   image_id      = var.ami_id
-  instance_type = "c7i-flex.large"
+  instance_type = "t3.small"
 
   iam_instance_profile {
     name = aws_iam_instance_profile.attendance_ssm_profile.name
@@ -21,7 +21,7 @@ resource "aws_launch_template" "attendance_api" {
     device_name = "/dev/sda1"
 
     ebs {
-      volume_size           = 30
+      volume_size           = 20
       volume_type           = "gp3"
       delete_on_termination = true
       encrypted             = true
