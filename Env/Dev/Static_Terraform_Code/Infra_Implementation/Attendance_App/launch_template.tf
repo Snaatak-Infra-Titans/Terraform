@@ -3,7 +3,7 @@ resource "aws_launch_template" "attendance_api" {
   description = "Launch template for the Attendance API backend"
 
   image_id      = var.ami_id
-  instance_type = "t3.micro"
+  instance_type = "c7i-flex.large"
 
   iam_instance_profile {
     name = aws_iam_instance_profile.attendance_ssm_profile.name
