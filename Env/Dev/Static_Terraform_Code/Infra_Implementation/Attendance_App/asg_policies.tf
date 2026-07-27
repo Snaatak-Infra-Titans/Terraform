@@ -1,13 +1,15 @@
-resource "aws_autoscaling_policy" "attendance_cpu_scaling" {
-  name                   = "dev-otms-attendance-api-cpu-scaling"
+resource "aws_autoscaling_policy" "cpu_target_tracking" {
+  name                   = "${var.environment}-${var.application}-cpu-policy"
+  
+  autoscaling_group_name = aws_autoscaling_group.attendance_asg.name
+  
   policy_type            = "TargetTrackingScaling"
-  autoscaling_group_name = aws_autoscaling_group.attendance_api.name
-
+  
+  # Target Tracking Configuration (CPU based)
   target_tracking_configuration {
     predefined_metric_specification {
       predefined_metric_type = "ASGAverageCPUUtilization"
     }
-
-    target_value = 70.0
+    target_value = var.cpu_target_value
   }
 }
