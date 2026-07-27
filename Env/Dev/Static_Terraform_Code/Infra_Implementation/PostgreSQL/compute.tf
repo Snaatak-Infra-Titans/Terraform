@@ -6,7 +6,7 @@ resource "aws_instance" "postgresql" {
   subnet_id = data.aws_subnet.database_subnet.id
 
   vpc_security_group_ids = [
-    aws_security_group.postgresql.id
+    aws_security_group.postgresql_sg.id
   ]
 
   iam_instance_profile = data.aws_iam_instance_profile.ssm.name
