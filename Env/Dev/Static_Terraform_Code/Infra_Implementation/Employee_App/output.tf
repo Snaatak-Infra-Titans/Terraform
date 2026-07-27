@@ -1,26 +1,19 @@
-# Launch Template Outputs (Ticket 431)
-output "launch_template_id" {
-  description = "ID of the Launch Template"
-  value       = aws_launch_template.employee_app.id
+output "employee_api_security_group_id" {
+  description = "The ID of the custom Security Group attached to the Employee API"
+  value       = aws_security_group.api_sg.id
 }
 
-output "launch_template_arn" {
-  description = "ARN of the Launch Template"
-  value       = aws_launch_template.employee_app.arn
+output "employee_api_launch_template_id" {
+  description = "The ID of the Employee API Launch Template"
+  value       = aws_launch_template.employee_api.id
 }
 
-# Auto Scaling Group Outputs (Ticket 433)
-output "asg_id" {
-  description = "ID of the Auto Scaling Group"
-  value       = aws_autoscaling_group.employee_app_asg.id
+output "employee_tg_arn" {
+  description = "The ARN of the Employee Target Group fetched from network state"
+  value       = data.terraform_remote_state.network.outputs.target_group_arns["employee"]
 }
 
-output "asg_name" {
-  description = "Name of the Auto Scaling Group"
-  value       = aws_autoscaling_group.employee_app_asg.name
-}
-
-output "asg_arn" {
-  description = "ARN of the Auto Scaling Group"
-  value       = aws_autoscaling_group.employee_app_asg.arn
+output "employee_api_asg_name" {
+  description = "The name of the Employee API Auto Scaling Group"
+  value       = aws_autoscaling_group.employee_api.name
 }
