@@ -64,7 +64,9 @@ data "aws_ami" "attendance_app" {
   }
 }
 
-
+data "aws_lb_target_group" "attendance_tg" {
+  name = "${var.environment}-${var.application}-attendance-tg"
+}
 
 
 
