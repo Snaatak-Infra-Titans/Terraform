@@ -1,62 +1,30 @@
-resource "aws_launch_template" "attendance_api" {
-  name_prefix = "dev-otms-attendance-api-lt-"
-  description = "Launch template for the Attendance API backend"
+resource "aws_launch_template" "attendance_lt" {
+  name          = "${var.environment}-${var.application}-notification-lt"
+  image_id      = data.aws_ami.attendance_app.id
+  instance_type = var.instance_type
+  key_name      = data.aws_key_pair.existing_key.key_name
 
-  image_id      = var.ami_id
-  instance_type = "t3.small"
+  vpc_security_group_ids = [
+    aws_security_group.attendance_sg.id
+  ]
 
   iam_instance_profile {
-    name = aws_iam_instance_profile.attendance_ssm_profile.name
-  }
-
-  key_name = data.terraform_remote_state.ssh.outputs.key_pair_name
-
-  network_interfaces {
-    device_index                = 0
-    associate_public_ip_address = false
-    security_groups             = [aws_security_group.attendance_api_sg.id]
-  }
-
-  block_device_mappings {
-    device_name = "/dev/sda1"
-
-    ebs {
-      volume_size           = 20
-      volume_type           = "gp3"
-      delete_on_termination = true
-      encrypted             = true
-    }
+    name = var.ssm_instance_profile
   }
 
   tag_specifications {
     resource_type = "instance"
 
-    tags = merge(
-      var.common_tags,
-      {
-        Name    = "dev-otms-attendance-api-asg-instance"
-        Service = "attendance"
-      }
-    )
-  }
-
-  tag_specifications {
-    resource_type = "volume"
-
-    tags = merge(
-      var.common_tags,
-      {
-        Name    = "dev-otms-attendance-api-volume"
-        Service = "attendance"
-      }
-    )
-  }
-
-  tags = merge(
-    var.common_tags,
-    {
-      Name    = "dev-otms-attendance-api-lt"
-      Service = "attendance"
+    tags = {
+      Name        = "${var.environment}-${var.application}-attendance"
+      Environment = var.environment
+      Application = var.application
+      Owner       = var.owner
+      CostCenter  = var.cost_center
     }
-  )
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
