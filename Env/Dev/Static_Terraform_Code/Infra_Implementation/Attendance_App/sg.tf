@@ -1,33 +1,36 @@
-resource "aws_security_group" "attendance_api_sg" {
-  name        = "dev-otms-attendance-api-sg"
-  description = "Security Group for the Attendance API backend service"
-  vpc_id      = data.terraform_remote_state.vpc.outputs.vpc_id
+resource "aws_security_group" "attendance_sg" {
+  name        = "${var.environment}-${var.application}-attendance-sg"
+  description = "Security group for attendance backend instances"
+  vpc_id      = data.aws_vpc.network_vpc.id
 
   ingress {
-    description = "Allow Attendance API traffic from the ALB on port 8081"
-    from_port   = 8081
-    to_port     = 8081
-    protocol    = "tcp"
-
-    security_groups = [
-      data.aws_security_group.alb.id
-    ]
+    description     = "Allow traffic from ALB"
+    from_port       = 8081
+    to_port         = 8081
+    protocol        = "tcp"
+    security_groups = [data.aws_security_group.alb_sg.id]
   }
 
+/*
+  ingress {
+    description     = "Allow SSH from Bastion"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [data.aws_security_group.bastion_sg.id]
+  }
+*/
+
   egress {
-    description = "Allow outbound traffic to RDS, Redis and required internet services"
+    description = "Allow all outbound traffic"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = merge(
-    var.common_tags,
-    {
-      Name    = "dev-otms-attendance-api-sg"
-      Service = "attendance"
-    }
-  )
+  tags = {
+    Name = "${var.environment}-${var.application}-attendance-sg"
+  }
 }
+
