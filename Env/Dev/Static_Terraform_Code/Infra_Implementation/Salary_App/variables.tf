@@ -24,7 +24,7 @@ variable "vpc_name" {
 
 variable "ami_name" {
   type        = string
-  description = "Name of the golden AMI for the Notification app"
+  description = "Name of the golden AMI for the Salary app"
 }
 
 variable "ami_owner_id" {
