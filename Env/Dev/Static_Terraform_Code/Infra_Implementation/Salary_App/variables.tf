@@ -29,3 +29,13 @@ variable "key_name" {
 variable "instance_type" {
   type = string
 }
+
+variable "ami_owner_id" {
+  type        = string
+  description = "AWS Account ID of the Custom AMI owner"
+}
+
+variable "ami_name" {
+  type        = string
+  description = "Name of the golden AMI for the Notification app"
+}
