@@ -19,7 +19,7 @@ data "aws_key_pair" "existing_key" {
   key_name = var.key_name
 }
 
-data "aws_ami" "notification_app" {
+data "aws_ami" "salary_app" {
   most_recent = true
   owners      = [var.ami_owner_id]
 
