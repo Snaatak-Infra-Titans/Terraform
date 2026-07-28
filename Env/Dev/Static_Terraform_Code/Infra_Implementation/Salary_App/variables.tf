@@ -1,29 +1,12 @@
-variable "salary_ami_id" {
-  description = "AMI ID of the Salary Golden AMI"
-  type        = string
-}
-
-variable "instance_type" {
-  description = "EC2 instance type"
-  type        = string
-  default     = "t3.small"
-}
-
-variable "instance_profile_name" {
-  description = "IAM Instance Profile for SSM"
-  type        = string
-}
-
-variable "salary_security_group_id" {
-  description = "Security Group for Salary EC2"
-  type        = string
-}
-
-variable "application" {
+variable "aws_region" {
   type = string
 }
 
 variable "environment" {
+  type = string
+}
+
+variable "application" {
   type = string
 }
 
@@ -33,4 +16,32 @@ variable "owner" {
 
 variable "cost_center" {
   type = string
+}
+
+variable "vpc_name" {
+  type = string
+}
+
+variable "ami_name" {
+  type        = string
+  description = "Name of the golden AMI for the Notification app"
+}
+
+variable "ami_owner_id" {
+  type        = string
+  description = "AWS Account ID of the Custom AMI owner"
+}
+
+
+variable "key_name" {
+  type = string
+}
+
+variable "instance_type" {
+  type = string
+}
+
+variable "ssm_instance_profile" {
+  type        = string
+  description = "Name of the manually created IAM Instance Profile for SSM"
 }
