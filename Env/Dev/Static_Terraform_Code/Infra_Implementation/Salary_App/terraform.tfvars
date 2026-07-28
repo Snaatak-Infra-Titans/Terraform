@@ -1,11 +1,8 @@
-salary_ami_id         = "ami-xxxxxxxxxxxxxxxxx"
-instance_type         = "t3.small"
-
-instance_profile_name = "dev-otms-ssm-role"
-
-salary_security_group_id = "sg-xxxxxxxxxxxxxxxx"
-
-application = "otms"
-environment = "dev"
-owner       = "Infra-Titans"
-cost_center = "Snaatak"
+aws_region    = "us-east-1"
+environment   = "dev"
+application   = "otms"
+owner         = "Infra-Titans"
+cost_center   = "Snaatak"
+vpc_name      = "dev-otms-vpc"
+key_name      = "dev-otms-key"
+instance_type = "t3.small"
