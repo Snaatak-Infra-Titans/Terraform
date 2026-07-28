@@ -1,14 +1,14 @@
-output "salary_lt_id" {
-  description = "The ID of the salary launch template"
-  value       = aws_launch_template.salary_lt.id
+output "notification_asg_id" {
+  description = "The ID of the notification Auto Scaling Group"
+  value       = aws_autoscaling_group.notification_asg.id
 }
 
-output "salary_lt_arn" {
-  description = "The ARN of the salary launch template"
-  value       = aws_launch_template.salary_lt.arn
+output "notification_asg_name" {
+  description = "The name of the notification Auto Scaling Group"
+  value       = aws_autoscaling_group.notification_asg.name
 }
 
-output "salary_lt_latest_version" {
-  description = "The latest version of the salary launch template"
-  value       = aws_launch_template.salary_lt.latest_version
+output "notification_asg_arn" {
+  description = "The ARN of the notification Auto Scaling Group"
+  value       = aws_autoscaling_group.notification_asg.arn
 }
