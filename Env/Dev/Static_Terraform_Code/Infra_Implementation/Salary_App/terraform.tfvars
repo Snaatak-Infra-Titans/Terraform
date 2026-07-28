@@ -10,5 +10,5 @@ asg_min_size         = 1
 asg_max_size         = 1
 asg_desired_capacity = 1
 ami_owner_id = "547941801997"
-ami_name     = "salary-golden-ami.amazon-ebs.salary"
+ami_name     = "salary-golden-v1-20260728-022005"
 ssm_instance_profile = "dev-otms-ssm-role"
