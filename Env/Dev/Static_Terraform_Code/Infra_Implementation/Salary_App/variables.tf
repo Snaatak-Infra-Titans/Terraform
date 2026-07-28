@@ -30,6 +30,21 @@ variable "instance_type" {
   type = string
 }
 
+variable "asg_min_size" {
+  type        = number
+  description = "Minimum number of instances in ASG"
+}
+
+variable "asg_max_size" {
+  type        = number
+  description = "Maximum number of instances in ASG"
+}
+
+variable "asg_desired_capacity" {
+  type        = number
+  description = "Desired number of instances in ASG"
+}
+
 variable "ami_owner_id" {
   type        = string
   description = "AWS Account ID of the Custom AMI owner"
