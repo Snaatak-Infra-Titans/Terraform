@@ -17,6 +17,15 @@ data "aws_subnet" "database_subnet" {
   }
 }
 
+data "aws_subnets" "backend_subnets" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.network_vpc.id]
+  }
+  tags = {
+    Tier = "backend"
+  }
+}
 data "aws_key_pair" "existing_key" {
   key_name = var.key_name
 }
