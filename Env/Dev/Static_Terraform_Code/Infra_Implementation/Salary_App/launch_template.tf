@@ -1,4 +1,4 @@
-resource "aws_launch_template" "salary_lt" {
+/* resource "aws_launch_template" "salary_lt" {
   name          = "${var.environment}-${var.application}-salary-lt"
   image_id      = data.aws_ami.salary_app.id
   instance_type = var.instance_type
@@ -28,3 +28,4 @@ resource "aws_launch_template" "salary_lt" {
     create_before_destroy = true
   }
 }
+*/
