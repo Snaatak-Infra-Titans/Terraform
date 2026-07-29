@@ -31,15 +31,6 @@ variable "key_name" {
   description = "Existing EC2 Key Pair name"
 }
 
-variable "ami_name" {
-  type        = string
-  description = "Name of the AMI used for Redis EC2"
-}
-
-variable "ami_owner_id" {
-  type        = string
-  description = "AWS Account ID that owns the AMI"
-}
 
 variable "instance_type" {
   type        = string
