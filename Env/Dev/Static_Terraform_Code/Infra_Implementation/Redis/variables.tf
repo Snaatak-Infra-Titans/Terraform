@@ -47,3 +47,8 @@ variable "ami_name" {
   type        = string
   description = "AMI name"
 }
+
+variable "salary_api_sg_name" {
+  type        = string
+  description = "Name tag of the Salary API security group"
+}
