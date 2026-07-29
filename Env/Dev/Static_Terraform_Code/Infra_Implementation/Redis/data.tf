@@ -46,3 +46,10 @@ data "aws_ami" "ubuntu" {
     values = [var.ami_name]
   }
 }
+data "aws_security_group" "salary_api_sg" {
+  vpc_id = data.aws_vpc.network_vpc.id
+
+  tags = {
+    Name = "${var.environment}-${var.application}-salary-sg"
+  }
+}
