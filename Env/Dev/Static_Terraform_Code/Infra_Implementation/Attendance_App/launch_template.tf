@@ -1,5 +1,5 @@
 resource "aws_launch_template" "attendance_lt" {
-  name          = "${var.environment}-${var.application}-attendance_lt-lt"
+  name          = "${var.environment}-${var.application}-attendance-lt"
   image_id      = data.aws_ami.attendance_app.id
   instance_type = var.instance_type
   key_name      = data.aws_key_pair.existing_key.key_name
