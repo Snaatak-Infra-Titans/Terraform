@@ -15,11 +15,13 @@ resource "aws_security_group" "redis_sg" {
 # Ingress Rule
 resource "aws_vpc_security_group_ingress_rule" "redis" {
   security_group_id = aws_security_group.redis_sg.id
-  description       = "Allow Redis traffic from Backend subnet"
-  from_port         = 6379
-  to_port           = 6379
-  ip_protocol       = "tcp"
-  cidr_ipv4         = data.aws_subnet.backend_subnet.cidr_block
+
+  referenced_security_group_id = data.aws_security_group.salary_api_sg.id
+
+  description = "Allow Redis traffic from Salary API"
+  from_port   = 6379
+  to_port     = 6379
+  ip_protocol = "tcp"
 }
 
 # Egress Rule
