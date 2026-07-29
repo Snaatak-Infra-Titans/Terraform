@@ -56,19 +56,6 @@ data "aws_key_pair" "existing_key" {
   key_name = var.key_name
 }
 
-###############################################################################
-# AMI
-###############################################################################
-
-data "aws_ami" "salary_app" {
-  most_recent = true
-  owners      = [var.ami_owner_id]
-
-  filter {
-    name   = "name"
-    values = [var.ami_name]
-  }
-}
 
 ###############################################################################
 # Redis Security Group
