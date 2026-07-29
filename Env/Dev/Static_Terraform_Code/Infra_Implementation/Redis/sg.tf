@@ -29,7 +29,7 @@ resource "aws_vpc_security_group_ingress_rule" "salary_to_redis" {
   to_port     = 6379
   ip_protocol = "tcp"
 }
-
+/*
 resource "aws_vpc_security_group_ingress_rule" "employee_to_redis" {
   security_group_id            = aws_security_group.redis_sg.id
   referenced_security_group_id = data.aws_security_group.employee_sg.id
@@ -49,7 +49,7 @@ resource "aws_vpc_security_group_ingress_rule" "attendance_to_redis" {
   to_port     = 6379
   ip_protocol = "tcp"
 }
-
+*/
 ###############################################################################
 # Egress Rule
 ###############################################################################
