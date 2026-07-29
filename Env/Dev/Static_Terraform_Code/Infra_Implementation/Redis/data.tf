@@ -20,7 +20,7 @@ data "aws_subnet" "database_subnet" {
 ###############################################################################
 # Existing Security Groups
 ###############################################################################
-
+/*
 data "aws_security_group" "attendance_sg" {
   filter {
     name   = "group-name"
@@ -29,7 +29,7 @@ data "aws_security_group" "attendance_sg" {
 
   vpc_id = data.aws_vpc.network_vpc.id
 }
-
+*/
 data "aws_security_group" "salary_sg" {
   filter {
     name   = "group-name"
@@ -38,7 +38,7 @@ data "aws_security_group" "salary_sg" {
 
   vpc_id = data.aws_vpc.network_vpc.id
 }
-
+/*
 data "aws_security_group" "employee_sg" {
   filter {
     name   = "group-name"
@@ -47,7 +47,7 @@ data "aws_security_group" "employee_sg" {
 
   vpc_id = data.aws_vpc.network_vpc.id
 }
-
+*/
 ###############################################################################
 # Key Pair
 ###############################################################################
