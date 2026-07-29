@@ -25,3 +25,8 @@ variable "vpc_name" {
 variable "database_subnet_name" {
   type = string
 }
+
+variable "ssm_instance_profile" {
+  type        = string
+  description = "Name of the manually created IAM Instance Profile for SSM"
+}
