@@ -59,7 +59,7 @@ variable "listener_rule_priority" {
   type        = number
   description = "Priority for the ALB listener rule"
 }
-
+/*
 variable "ami_owner_id" {
   type        = string
   description = "AWS Account ID of the Custom AMI owner"
@@ -69,7 +69,7 @@ variable "ami_name" {
   type        = string
   description = "Name of the golden AMI for the Notification app"
 }
-
+*/
 variable "ssm_instance_profile" {
   type        = string
   description = "Name of the manually created IAM Instance Profile for SSM"
