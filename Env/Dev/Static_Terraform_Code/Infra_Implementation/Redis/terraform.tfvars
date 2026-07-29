@@ -17,3 +17,4 @@ instance_type        = "t3.small"
 
 ami_owner_id         = "099720109477"
 ami_name             = "ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"
+salary_api_sg_name = "dev-otms-salary-sg"
