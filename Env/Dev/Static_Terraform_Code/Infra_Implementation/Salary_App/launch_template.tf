@@ -1,6 +1,6 @@
-/* resource "aws_launch_template" "salary_lt" {
+ resource "aws_launch_template" "salary_lt" {
   name          = "${var.environment}-${var.application}-salary-lt"
-  image_id      = data.aws_ami.salary_app.id
+ /* image_id      = data.aws_ami.salary_app.id */
   instance_type = var.instance_type
   key_name      = data.aws_key_pair.existing_key.key_name
 
@@ -28,4 +28,4 @@
     create_before_destroy = true
   }
 }
-*/
+
