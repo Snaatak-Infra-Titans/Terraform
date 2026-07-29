@@ -11,6 +11,6 @@ database_subnet_name = "dev_otms_database_subnet_a"
 
 key_name             = "dev-otms-key"
 
-instance_type        = "t2.micro"
+instance_type        = "t3.small"
 
 ssm_instance_profile = "dev-otms-ssm-role"
