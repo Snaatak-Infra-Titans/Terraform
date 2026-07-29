@@ -15,4 +15,4 @@ ssm_instance_profile = "dev-otms-ssm-role"
 asg_min_size         = 1
 asg_max_size         = 2
 asg_desired_capacity = 1
-cpu_target_value = 60.0
+cpu_target_value = 70.0
