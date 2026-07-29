@@ -19,9 +19,27 @@ resource "aws_vpc_security_group_ingress_rule" "redis" {
   from_port         = 6379
   to_port           = 6379
   ip_protocol       = "tcp"
-  cidr_ipv4         = data.aws_subnet.database_subnet.cidr_block
+  security_group_id = data.aws_security_group.salary_sg.id
+}
+/*
+resource "aws_vpc_security_group_ingress_rule" "redis" {
+  security_group_id = aws_security_group.redis_sg.id
+  description       = "Allow Redis traffic from Backend subnet"
+  from_port         = 6379
+  to_port           = 6379
+  ip_protocol       = "tcp"
+  security_group_id = data.aws_security_group.employee_sg.id
 }
 
+resource "aws_vpc_security_group_ingress_rule" "redis" {
+  security_group_id = aws_security_group.redis_sg.id
+  description       = "Allow Redis traffic from Backend subnet"
+  from_port         = 6379
+  to_port           = 6379
+  ip_protocol       = "tcp"
+  security_group_id = data.aws_security_group.attendance_sg.id
+}
+*/
 # Egress Rule
 resource "aws_vpc_security_group_egress_rule" "all_outbound" {
   security_group_id = aws_security_group.redis_sg.id
