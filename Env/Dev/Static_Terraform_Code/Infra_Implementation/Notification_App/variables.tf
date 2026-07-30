@@ -1,34 +1,10 @@
 variable "aws_region" {
-  type = string
-}
-
-variable "environment" {
-  type = string
-}
-
-variable "application" {
-  type = string
-}
-
-variable "owner" {
-  type = string
-}
-
-variable "cost_center" {
-  type = string
-}
-
-variable "vpc_name" {
-  type = string
-}
-
-variable "ami_owner_id" {
+  description = "AWS Region"
   type        = string
-  description = "AWS Account ID of the Custom AMI owner"
 }
 
 variable "ami_id" {
-  description = "AMI ID for Notification EC2"
+  description = "AMI ID"
   type        = string
 }
 
@@ -37,6 +13,22 @@ variable "instance_type" {
   type        = string
 }
 
-variable "key_name" {
-  type = string
+variable "subnet_name" {
+  description = "Subnet Name Tag"
+  type        = string
+}
+
+variable "iam_instance_profile" {
+  description = "IAM Instance Profile"
+  type        = string
+}
+
+variable "instance_name" {
+  description = "EC2 Name Tag"
+  type        = string
+}
+
+variable "tags" {
+  description = "Common Tags"
+  type        = map(string)
 }
