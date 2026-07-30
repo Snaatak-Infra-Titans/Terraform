@@ -61,8 +61,8 @@ resource "aws_vpc_security_group_ingress_rule" "scylla_cql" {
 
   description = "Allow ScyllaDB CQL traffic from OTMS applications"
 
-  from_port   = 9042
-  to_port     = 9042
+  from_port = var.scylla_port
+  to_port   = var.scylla_port
   ip_protocol = "tcp"
 
   cidr_ipv4 = data.aws_vpc.network_vpc.cidr_block
@@ -95,10 +95,10 @@ resource "aws_instance" "scylladb" {
   associate_public_ip_address = false
 
   root_block_device {
-    volume_size = 15
-    volume_type = "gp3"
 
-    encrypted             = true
+    volume_size = var.root_volume_size
+    volume_type = var.root_volume_type
+    encrypted = var.root_volume_encrypted
     delete_on_termination = true
   }
 
