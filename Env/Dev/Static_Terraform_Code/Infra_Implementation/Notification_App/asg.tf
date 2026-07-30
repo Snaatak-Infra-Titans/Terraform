@@ -58,6 +58,9 @@ data "aws_ami" "notification_app" {
   }
 }
 
+data "aws_lb_target_group" "notification_tg" {
+  name = "${var.environment}-${var.application}-notification-tg"
+}
 
 resource "aws_autoscaling_group" "notification_asg" {
   name                = "${var.environment}-${var.application}-notification-asg"
