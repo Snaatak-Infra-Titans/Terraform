@@ -1,7 +1,3 @@
-##########################
-# Existing Resources
-##########################
-
 data "aws_vpc" "this" {
   filter {
     name   = "tag:Name"
@@ -11,21 +7,27 @@ data "aws_vpc" "this" {
 
 data "aws_subnet" "public" {
   filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.this.id]
+  }
+
+  filter {
     name   = "tag:Name"
     values = [var.public_subnet_name]
   }
 }
 
-data "aws_subnet" "private" {
+data "aws_subnet" "backend" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.this.id]
+  }
+
   filter {
     name   = "tag:Name"
-    values = [var.private_subnet_name]
+    values = [var.backend_subnet_name]
   }
 }
-
-##########################
-# Internet Gateway
-##########################
 
 resource "aws_internet_gateway" "this" {
   vpc_id = data.aws_vpc.this.id
@@ -38,10 +40,6 @@ resource "aws_internet_gateway" "this" {
   )
 }
 
-##########################
-# Elastic IP
-##########################
-
 resource "aws_eip" "this" {
   domain = "vpc"
 
@@ -52,10 +50,6 @@ resource "aws_eip" "this" {
     }
   )
 }
-
-##########################
-# Public Route Table
-##########################
 
 resource "aws_route_table" "public" {
   vpc_id = data.aws_vpc.this.id
@@ -79,10 +73,6 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public.id
 }
 
-##########################
-# NAT Gateway
-##########################
-
 resource "aws_nat_gateway" "this" {
   allocation_id = aws_eip.this.id
   subnet_id     = data.aws_subnet.public.id
@@ -93,15 +83,7 @@ resource "aws_nat_gateway" "this" {
       Name = "${var.environment}-${var.application}-nat-gateway"
     }
   )
-
-  depends_on = [
-    aws_internet_gateway.this
-  ]
 }
-
-##########################
-# Private Route Table
-##########################
 
 resource "aws_route_table" "private" {
   vpc_id = data.aws_vpc.this.id
@@ -121,6 +103,6 @@ resource "aws_route" "private_nat" {
 }
 
 resource "aws_route_table_association" "private" {
-  subnet_id      = data.aws_subnet.private.id
+  subnet_id      = data.aws_subnet.backend.id
   route_table_id = aws_route_table.private.id
 }
