@@ -13,3 +13,26 @@ variable "common_tags" {
     CostCenter  = "Snaatak"
   }
 }
+
+variable "vpc_name" {
+  description = "Name tag of the existing VPC"
+  type        = string
+}
+
+variable "alb_sg_name" {
+  description = "Name tag of the existing ALB Security Group"
+  type        = string
+}
+
+variable "target_group_name" {
+  description = "Name of the existing ALB Target Group"
+  type        = string
+}
+
+variable "iam_profile_name" {
+  description = "Name of the existing IAM instance profile"
+  type        = string
+  default     = "dev-otms-ssm-role"
+}
+
+

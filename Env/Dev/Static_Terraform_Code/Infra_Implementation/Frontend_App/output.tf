@@ -17,3 +17,9 @@ output "frontend_security_group_id" {
   description = "The ID of the Frontend Security Group"
   value       = aws_security_group.frontend_sg.id
 }
+
+output "frontend_target_group_arn" {
+  description = "The ARN of the Target Group attached to the Frontend ASG"
+  value       = data.aws_lb_target_group.frontend_tg.arn
+}
+
