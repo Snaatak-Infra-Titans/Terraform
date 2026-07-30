@@ -1,11 +1,19 @@
+output "internet_gateway_id" {
+  value = aws_internet_gateway.this.id
+}
+
+output "elastic_ip" {
+  value = aws_eip.this.public_ip
+}
+
 output "nat_gateway_id" {
   value = aws_nat_gateway.this.id
 }
 
-output "nat_gateway_public_ip" {
-  value = aws_eip.this.public_ip
+output "public_route_table_id" {
+  value = aws_route_table.public.id
 }
 
-output "elastic_ip_allocation_id" {
-  value = aws_eip.this.id
+output "private_route_table_id" {
+  value = aws_route_table.private.id
 }
