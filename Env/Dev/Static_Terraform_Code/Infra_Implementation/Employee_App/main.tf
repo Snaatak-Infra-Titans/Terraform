@@ -1,6 +1,4 @@
-# ==========================================
-# 1. SECURITY GROUP
-# ==========================================
+
 resource "aws_security_group" "api_sg" {
   name        = "dev-otms-employee-api-sg"
   description = "Security Group for the Employee API backend service"
@@ -30,9 +28,6 @@ resource "aws_security_group" "api_sg" {
   )
 }
 
-# ==========================================
-# 2. LAUNCH TEMPLATE
-# ==========================================
 resource "aws_launch_template" "employee_api" {
   name_prefix   = "dev-otms-employee-api-lt-"
   description   = "Launch template for the Employee API backend"
@@ -58,7 +53,7 @@ resource "aws_launch_template" "employee_api" {
     }
   }
 
-  # Propagate tags to the instances
+
   tag_specifications {
     resource_type = "instance"
     tags = merge(
@@ -69,7 +64,6 @@ resource "aws_launch_template" "employee_api" {
     )
   }
   
-  # Propagate tags to the volumes
   tag_specifications {
     resource_type = "volume"
     tags = merge(
