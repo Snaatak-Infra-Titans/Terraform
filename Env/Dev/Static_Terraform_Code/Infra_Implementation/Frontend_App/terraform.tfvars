@@ -1,4 +1,4 @@
-ami_id           = "ami-0aef584c5aaf33618"
+ami_id           = "ami-01bd525fdafeaa832"
 vpc_name         = "dev-otms-vpc"
 subnet_name      = "dev_otms_frontend_subnet_a"
 iam_profile_name = "dev-otms-ssm-role"
