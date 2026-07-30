@@ -1,28 +1,66 @@
-resource "aws_eip" "nat_eip" {
+##############
+# Data Sources
+###############
+
+# Public Subnet
+data "aws_subnet" "public" {
+  filter {
+    name   = "tag:Name"
+    values = [var.public_subnet_name]
+  }
+}
+
+# Internet Gateway
+data "aws_internet_gateway" "igw" {
+  filter {
+    name   = "tag:Name"
+    values = [var.internet_gateway_name]
+  }
+}
+
+# Private Route Table
+data "aws_route_table" "private" {
+  filter {
+    name   = "tag:Name"
+    values = [var.private_route_table_name]
+  }
+}
+
+#############
+# Elastic IP
+#############
+
+resource "aws_eip" "this" {
   domain = "vpc"
 
   tags = {
-    Name = "${var.environment}_${var.application}_nat_eip"
+    Name = var.nat_eip_name
   }
 }
 
-resource "aws_nat_gateway" "nat" {
-  allocation_id = aws_eip.nat_eip.id
-  
-  # Connects directly to Pawan's first public subnet
-  subnet_id     = aws_subnet.public["a"].id
+#############
+# NAT Gateway
+#############
+
+resource "aws_nat_gateway" "this" {
+  allocation_id = aws_eip.this.id
+  subnet_id     = data.aws_subnet.public.id
 
   tags = {
-    Name = "${var.environment}_${var.application}_nat_gw"
+    Name = var.nat_gateway_name
   }
 
-  
-  depends_on = [aws_internet_gateway.main_igw]
+  depends_on = [
+    data.aws_internet_gateway.igw
+  ]
 }
 
+###############
+# Private Route
+###############
 
-resource "aws_route" "private_nat_route" {
-  route_table_id         = aws_route_table.private.id
-  destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = aws_nat_gateway.nat.id
+resource "aws_route" "private_nat" {
+  route_table_id         = data.aws_route_table.private.id
+  destination_cidr_block = var.destination_cidr
+  nat_gateway_id         = aws_nat_gateway.this.id
 }
