@@ -1,13 +1,18 @@
-aws_region  = "us-east-1"
-environment = "dev"
-application = "otms"
-cost_center = "Snaatak"
-owner       = "Infra-Titans"
+aws_region = "us-east-1"
 
-vpc_name = "dev-otms-vpc"
-vpc_cidr = "10.0.0.0/24"
+public_subnet_name = "dev_otms_public_subnet_a"
 
-subnet_newbits = 3
-azs            = ["a", "b"]
+private_route_table_id = "rtb-xxxxxxxx"
 
-igw_name = "dev-otms-igw"
+nat_gateway_name = "dev_otms_nat_gw"
+
+eip_name = "dev_otms_nat_eip"
+
+destination_cidr = "0.0.0.0/0"
+
+tags = {
+  Environment = "dev"
+  Application = "otms"
+  Owner        = "Infra-Titans"
+  CostCenter   = "Snaatak"
+}
