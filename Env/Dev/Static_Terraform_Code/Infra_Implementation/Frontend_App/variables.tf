@@ -13,3 +13,31 @@ variable "common_tags" {
     CostCenter  = "Snaatak"
   }
 }
+
+variable "vpc_name" {
+  description = "Name tag of the existing VPC"
+  type        = string
+}
+
+variable "subnet_name" {
+  description = "Name tag of the specific frontend subnet to deploy into (e.g., dev_otms_frontend_subnet_a)"
+  type        = string
+}
+
+variable "iam_profile_name" {
+  description = "Name of the existing IAM instance profile"
+  type        = string
+  default     = "dev-otms-ssm-role"
+}
+
+variable "instance_type" {
+  description = "EC2 instance type"
+  type        = string
+  default     = "t3.micro"
+}
+
+variable "instance_name" {
+  description = "Name tag for the frontend EC2 instance"
+  type        = string
+  default     = "dev-otms-frontend"
+}
