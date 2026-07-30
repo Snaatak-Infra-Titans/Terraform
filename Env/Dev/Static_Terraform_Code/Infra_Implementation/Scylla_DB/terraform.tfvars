@@ -14,3 +14,9 @@ ami_owner_id = "099720109477"
 ami_name = "ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"
 
 ssm_instance_profile = "dev-otms-ssm-role"
+
+scylla_port          = 9042
+
+root_volume_size     = 15
+root_volume_type     = "gp3"
+root_volume_encrypted = true
