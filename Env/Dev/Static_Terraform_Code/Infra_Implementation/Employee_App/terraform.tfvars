@@ -1,1 +1,5 @@
-ami_id = "ami-04d8312c0e38c4b8a"
+ami_id            = "ami-04d8312c0e38c4b8a"
+vpc_name          = "dev-otms-vpc"
+alb_sg_name       = "dev-otms-alb-sg" 
+target_group_name = "dev-otms-employee-tg"
+key_pair_name     = "dev-otms-key"
