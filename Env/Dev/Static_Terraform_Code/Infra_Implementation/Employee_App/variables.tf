@@ -13,3 +13,29 @@ variable "common_tags" {
     CostCenter  = "Snaatak"
   }
 }
+
+variable "vpc_name" {
+  description = "Name tag of the existing VPC"
+  type        = string
+}
+
+variable "subnet_name" {
+  description = "Name tag of the specific backend subnet to deploy into"
+  type        = string
+}
+
+variable "alb_sg_name" {
+  description = "Name tag of the existing ALB Security Group"
+  type        = string
+}
+
+variable "iam_profile_name" {
+  description = "Name of the existing IAM instance profile"
+  type        = string
+  default     = "dev-otms-ssm-role"
+}
+
+variable "key_pair_name" {
+  description = "The name of the SSH key pair to attach to the instance"
+  type        = string
+}
