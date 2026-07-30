@@ -2,19 +2,23 @@ variable "aws_region" {
   type = string
 }
 
+variable "environment" {
+  type = string
+}
+
+variable "application" {
+  type = string
+}
+
+variable "vpc_name" {
+  type = string
+}
+
 variable "public_subnet_name" {
   type = string
 }
 
-variable "private_route_table_id" {
-  type = string
-}
-
-variable "nat_gateway_name" {
-  type = string
-}
-
-variable "eip_name" {
+variable "private_subnet_name" {
   type = string
 }
 
