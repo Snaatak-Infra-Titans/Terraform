@@ -1,3 +1,12 @@
+locals {
+  common_tags = {
+    Application = var.application
+    Environment = var.environment
+    Owner       = var.owner
+    CostCenter  = var.cost_center
+  }
+}
+
 data "aws_vpc" "network_vpc" {
   filter {
     name   = "tag:Name"
@@ -33,7 +42,7 @@ data "aws_key_pair" "existing_key" {
 }
 
 data "aws_iam_instance_profile" "ssm" {
-  name = "dev-otms-ssm-role"
+  name = var.ssm_instance_profile
 }
 
 resource "aws_security_group" "scylla_sg" {
@@ -42,13 +51,9 @@ resource "aws_security_group" "scylla_sg" {
 
   vpc_id = data.aws_vpc.network_vpc.id
 
-  tags = {
-    Name        = "${var.environment}-${var.application}-scylla-sg"
-    Application = var.application
-    Environment = var.environment
-    Owner       = var.owner
-    CostCenter  = var.cost_center
-  }
+  tags = merge(local.common_tags, {
+    Name = "${var.environment}-${var.application}-scylla-sg"
+  })
 }
 
 resource "aws_vpc_security_group_ingress_rule" "scylla_cql" {
@@ -56,9 +61,8 @@ resource "aws_vpc_security_group_ingress_rule" "scylla_cql" {
 
   description = "Allow ScyllaDB CQL traffic from OTMS applications"
 
-  from_port = 9042
-  to_port   = 9042
-
+  from_port   = 9042
+  to_port     = 9042
   ip_protocol = "tcp"
 
   cidr_ipv4 = data.aws_vpc.network_vpc.cidr_block
@@ -92,19 +96,13 @@ resource "aws_instance" "scylladb" {
 
   root_block_device {
     volume_size = 15
-
     volume_type = "gp3"
 
-    encrypted = true
-
+    encrypted             = true
     delete_on_termination = true
   }
 
-  tags = {
-    Name        = "${var.environment}-${var.application}-scylla-ec2"
-    Application = "otms"
-    Environment = var.environment
-    Owner       = var.owner
-    CostCenter  = var.cost_center
-  }
+  tags = merge(local.common_tags, {
+    Name = "${var.environment}-${var.application}-scylla-ec2"
+  })
 }
