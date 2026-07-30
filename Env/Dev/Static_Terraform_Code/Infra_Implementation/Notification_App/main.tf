@@ -1,23 +1,27 @@
-# SSM Instance Profile
-data "aws_iam_instance_profile" "ssm_profile" {
-  name = "dev-otms-ssm-role"
-}
-
-# Backend Subnet
-data "aws_subnet" "backend_subnet" {
+# Lookup Subnet
+data "aws_subnet" "selected" {
   filter {
     name   = "tag:Name"
-    values = ["dev_otms_backend_subnet_a"]
+    values = [var.subnet_name]
   }
 }
 
-resource "aws_instance" "notification" {
+# Lookup IAM Instance Profile
+data "aws_iam_instance_profile" "selected" {
+  name = var.iam_instance_profile
+}
+
+# EC2 Instance
+resource "aws_instance" "this" {
   ami                    = var.ami_id
   instance_type          = var.instance_type
-  subnet_id              = data.aws_subnet.backend_subnet.id
-  iam_instance_profile   = data.aws_iam_instance_profile.ssm_profile.name
+  subnet_id              = data.aws_subnet.selected.id
+  iam_instance_profile   = data.aws_iam_instance_profile.selected.name
 
-  tags = {
-    Name = "dev-otms-notification-ec2"
-  }
+  tags = merge(
+    var.tags,
+    {
+      Name = var.instance_name
+    }
+  )
 }
