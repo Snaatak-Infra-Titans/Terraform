@@ -1,4 +1,4 @@
-# Fetch the existing VPC
+
 data "aws_vpc" "main_vpc" {
   filter {
     name   = "tag:Name"
@@ -6,7 +6,7 @@ data "aws_vpc" "main_vpc" {
   }
 }
 
-# Fetch the existing ALB Security Group for Ingress rules
+
 data "aws_security_group" "alb_sg" {
   filter {
     name   = "tag:Name"
@@ -15,7 +15,7 @@ data "aws_security_group" "alb_sg" {
   vpc_id = data.aws_vpc.main_vpc.id
 }
 
-# Fetch the existing Target Group created in the Network Skeleton
+
 data "aws_lb_target_group" "employee_tg" {
   name = var.target_group_name
 }
