@@ -57,6 +57,8 @@ data "aws_ami" "notification_app" {
     values = [var.ami_name]
   }
 }
+
+
 resource "aws_launch_template" "notification_lt" {
   name          = "${var.environment}-${var.application}-notification-lt"
   image_id      = data.aws_ami.notification_app.id
@@ -85,5 +87,32 @@ resource "aws_launch_template" "notification_lt" {
 
   lifecycle {
     create_before_destroy = true
+  }
+}
+
+
+resource "aws_security_group" "notification_sg" {
+  name        = "${var.environment}-${var.application}-notification-sg"
+  description = "Security group for notification backend instances"
+  vpc_id      = data.aws_vpc.network_vpc.id
+
+  ingress {
+    description     = "Allow traffic from ALB"
+    from_port       = 8085
+    to_port         = 8085
+    protocol        = "tcp"
+    security_groups = [data.aws_security_group.alb_sg.id]
+  }
+
+  egress {
+    description = "Allow all outbound traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${var.environment}-${var.application}-notification-sg"
   }
 }
