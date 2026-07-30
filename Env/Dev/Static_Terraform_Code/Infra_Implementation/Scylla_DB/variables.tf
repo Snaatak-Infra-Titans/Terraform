@@ -57,3 +57,23 @@ variable "ssm_instance_profile" {
   description = "IAM Instance Profile attached to the EC2 instance"
   type        = string
 }
+
+variable "scylla_port" {
+  description = "Port used by ScyllaDB CQL"
+  type        = number
+}
+
+variable "root_volume_size" {
+  description = "Root EBS volume size in GB"
+  type        = number
+}
+
+variable "root_volume_type" {
+  description = "Root EBS volume type"
+  type        = string
+}
+
+variable "root_volume_encrypted" {
+  description = "Enable encryption for the root EBS volume"
+  type        = bool
+}
