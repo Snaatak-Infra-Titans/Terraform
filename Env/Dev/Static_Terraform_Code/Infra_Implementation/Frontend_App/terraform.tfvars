@@ -1,1 +1,5 @@
-ami_id = "ami-0aef584c5aaf33618"
+ami_id            = "ami-0aef584c5aaf33618"
+vpc_name          = "dev-otms-vpc"
+alb_sg_name       = "dev-otms-alb-sg" 
+target_group_name = "dev-otms-frontend-tg"
+iam_profile_name  = "dev-otms-ssm-role"
