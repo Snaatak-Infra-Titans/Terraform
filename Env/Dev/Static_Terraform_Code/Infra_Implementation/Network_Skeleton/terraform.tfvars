@@ -1,12 +1,14 @@
 aws_region = "us-east-1"
 
-public_subnet_name = "dev_otms_public_subnet_a"
+environment = "dev"
 
-private_route_table_id = "rtb-xxxxxxxx"
+application = "otms"
 
-nat_gateway_name = "dev_otms_nat_gw"
+vpc_name = "dev-otms-vpc"
 
-eip_name = "dev_otms_nat_eip"
+public_subnet_name = "dev-otms-public-subnet-a"
+
+private_subnet_name = "dev-otms-private-subnet-a"
 
 destination_cidr = "0.0.0.0/0"
 
