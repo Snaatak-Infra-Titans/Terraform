@@ -1,4 +1,4 @@
-ami_id            = "ami-04d8312c0e38c4b8a"
+ami_id            = "ami-0b6b7f2cd075e3e43"
 vpc_name          = "dev-otms-vpc"
 alb_sg_name       = "dev-otms-alb-sg" 
 target_group_name = "dev-otms-employee-tg"
