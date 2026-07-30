@@ -1,7 +1,3 @@
-##############
-# Data Sources
-###############
-
 # Public Subnet
 data "aws_subnet" "public" {
   filter {
@@ -26,10 +22,6 @@ data "aws_route_table" "private" {
   }
 }
 
-#############
-# Elastic IP
-#############
-
 resource "aws_eip" "this" {
   domain = "vpc"
 
@@ -38,10 +30,6 @@ resource "aws_eip" "this" {
   }
 }
 
-#############
-# NAT Gateway
-#############
-
 resource "aws_nat_gateway" "this" {
   allocation_id = aws_eip.this.id
   subnet_id     = data.aws_subnet.public.id
@@ -49,15 +37,7 @@ resource "aws_nat_gateway" "this" {
   tags = {
     Name = var.nat_gateway_name
   }
-
-  depends_on = [
-    data.aws_internet_gateway.igw
-  ]
 }
-
-###############
-# Private Route
-###############
 
 resource "aws_route" "private_nat" {
   route_table_id         = data.aws_route_table.private.id
