@@ -13,3 +13,23 @@ variable "common_tags" {
     CostCenter  = "Snaatak"
   }
 }
+
+variable "vpc_name" {
+  description = "Name tag of the existing VPC"
+  type        = string
+}
+
+variable "alb_sg_name" {
+  description = "Name tag of the existing ALB Security Group"
+  type        = string
+}
+
+variable "target_group_name" {
+  description = "Name of the existing Employee ALB Target Group"
+  type        = string
+}
+
+variable "key_pair_name" {
+  description = "Name of the SSH key pair to attach to the instances"
+  type        = string
+}
