@@ -9,7 +9,8 @@ resource "aws_security_group" "frontend_sg" {
     from_port       = 3000
     to_port         = 3000
     protocol        = "tcp"
-    security_groups = [data.aws_security_group.alb_sg.id]  }
+    security_groups = [data.aws_security_group.alb_sg.id]  
+}
 
   egress {
     description = "Allow all outbound traffic for SSM and NAT access"
