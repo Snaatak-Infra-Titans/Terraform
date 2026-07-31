@@ -1,7 +1,3 @@
-data "aws_vpc" "main" {
-  tags = { Name = "${var.environment}-otms-vpc" }
-}
-
 # Attendance Service Security Group
 resource "aws_security_group" "attendance" {
   name   = "${var.environment}-otms-attendance-sg"
