@@ -34,7 +34,7 @@ ssl_policy      = "ELBSecurityPolicy-TLS13-1-2-2021-06"
 
 frontend_health_check     = "/"
 employee_health_check     = "/api/v1/employee/health"
-attendance_health_check   = "/"
+attendance_health_check   = "/api/v1/attendance/health"
 salary_health_check       = "/api/v1/salary/*"
 notification_health_check = "/api/v1/notification/health/detail"
 
