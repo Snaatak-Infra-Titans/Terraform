@@ -1,4 +1,3 @@
-
 data "aws_vpc" "network_vpc" {
   filter {
     name   = "tag:Name"
