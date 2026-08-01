@@ -10,5 +10,5 @@ asg_min_size         = 1
 asg_max_size         = 1
 asg_desired_capacity = 1
 ami_owner_id = "547941801997"
-ami_name     = "notification-es-golden-v1-20260801-043411"
+ami_name     = "notification-es-golden-v1-20260801-113227"
 ssm_instance_profile = "dev-otms-ssm-role"
