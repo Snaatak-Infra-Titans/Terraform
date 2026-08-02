@@ -1,5 +1,5 @@
 
-aws_region  = "ap-south-1"
+aws_region  = "us-east-1"
 environment = "dev"
 application = "otms"
 cost_center = "Snaatak"
