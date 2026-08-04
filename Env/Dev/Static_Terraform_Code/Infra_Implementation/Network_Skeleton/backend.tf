@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket       = "otms-dev-titans"
+    bucket       = "otms-terraform-state-dev"
     key          = "network/igw.tfstate"
     region       = "us-east-1"
     encrypt      = true
