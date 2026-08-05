@@ -1,0 +1,5 @@
+aws_region      = "us-east-1"
+environment     = "dev"
+tag_application = "otms"
+tag_owner       = "Infra-Titans"
+tag_costcenter  = "Snaatak"
