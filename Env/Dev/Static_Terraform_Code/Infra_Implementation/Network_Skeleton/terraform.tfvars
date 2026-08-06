@@ -7,8 +7,8 @@ cost_center  = "Snaatak"
 
 vpc_id = "vpc-07b753c29bf89621a"
 
-public_subnet_a_id = "subnet-09e85ba814051b97f"
-public_subnet_b_id = "subnet-049af8f3da74399da"
+public_subnet_a_id = "subnet-03c6da9b738ec3340"
+public_subnet_b_id = "subnet-0e9541424aca4a92a"
 
 
 http_port  = 80
