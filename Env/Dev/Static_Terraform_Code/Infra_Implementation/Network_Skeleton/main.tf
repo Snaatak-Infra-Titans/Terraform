@@ -57,9 +57,7 @@ locals {
   }
 }
 
-############################################
-# Security Group
-############################################
+
 
 resource "aws_security_group" "alb" {
 
@@ -109,9 +107,6 @@ resource "aws_vpc_security_group_egress_rule" "all" {
   description = "Allow All Outbound"
 }
 
-############################################
-# Application Load Balancer
-############################################
 
 resource "aws_lb" "this" {
 
@@ -135,9 +130,7 @@ resource "aws_lb" "this" {
   }
 }
 
-############################################
-# Target Groups
-############################################
+
 
 resource "aws_lb_target_group" "services" {
 
@@ -172,9 +165,6 @@ resource "aws_lb_target_group" "services" {
   }
 }
 
-############################################
-# HTTP Listener
-############################################
 
 resource "aws_lb_listener" "http" {
 
@@ -197,9 +187,6 @@ resource "aws_lb_listener" "http" {
   }
 }
 
-############################################
-# HTTPS Listener
-############################################
 
 resource "aws_lb_listener" "https" {
 
@@ -219,9 +206,7 @@ resource "aws_lb_listener" "https" {
   }
 }
 
-############################################
-# Listener Rules
-############################################
+
 
 resource "aws_lb_listener_rule" "services" {
 
