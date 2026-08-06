@@ -1,3 +1,16 @@
-ami_id = "ami-0b99d2f06e67a23ad"
-
+# Attendance API AMI created using Packer
+ami_id = "ami-024952d6180e2accf"
 private_subnet_id = "subnet-0612448b4081aee8b"
+aws_region    = "us-east-1"
+environment   = "dev"
+application   = "otms"
+owner         = "Infra-Titans"
+cost_center   = "Snaatak"
+vpc_name      = "dev-otms-vpc"
+key_name      = "dev-otms-key"
+instance_type = "t3.small"
+ssm_instance_profile = "dev-otms-ssm-role"
+asg_min_size         = 1
+asg_max_size         = 2
+asg_desired_capacity = 1
+cpu_target_value = 70.0
