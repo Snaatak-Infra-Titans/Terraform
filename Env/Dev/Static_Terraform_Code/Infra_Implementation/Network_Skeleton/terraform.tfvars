@@ -42,4 +42,4 @@ key_name = "dev-otms-key"
 
 # --- ROUTE 53 CONFIGURATION  ---
 hosted_zone_name = "otms.online"
-domain_name      = "otms.online"
+domain_name      = "www.otms.online"
