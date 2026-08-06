@@ -29,7 +29,7 @@ scylla_port         = 9042
 ephemeral_from_port = 1024
 ephemeral_to_port   = 65535
 
-certificate_arn = "arn:aws:acm:us-east-1:547941801997:certificate/c8cfc9e7-cca3-4306-ada2-716b62c097e2"
+certificate_arn = "arn:aws:acm:ap-south-1:547941801997:certificate/9be43256-666d-4bdb-b7f5-60d63d109416"
 ssl_policy      = "ELBSecurityPolicy-TLS13-1-2-2021-06"
 
 frontend_health_check     = "/"
