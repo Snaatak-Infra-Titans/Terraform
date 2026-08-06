@@ -1,67 +1,35 @@
-data "terraform_remote_state" "vpc" {
-  backend = "s3"
-
-  config = {
-    bucket = "otms-terraform-state-dev-788572613316"
-    key    = "network/vpc.tfstate"
-    region = "us-east-1"
-  }
-}
-
-data "terraform_remote_state" "subnets" {
-  backend = "s3"
-
-  config = {
-    bucket = "otms-terraform-state-dev-788572613316"
-    key    = "network/subnets.tfstate"
-    region = "us-east-1"
-  }
-}
-
-data "terraform_remote_state" "alb" {
-  backend = "s3"
-
-  config = {
-    bucket = "otms-terraform-state-dev-788572613316"
-    key    = "network/alb.tfstate"
-    region = "us-east-1"
-  }
-}
-
-data "terraform_remote_state" "ssh" {
-  backend = "s3"
-
-  config = {
-    bucket = "otms-terraform-state-dev-788572613316"
-    key    = "network/ssh.tfstate"
-    region = "us-east-1"
-  }
-}
-
-data "aws_lb_target_group" "attendance" {
-  name = "dev-otms-attendance-tg"
-}
-
-data "aws_security_group" "alb" {
+# Fetch existing OTMS VPC using the Name tag
+data "aws_vpc" "otms" {
   filter {
     name   = "tag:Name"
-    values = ["dev-otms-alb-sg"]
+    values = [var.vpc_name]
   }
-
-  vpc_id = data.terraform_remote_state.vpc.outputs.vpc_id
 }
 
-data "aws_subnets" "backend" {
+# Fetch one existing private/backend subnet
+data "aws_subnet" "attendance" {
   filter {
-    name   = "vpc-id"
-    values = [data.terraform_remote_state.vpc.outputs.vpc_id]
+    name   = "tag:Name"
+    values = [var.private_subnet_name]
   }
 
   filter {
-    name = "tag:Name"
-    values = [
-      "dev_otms_backend_subnet_a",
-      "dev_otms_backend_subnet_b"
-    ]
+    name   = "vpc-id"
+    values = [data.aws_vpc.otms.id]
   }
+}
+
+# Fetch the existing Attendance API security group
+data "aws_security_group" "attendance_api" {
+  filter {
+    name   = "tag:Name"
+    values = [var.attendance_security_group_name]
+  }
+
+  vpc_id = data.aws_vpc.otms.id
+}
+
+# Fetch the existing IAM instance profile used for SSM
+data "aws_iam_instance_profile" "attendance_ssm" {
+  name = var.ssm_instance_profile_name
 }
