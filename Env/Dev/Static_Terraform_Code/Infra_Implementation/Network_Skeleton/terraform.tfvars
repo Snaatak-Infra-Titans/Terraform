@@ -12,10 +12,10 @@ cost_center  = "Snaatak"
 # Existing Infrastructure
 ############################################
 
-vpc_id = "vpc-xxxxxxxxxxxxxxxxx"
+vpc_id = "vpc-0cc8a73f1e8b23d98"
 
-public_subnet_a_id = "subnet-xxxxxxxxxxxxxxxxx"
-public_subnet_b_id = "subnet-yyyyyyyyyyyyyyyyy"
+public_subnet_a_id = "subnet-09e85ba814051b97f"
+public_subnet_b_id = "subnet-049af8f3da74399da"
 
 ############################################
 # Listener Ports
