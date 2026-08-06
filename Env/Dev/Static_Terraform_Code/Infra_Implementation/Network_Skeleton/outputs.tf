@@ -1,6 +1,3 @@
-############################################
-# ALB Outputs
-############################################
 
 output "alb_arn" {
   description = "Application Load Balancer ARN"
@@ -12,18 +9,13 @@ output "alb_dns_name" {
   value       = aws_lb.this.dns_name
 }
 
-############################################
-# Security Group Output
-############################################
+
 
 output "alb_security_group_id" {
   description = "ALB Security Group ID"
   value       = aws_security_group.alb.id
 }
 
-############################################
-# Target Group Outputs
-############################################
 
 output "target_group_arns" {
   description = "Target Group ARNs"
