@@ -1,7 +1,7 @@
 
 
 # Attendance API AMI created using Packer
-ami_id = "ami-0b99d2f06e67a23ad"
+ami_id = "ami-024952d6180e2accf"
 
 aws_region    = "us-east-1"
 environment   = "dev"
