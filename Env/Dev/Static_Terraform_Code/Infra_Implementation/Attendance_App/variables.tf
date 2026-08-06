@@ -1,10 +1,10 @@
-variable "key_name" {
-  description = "Existing EC2 key pair name"
+variable "aws_region" {
+  description = "AWS region where the Attendance API instance will be created"
   type        = string
 }
 
 variable "ami_id" {
-  description = "Attendance application AMI ID"
+  description = "Attendance API AMI ID created using Packer"
   type        = string
 
   validation {
@@ -13,62 +13,48 @@ variable "ami_id" {
   }
 }
 
-
-
-variable "aws_region" {
-  type = string
-}
-
-variable "private_subnet_id" {
-  type = string
-}
-
-variable "environment" {
-  type = string
-}
-
-variable "application" {
-  type = string
-}
-
-variable "owner" {
-  type = string
-}
-
-variable "cost_center" {
-  type = string
+variable "instance_type" {
+  description = "EC2 instance type for the Attendance API"
+  type        = string
+  default     = "t3.small"
 }
 
 variable "vpc_name" {
-  type = string
-}
-
-
-variable "instance_type" {
-  type = string
-}
-
-variable "ssm_instance_profile" {
+  description = "Name tag of the existing OTMS VPC"
   type        = string
-  description = "Name of the manually created IAM Instance Profile for SSM"
 }
 
-variable "asg_min_size" {
-  type        = number
-  description = "Minimum number of instances in ASG"
+variable "private_subnet_name" {
+  description = "Name tag of the existing private subnet for the Attendance API"
+  type        = string
 }
 
-variable "asg_max_size" {
-  type        = number
-  description = "Maximum number of instances in ASG"
+variable "attendance_security_group_name" {
+  description = "Name tag of the existing Attendance API security group"
+  type        = string
 }
 
-variable "asg_desired_capacity" {
-  type        = number
-  description = "Desired number of instances in ASG"
+variable "ssm_instance_profile_name" {
+  description = "Name of the existing IAM instance profile used for SSM access"
+  type        = string
 }
 
-variable "cpu_target_value" {
-  type        = number
-  description = "Target CPU utilization percentage for ASG scaling"
+variable "environment" {
+  description = "Deployment environment"
+  type        = string
+}
+
+variable "application" {
+  description = "Application name"
+  type        = string
+}
+
+variable "owner" {
+  description = "Team responsible for managing the resource"
+  type        = string
+}
+
+variable "cost_center" {
+  description = "Cost center associated with the resource"
+  type        = string
 }
