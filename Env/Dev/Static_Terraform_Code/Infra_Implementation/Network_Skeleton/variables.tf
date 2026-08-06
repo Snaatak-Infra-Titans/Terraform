@@ -1,7 +1,3 @@
-############################################
-# AWS Provider Variables
-############################################
-
 variable "aws_region" {
   type = string
 }
@@ -22,9 +18,6 @@ variable "cost_center" {
   type = string
 }
 
-############################################
-# Existing Infrastructure Variables
-############################################
 
 variable "vpc_id" {
   description = "Existing VPC ID"
@@ -41,9 +34,6 @@ variable "public_subnet_b_id" {
   type        = string
 }
 
-############################################
-# Listener Ports
-############################################
 
 variable "http_port" {
   type = number
@@ -53,9 +43,6 @@ variable "https_port" {
   type = number
 }
 
-############################################
-# Target Group Ports
-############################################
 
 variable "frontend_port" {
   type = number
@@ -77,9 +64,7 @@ variable "notification_port" {
   type = number
 }
 
-############################################
-# ACM Certificate
-############################################
+
 
 variable "certificate_arn" {
   type = string
@@ -89,9 +74,6 @@ variable "ssl_policy" {
   type = string
 }
 
-############################################
-# Health Checks
-############################################
 
 variable "frontend_health_check" {
   type = string
