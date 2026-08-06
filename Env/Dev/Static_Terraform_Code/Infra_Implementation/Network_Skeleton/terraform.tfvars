@@ -1,4 +1,4 @@
-aws_region  = "us-east-1"
+aws_region  = "ap-south-1"
 environment = "dev"
 application = "otms"
 owner        = "Infra-Titans"
@@ -22,7 +22,7 @@ salary_port      = 8082
 notification_port = 8085
 
 
-certificate_arn = "arn:aws:acm:us-east-1:547941801997:certificate/c8cfc9e7-cca3-4306-ada2-716b62c097e2"
+certificate_arn = "arn:aws:acm:ap-south-1:547941801997:certificate/9be43256-666d-4bdb-b7f5-60d63d109416"
 
 ssl_policy = "ELBSecurityPolicy-TLS13-1-2-2021-06"
 
