@@ -5,7 +5,7 @@ owner        = "Infra-Titans"
 cost_center  = "Snaatak"
 
 
-vpc_id = "vpc-0cc8a73f1e8b23d98"
+vpc_id = "vpc-07b753c29bf89621a"
 
 public_subnet_a_id = "subnet-09e85ba814051b97f"
 public_subnet_b_id = "subnet-049af8f3da74399da"
