@@ -12,7 +12,7 @@ vpc_name            = "dev-otms-vpc"
 private_subnet_name = "dev_otms_backend_subnet_a"
 
 # Existing Attendance API security group
-attendance_security_group_name = "dev-otms-attendance-api-sg"
+attendance_security_group_name = "dev-otms-attendance-sg"
 
 # Existing IAM instance profile for SSM
 ssm_instance_profile_name = "dev-otms-ssm-role"
