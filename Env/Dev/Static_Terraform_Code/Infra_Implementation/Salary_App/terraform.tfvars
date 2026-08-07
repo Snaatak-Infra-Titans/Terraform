@@ -12,6 +12,6 @@ key_name      = "dev-otms-key"
 instance_type = "t3.small"
 
 ami_owner_id  = "547941801997"
-ami_name      = "salary-golden-v1-20260728-060148"
+ami_name = "salary-golden-v1-20260731-031625"
 
 ssm_instance_profile = "dev-otms-ssm-role"
