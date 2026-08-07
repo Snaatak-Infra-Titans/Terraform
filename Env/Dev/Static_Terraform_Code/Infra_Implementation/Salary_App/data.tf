@@ -25,3 +25,7 @@ data "aws_ami" "salary_app" {
     values = [var.ami_name]
   }
 }
+
+data "aws_iam_instance_profile" "ssm_profile" {
+  name = var.ssm_instance_profile
+}
