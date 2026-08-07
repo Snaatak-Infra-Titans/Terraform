@@ -5,13 +5,6 @@ data "aws_vpc" "network_vpc" {
   }
 }
 
-data "aws_security_group" "alb_sg" {
-  filter {
-    name   = "tag:Name"
-    values = ["*alb*"]
-  }
-}
-
 data "aws_security_group" "salary_sg" {
   filter {
     name   = "tag:Name"
