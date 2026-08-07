@@ -9,7 +9,7 @@ resource "aws_launch_template" "salary_lt" {
   ]
 
   iam_instance_profile {
-    name = aws_iam_instance_profile.ssm_profile.name
+    name = data.aws_iam_instance_profile.ssm_profile.name
   }
 
   tag_specifications {
