@@ -1,14 +1,13 @@
-aws_region    = "us-east-1"
-environment   = "dev"
-application   = "otms"
-owner         = "Infra-Titans"
-cost_center   = "Snaatak"
-vpc_name      = "dev-otms-vpc"
-key_name      = "dev-otms-key"
-instance_type = "t3.small"
+aws_region  = "ap-south-1"
+
+environment = "dev"
+application = "otms"
+
+owner       = "Infra-Titans"
+cost_center = "Snaatak"
+
+vpc_name = "dev-otms-vpc"
+
 asg_min_size         = 1
 asg_max_size         = 1
 asg_desired_capacity = 1
-ami_owner_id = "547941801997"
-ami_name     = "salary-golden-v1-20260728-060148"
-ssm_instance_profile = "dev-otms-ssm-role"
