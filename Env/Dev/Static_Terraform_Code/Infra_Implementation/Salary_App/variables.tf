@@ -1,0 +1,38 @@
+variable "aws_region" {
+  type = string
+}
+
+variable "environment" {
+  type = string
+}
+
+variable "application" {
+  type = string
+}
+
+variable "owner" {
+  type = string
+}
+
+variable "cost_center" {
+  type = string
+}
+
+variable "vpc_name" {
+  type = string
+}
+
+variable "asg_min_size" {
+  type        = number
+  description = "Minimum number of instances in the Auto Scaling Group"
+}
+
+variable "asg_max_size" {
+  type        = number
+  description = "Maximum number of instances in the Auto Scaling Group"
+}
+
+variable "asg_desired_capacity" {
+  type        = number
+  description = "Desired number of instances in the Auto Scaling Group"
+}
