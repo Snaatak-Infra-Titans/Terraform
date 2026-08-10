@@ -40,3 +40,16 @@ data "aws_security_group" "bastion_sg" {
 data "aws_key_pair" "existing_key" {
   key_name = var.key_name
 }
+
+# Fetching Salary Golden AMI
+
+data "aws_ami" "salary_ami" {
+  most_recent = true
+
+  owners = [var.ami_owner_id]
+
+  filter {
+    name   = "name"
+    values = [var.ami_name]
+  }
+}
