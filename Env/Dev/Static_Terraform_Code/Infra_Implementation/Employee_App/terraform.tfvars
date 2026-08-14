@@ -1,0 +1,6 @@
+ami_id           = "ami-0b6b7f2cd075e3e43"
+vpc_name         = "dev-otms-vpc"
+subnet_name      = "dev_otms_backend_subnet_a"
+alb_sg_name      = "dev-otms-alb-sg" 
+iam_profile_name = "dev-otms-ssm-role"
+key_pair_name    = "dev-otms-key"
