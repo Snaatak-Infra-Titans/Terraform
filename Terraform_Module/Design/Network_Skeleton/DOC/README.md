@@ -125,7 +125,7 @@ network-skeleton-module/
 
 The Network Skeleton module creates the base AWS networking architecture.
 
-Architecture
+```
                               Internet
                                  |
                                  v
@@ -160,7 +160,7 @@ Architecture
                     +-----------+-----------+
                     |           |           |
                   Redis      PostgreSQL   ScyllaDB
-
+```
 ---
 
 # 7. File Description
