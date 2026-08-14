@@ -1,0 +1,6 @@
+ami_id           = "ami-01bd525fdafeaa832"
+vpc_name         = "dev-otms-vpc"
+subnet_name      = "dev_otms_frontend_subnet_a"
+iam_profile_name = "dev-otms-ssm-role"
+instance_type    = "t3.micro"
+instance_name    = "dev-otms-frontend"
