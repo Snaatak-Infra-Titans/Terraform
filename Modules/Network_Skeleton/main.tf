@@ -1,22 +1,4 @@
 ############################################
-# Locals
-############################################
-
-locals {
-  name_prefix = "${var.environment}-${var.application}"
-
-  common_tags = merge(
-    {
-      Application = var.application
-      Environment = var.environment
-      Owner       = var.owner
-      CostCenter  = var.cost_center
-    },
-    var.tags
-  )
-}
-
-############################################
 # VPC
 ############################################
 
@@ -211,7 +193,8 @@ resource "aws_security_group" "this" {
 
   name        = "${local.name_prefix}-${each.key}-sg"
   description = each.value.description
-  vpc_id      = aws_vpc.this.id
+
+  vpc_id = aws_vpc.this.id
 
   tags = merge(
     local.common_tags,
@@ -225,32 +208,6 @@ resource "aws_security_group" "this" {
 ############################################
 # Security Group Ingress Rules
 ############################################
-
-locals {
-  security_group_ingress_rules = {
-    for item in flatten([
-      for sg_key, sg in var.security_groups : [
-        for index, rule in sg.ingress : {
-          key                = "${sg_key}-ingress-${index}"
-          security_group_key = sg_key
-          rule               = rule
-        }
-      ]
-    ]) : item.key => item
-  }
-
-  security_group_egress_rules = {
-    for item in flatten([
-      for sg_key, sg in var.security_groups : [
-        for index, rule in sg.egress : {
-          key                = "${sg_key}-egress-${index}"
-          security_group_key = sg_key
-          rule               = rule
-        }
-      ]
-    ]) : item.key => item
-  }
-}
 
 resource "aws_vpc_security_group_ingress_rule" "this" {
   for_each = local.security_group_ingress_rules
@@ -325,48 +282,6 @@ resource "aws_network_acl" "this" {
 }
 
 ############################################
-# Flatten NACL Associations and Rules
-############################################
-
-locals {
-  nacl_associations = {
-    for item in flatten([
-      for nacl_key, nacl in var.network_acls : [
-        for subnet_key in nacl.subnet_keys : {
-          key        = "${nacl_key}-${subnet_key}"
-          nacl_key   = nacl_key
-          subnet_key = subnet_key
-        }
-      ]
-    ]) : item.key => item
-  }
-
-  nacl_ingress_rules = {
-    for item in flatten([
-      for nacl_key, nacl in var.network_acls : [
-        for index, rule in nacl.ingress : {
-          key      = "${nacl_key}-ingress-${index}"
-          nacl_key = nacl_key
-          rule     = rule
-        }
-      ]
-    ]) : item.key => item
-  }
-
-  nacl_egress_rules = {
-    for item in flatten([
-      for nacl_key, nacl in var.network_acls : [
-        for index, rule in nacl.egress : {
-          key      = "${nacl_key}-egress-${index}"
-          nacl_key = nacl_key
-          rule     = rule
-        }
-      ]
-    ]) : item.key => item
-  }
-}
-
-############################################
 # NACL Subnet Associations
 ############################################
 
@@ -394,11 +309,13 @@ resource "aws_network_acl_rule" "ingress" {
   ].id
 
   rule_number = each.value.rule.rule_number
-  egress      = false
+
+  egress = false
 
   protocol    = each.value.rule.protocol
   rule_action = each.value.rule.rule_action
-  cidr_block  = each.value.rule.cidr_block
+
+  cidr_block = each.value.rule.cidr_block
 
   from_port = each.value.rule.from_port
   to_port   = each.value.rule.to_port
@@ -416,11 +333,13 @@ resource "aws_network_acl_rule" "egress" {
   ].id
 
   rule_number = each.value.rule.rule_number
-  egress      = true
+
+  egress = true
 
   protocol    = each.value.rule.protocol
   rule_action = each.value.rule.rule_action
-  cidr_block  = each.value.rule.cidr_block
+
+  cidr_block = each.value.rule.cidr_block
 
   from_port = each.value.rule.from_port
   to_port   = each.value.rule.to_port
