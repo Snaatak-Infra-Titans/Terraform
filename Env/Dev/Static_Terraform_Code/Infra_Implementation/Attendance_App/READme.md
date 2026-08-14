@@ -14,7 +14,7 @@ https://faisalakhan98-newbatch.atlassian.net/browse/SCRUM-393
 The required ALB Listener Rules have already been implemented in the existing Terraform configuration.
 
 **Reference Code:**  
-https://github.com/Snaatak-Infra-Titans/Terraform/blob/SCRUM-393-versha/Env/Dev/Static_Terraform_Code/Infra_Implementation/Network_Skeleton/alb.tf
+https://github.com/Snaatak-Infra-Titans/Terraform/tree/SCRUM-393-versha/Env/Dev/Static_Terraform_Code/Infra_Implementation/Network_Skeleton
 
 ---
 
