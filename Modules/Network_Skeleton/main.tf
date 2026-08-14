@@ -232,6 +232,8 @@ resource "aws_vpc_security_group_ingress_rule" "this" {
     ].id
     : null
   )
+
+  tags = local.common_tags
 }
 
 ############################################
@@ -261,6 +263,8 @@ resource "aws_vpc_security_group_egress_rule" "this" {
     ].id
     : null
   )
+
+  tags = local.common_tags
 }
 
 ############################################
@@ -271,6 +275,46 @@ resource "aws_network_acl" "this" {
   for_each = var.network_acls
 
   vpc_id = aws_vpc.this.id
+
+  ##########################################
+  # Dynamic Ingress Rules
+  ##########################################
+
+  dynamic "ingress" {
+    for_each = each.value.ingress
+
+    content {
+      rule_no = ingress.value.rule_number
+
+      protocol = ingress.value.protocol
+      action   = ingress.value.rule_action
+
+      cidr_block = ingress.value.cidr_block
+
+      from_port = ingress.value.from_port
+      to_port   = ingress.value.to_port
+    }
+  }
+
+  ##########################################
+  # Dynamic Egress Rules
+  ##########################################
+
+  dynamic "egress" {
+    for_each = each.value.egress
+
+    content {
+      rule_no = egress.value.rule_number
+
+      protocol = egress.value.protocol
+      action   = egress.value.rule_action
+
+      cidr_block = egress.value.cidr_block
+
+      from_port = egress.value.from_port
+      to_port   = egress.value.to_port
+    }
+  }
 
   tags = merge(
     local.common_tags,
@@ -295,52 +339,4 @@ resource "aws_network_acl_association" "this" {
   network_acl_id = aws_network_acl.this[
     each.value.nacl_key
   ].id
-}
-
-############################################
-# NACL Ingress Rules
-############################################
-
-resource "aws_network_acl_rule" "ingress" {
-  for_each = local.nacl_ingress_rules
-
-  network_acl_id = aws_network_acl.this[
-    each.value.nacl_key
-  ].id
-
-  rule_number = each.value.rule.rule_number
-
-  egress = false
-
-  protocol    = each.value.rule.protocol
-  rule_action = each.value.rule.rule_action
-
-  cidr_block = each.value.rule.cidr_block
-
-  from_port = each.value.rule.from_port
-  to_port   = each.value.rule.to_port
-}
-
-############################################
-# NACL Egress Rules
-############################################
-
-resource "aws_network_acl_rule" "egress" {
-  for_each = local.nacl_egress_rules
-
-  network_acl_id = aws_network_acl.this[
-    each.value.nacl_key
-  ].id
-
-  rule_number = each.value.rule.rule_number
-
-  egress = true
-
-  protocol    = each.value.rule.protocol
-  rule_action = each.value.rule.rule_action
-
-  cidr_block = each.value.rule.cidr_block
-
-  from_port = each.value.rule.from_port
-  to_port   = each.value.rule.to_port
 }
