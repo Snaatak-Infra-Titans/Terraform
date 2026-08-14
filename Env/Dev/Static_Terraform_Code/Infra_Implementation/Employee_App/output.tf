@@ -1,0 +1,24 @@
+output "employee_api_security_group_id" {
+  description = "The ID of the custom Security Group attached to the Employee API"
+  value       = aws_security_group.api_sg.id
+}
+
+output "employee_api_launch_template_id" {
+  description = "The ID of the Employee API Launch Template"
+  value       = aws_launch_template.employee_api.id
+}
+
+output "employee_tg_arn" {
+  description = "The ARN of the Employee Target Group fetched from AWS"
+  value       = data.aws_lb_target_group.employee_tg.arn
+}
+
+output "employee_api_asg_name" {
+  description = "The name of the Employee API Auto Scaling Group"
+  value       = aws_autoscaling_group.employee_api.name
+}
+
+output "employee_api_cpu_policy_arn" {
+  description = "The ARN of the CPU auto-scaling policy"
+  value       = aws_autoscaling_policy.cpu_scaling.arn
+}
