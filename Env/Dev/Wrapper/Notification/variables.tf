@@ -1,8 +1,12 @@
 variable "aws_region" {
-  description = "AWS region for the Dev environment"
+  description = "AWS region"
   type        = string
 }
 
+variable "vpc_id" {
+  description = "VPC ID where the target group is created"
+  type        = string
+}
 
 variable "environment" {
   description = "Deployment environment"
@@ -10,64 +14,38 @@ variable "environment" {
   default     = "dev"
 }
 
-
 variable "application" {
   description = "Application name"
   type        = string
   default     = "notification"
 }
 
-
-variable "vpc_id" {
-  description = "VPC ID for the Notification infrastructure"
-  type        = string
+variable "common_tags" {
+  description = "Common tags applied to AWS resources"
+  type        = map(string)
+  default     = {}
 }
 
-
-variable "subnet_ids" {
-  description = "Subnet IDs for the Notification Auto Scaling Group"
-  type        = list(string)
-}
-
-
-variable "ami_id" {
-  description = "Notification Golden AMI ID"
-  type        = string
-}
-
-
-variable "instance_type" {
-  description = "EC2 instance type for Notification"
-  type        = string
-  default     = "t3.small"
-}
-
-
-variable "security_group_id" {
-  description = "Security group ID for Notification instances"
-  type        = string
-}
-
-
-variable "iam_instance_profile_name" {
-  description = "IAM instance profile for Notification instances"
-  type        = string
-}
-
+# --------------------------------------------------
+# Target Group
+# --------------------------------------------------
 
 variable "application_port" {
-  description = "Port on which Notification is running"
+  description = "Port on which the application listens"
   type        = number
-  default     = 8080
+  default     = 8085
 }
-
 
 variable "target_group_protocol" {
-  description = "Protocol used by the Notification target group"
+  description = "Protocol used by the target group"
   type        = string
-  default     = "HTTPS"
-}
+  default     = "HTTP"
 
+  validation {
+    condition     = contains(["HTTP", "HTTPS"], var.target_group_protocol)
+    error_message = "target_group_protocol must be HTTP or HTTPS."
+  }
+}
 
 variable "target_type" {
   description = "Target type for the target group"
@@ -75,20 +53,22 @@ variable "target_type" {
   default     = "instance"
 }
 
-
 variable "health_check_enabled" {
-  description = "Enable target group health checks"
+  description = "Whether target group health checks are enabled"
   type        = bool
   default     = true
 }
 
-
 variable "health_check_protocol" {
-  description = "Protocol used for Notification health checks"
+  description = "Protocol used for target group health checks"
   type        = string
-  default     = "HTTPS"
-}
+  default     = "HTTP"
 
+  validation {
+    condition     = contains(["HTTP", "HTTPS"], var.health_check_protocol)
+    error_message = "health_check_protocol must be HTTP or HTTPS."
+  }
+}
 
 variable "health_check_path" {
   description = "Health check path"
@@ -96,13 +76,11 @@ variable "health_check_path" {
   default     = "/"
 }
 
-
 variable "health_check_port" {
   description = "Port used for health checks"
   type        = string
   default     = "traffic-port"
 }
-
 
 variable "health_check_interval" {
   description = "Health check interval in seconds"
@@ -110,108 +88,125 @@ variable "health_check_interval" {
   default     = 30
 }
 
-
 variable "health_check_timeout" {
   description = "Health check timeout in seconds"
   type        = number
   default     = 5
 }
 
-
 variable "healthy_threshold" {
-  description = "Number of successful health checks required"
+  description = "Number of consecutive successful health checks"
   type        = number
   default     = 3
 }
-
 
 variable "unhealthy_threshold" {
-  description = "Number of failed health checks before unhealthy"
+  description = "Number of consecutive failed health checks"
   type        = number
   default     = 3
 }
 
-
 variable "health_check_matcher" {
-  description = "Expected health check response code"
+  description = "Expected HTTP response codes"
   type        = string
   default     = "200"
 }
 
+# --------------------------------------------------
+# Listener Rule
+# --------------------------------------------------
 
 variable "listener_arn" {
   description = "ARN of the existing ALB listener"
   type        = string
 }
 
-
 variable "listener_rule_priority" {
   description = "Priority of the ALB listener rule"
   type        = number
 }
 
-
 variable "listener_rule_paths" {
-  description = "Path patterns for the Notification listener rule"
+  description = "Path patterns used by the listener rule"
   type        = list(string)
 }
 
+# --------------------------------------------------
+# Launch Template
+# --------------------------------------------------
+
+variable "ami_id" {
+  description = "AMI ID used by the launch template"
+  type        = string
+}
+
+variable "instance_type" {
+  description = "EC2 instance type"
+  type        = string
+  default     = "t3.small"
+}
+
+variable "security_group_id" {
+  description = "Security group ID attached to the instances"
+  type        = string
+}
+
+variable "iam_instance_profile_name" {
+  description = "IAM instance profile attached to the instances"
+  type        = string
+}
+
+# --------------------------------------------------
+# Auto Scaling Group
+# --------------------------------------------------
+
+variable "subnet_ids" {
+  description = "Subnet IDs used by the Auto Scaling Group"
+  type        = list(string)
+}
 
 variable "desired_capacity" {
-  description = "Desired number of Notification instances"
+  description = "Desired number of instances"
   type        = number
   default     = 1
 }
-
 
 variable "min_size" {
-  description = "Minimum number of Notification instances"
+  description = "Minimum number of instances"
   type        = number
   default     = 1
 }
-
 
 variable "max_size" {
-  description = "Maximum number of Notification instances"
+  description = "Maximum number of instances"
   type        = number
   default     = 1
 }
 
-
 variable "asg_health_check_type" {
-  description = "Auto Scaling Group health check type"
+  description = "Health check type used by the Auto Scaling Group"
   type        = string
   default     = "ELB"
 }
 
-
 variable "asg_health_check_grace_period" {
-  description = "ASG health check grace period in seconds"
+  description = "Health check grace period in seconds"
   type        = number
   default     = 300
 }
 
+# --------------------------------------------------
+# Auto Scaling Policy
+# --------------------------------------------------
 
 variable "scaling_metric_type" {
-  description = "Metric used for target tracking scaling"
+  description = "Predefined metric used for target tracking"
   type        = string
   default     = "ASGAverageCPUUtilization"
 }
-
 
 variable "scaling_target_value" {
   description = "Target value for the scaling policy"
   type        = number
   default     = 70
-}
-
-
-variable "common_tags" {
-  description = "Common tags for Notification resources"
-  type        = map(string)
-
-  default = {
-    Environment = "dev"
-    Application = "notification"
-  }
 }
