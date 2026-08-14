@@ -10,7 +10,7 @@
 
 | **Author** | **Created on** | **Version** | **Last Updated By** | **Last Edited On** | **Pre Reviewer** | **L0 Reviewer** | **L1 Reviewer** | **L2 Reviewer** |
 | ---------- | -------------- | ----------- | ------------------- | ------------------ | ---------------- | --------------- | --------------- | --------------- |
-| Ankita     | 20-07-2026     | v1.0        | Ankita              | 20-07-2026         | Team             | Komal Jaiswal   | Akshit Kapil    | Mahesh Kumar    |
+| Ankita     | 20-07-2026     | v1.0        | Ankita              | 15-08-2026         | Team             | Komal Jaiswal   | Akshit Kapil    | Mahesh Kumar    |
 
 ---
 
@@ -125,25 +125,41 @@ network-skeleton-module/
 
 The Network Skeleton module creates the base AWS networking architecture.
 
-```text
-                        AWS VPC
-                           │
-        ┌──────────────────┼──────────────────┐
-        │                  │                  │
- Public Subnet 1    Public Subnet 2      Internet Gateway
-        │                  │
-        └──────────┬───────┘
-                   │
-              NAT Gateway
-                   │
-      ┌────────────┴────────────┐
-      │                         │
-Private App Subnet 1     Private App Subnet 2
-      │                         │
-      └────────────┬────────────┘
-                   │
-        Private Database Subnets
-```
+Architecture
+                              Internet
+                                 |
+                                 v
+                         Internet Gateway
+                                 |
+                    +------------+------------+
+                    |                         |
+             Public Subnet 1           Public Subnet 2
+                    |                         |
+                    +-----------+-------------+
+                                |
+                        Application Load
+                           Balancer
+                                |
+                    +-----------+-----------+
+                    |                       |
+           Private App Subnet 1    Private App Subnet 2
+                    |                       |
+        +-----------+-----------+-----------+-----------+
+        |           |           |           |           |
+    Frontend    Employee    Attendance    Salary    Notification
+                API         API           API       API
+        |           |           |           |           |
+        +-----------+-----------+-----------+-----------+
+                                |
+                    +-----------+-----------+
+                    |                       |
+            Private DB Subnet 1    Private DB Subnet 2
+                    |                       |
+                    +-----------+-----------+
+                                |
+                    +-----------+-----------+
+                    |           |           |
+                  Redis      PostgreSQL   ScyllaDB
 
 ---
 
