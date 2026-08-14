@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "otms-terraform-state-dev"
+    bucket = "dev-otms-terraform-state"
     key    = "employee/full.tfstate"
     region = "us-east-1"
   }
