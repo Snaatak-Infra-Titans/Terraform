@@ -6,8 +6,8 @@ application = "notification"
 vpc_id = "<DEV_VPC_ID>"
 
 subnet_ids = [
-  "<DEV_SUBNET_ID_1>",
-  "<DEV_SUBNET_ID_2>"
+  "<DEV_BACKEND_SUBNET_A>",
+  "<DEV_BACKEND_SUBNET_B>"
 ]
 
 # Launch Template
@@ -17,13 +17,13 @@ security_group_id         = "<NOTIFICATION_SECURITY_GROUP_ID>"
 iam_instance_profile_name = "<NOTIFICATION_IAM_INSTANCE_PROFILE>"
 
 # Target Group
-application_port      = 8080
-target_group_protocol = "HTTPS"
+application_port      = 8085
+target_group_protocol = "HTTP"
 target_type           = "instance"
 
 # Health Check
 health_check_enabled  = true
-health_check_protocol = "HTTPS"
+health_check_protocol = "HTTP"
 health_check_path     = "/"
 health_check_port     = "traffic-port"
 
@@ -36,14 +36,14 @@ unhealthy_threshold = 3
 health_check_matcher = "200"
 
 # ALB Listener Rule
-listener_arn           = "<DEV_ALB_LISTENER_ARN>"
+listener_arn           = "<DEV_BACKEND_ALB_LISTENER_ARN>"
 listener_rule_priority = 100
 listener_rule_paths    = ["/notification/*"]
 
 # Auto Scaling Group
 desired_capacity = 1
 min_size         = 1
-max_size         = 1
+max_size         = 2
 
 asg_health_check_type         = "ELB"
 asg_health_check_grace_period = 300
