@@ -1,0 +1,12 @@
+tflint {
+  required_version = ">= 0.50"
+}
+
+config {
+  call_module_type = "local"
+}
+
+plugin "terraform" {
+  enabled = true
+  preset  = "recommended"
+}
