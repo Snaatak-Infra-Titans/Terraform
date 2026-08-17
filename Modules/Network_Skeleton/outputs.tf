@@ -1,111 +1,50 @@
 ############################################
-# VPC Outputs
+# Application Load Balancer Outputs
 ############################################
 
-output "vpc_id" {
-  description = "ID of the VPC"
-  value       = aws_vpc.this.id
+output "alb_arn" {
+  description = "ARN of the Application Load Balancer"
+
+  value = var.enable_alb ? aws_lb.this[0].arn : null
 }
 
-output "vpc_cidr_block" {
-  description = "CIDR block of the VPC"
-  value       = aws_vpc.this.cidr_block
+output "alb_dns_name" {
+  description = "DNS name of the Application Load Balancer"
+
+  value = var.enable_alb ? aws_lb.this[0].dns_name : null
+}
+
+output "alb_zone_id" {
+  description = "Canonical hosted zone ID of the Application Load Balancer"
+
+  value = var.enable_alb ? aws_lb.this[0].zone_id : null
 }
 
 ############################################
-# Subnet Outputs
+# Listener Outputs
 ############################################
 
-output "subnet_ids" {
-  description = "Map of subnet keys to subnet IDs"
+output "http_listener_arn" {
+  description = "ARN of the HTTP ALB listener"
+
+  value = var.enable_alb ? aws_lb_listener.http[0].arn : null
+}
+
+output "https_listener_arn" {
+  description = "ARN of the HTTPS ALB listener"
+
+  value = var.enable_alb ? aws_lb_listener.https[0].arn : null
+}
+
+############################################
+# Route53 Outputs
+############################################
+
+output "route53_record_names" {
+  description = "Route53 record names created for the ALB"
 
   value = {
-    for key, subnet in aws_subnet.this :
-    key => subnet.id
-  }
-}
-
-output "public_subnet_ids" {
-  description = "Map of public subnet keys to subnet IDs"
-
-  value = {
-    for key, subnet in aws_subnet.this :
-    key => subnet.id
-    if var.subnets[key].route_table_type == "public"
-  }
-}
-
-output "private_subnet_ids" {
-  description = "Map of private subnet keys to subnet IDs"
-
-  value = {
-    for key, subnet in aws_subnet.this :
-    key => subnet.id
-    if var.subnets[key].route_table_type == "private"
-  }
-}
-
-############################################
-# Internet Gateway Output
-############################################
-
-output "internet_gateway_id" {
-  description = "ID of the Internet Gateway"
-  value       = aws_internet_gateway.this.id
-}
-
-############################################
-# NAT Gateway Outputs
-############################################
-
-output "nat_gateway_id" {
-  description = "ID of the NAT Gateway"
-
-  value = var.enable_nat_gateway ? aws_nat_gateway.this[0].id : null
-}
-
-output "nat_eip_public_ip" {
-  description = "Public IP address allocated to the NAT Gateway"
-
-  value = var.enable_nat_gateway ? aws_eip.nat[0].public_ip : null
-}
-
-############################################
-# Route Table Outputs
-############################################
-
-output "public_route_table_id" {
-  description = "ID of the public route table"
-  value       = aws_route_table.public.id
-}
-
-output "private_route_table_id" {
-  description = "ID of the private route table"
-  value       = aws_route_table.private.id
-}
-
-############################################
-# Security Group Outputs
-############################################
-
-output "security_group_ids" {
-  description = "Map of Security Group keys to Security Group IDs"
-
-  value = {
-    for key, sg in aws_security_group.this :
-    key => sg.id
-  }
-}
-
-############################################
-# Network ACL Outputs
-############################################
-
-output "network_acl_ids" {
-  description = "Map of NACL keys to Network ACL IDs"
-
-  value = {
-    for key, nacl in aws_network_acl.this :
-    key => nacl.id
+    for key, record in aws_route53_record.alb_alias :
+    key => record.fqdn
   }
 }
