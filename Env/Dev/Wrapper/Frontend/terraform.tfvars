@@ -10,7 +10,7 @@ subnet_ids = [
 ]
 
 ami_id                    = "<FRONTEND_GOLDEN_AMI_ID>"
-instance_type             = "t3.small"
+instance_type             = "t3.micro"
 security_group_id         = "<FRONTEND_SECURITY_GROUP_ID>"
 iam_instance_profile_name = "dev-otms-ssm-role"
 
@@ -35,15 +35,17 @@ listener_rule_paths    = ["/*"]
 
 desired_capacity = 1
 min_size         = 1
-max_size         = 1
+max_size         = 2
 
 asg_health_check_type         = "ELB"
 asg_health_check_grace_period = 300
 
 scaling_metric_type  = "ASGAverageCPUUtilization"
-scaling_target_value = 60
+scaling_target_value = 50
 
 common_tags = {
-  Owner      = "Infra-Titans"
-  CostCenter = "Snaatak"
+  Application = "otms"
+  Owner       = "Infra-Titans"
+  Environment = "dev"
+  CostCenter  = "Snaatak"
 }
