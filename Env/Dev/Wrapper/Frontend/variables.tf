@@ -117,7 +117,7 @@ variable "ami_id" {
 variable "instance_type" {
   description = "Frontend EC2 instance type"
   type        = string
-  default     = "t3.small"
+  default     = "t3.micro"
 }
 
 variable "security_group_id" {
@@ -150,7 +150,7 @@ variable "min_size" {
 variable "max_size" {
   description = "Maximum number of Frontend instances"
   type        = number
-  default     = 1
+  default     = 2
 }
 
 variable "asg_health_check_type" {
@@ -174,5 +174,5 @@ variable "scaling_metric_type" {
 variable "scaling_target_value" {
   description = "Target CPU utilization"
   type        = number
-  default     = 60
+  default     = 50
 }
