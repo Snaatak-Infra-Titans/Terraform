@@ -47,7 +47,7 @@ locals {
 }
 
 ############################################
-# NACL Associations and Rules
+# NACL Associations
 ############################################
 
 locals {
@@ -58,30 +58,6 @@ locals {
           key        = "${nacl_key}-${subnet_key}"
           nacl_key   = nacl_key
           subnet_key = subnet_key
-        }
-      ]
-    ]) : item.key => item
-  }
-
-  nacl_ingress_rules = {
-    for item in flatten([
-      for nacl_key, nacl in var.network_acls : [
-        for index, rule in nacl.ingress : {
-          key      = "${nacl_key}-ingress-${index}"
-          nacl_key = nacl_key
-          rule     = rule
-        }
-      ]
-    ]) : item.key => item
-  }
-
-  nacl_egress_rules = {
-    for item in flatten([
-      for nacl_key, nacl in var.network_acls : [
-        for index, rule in nacl.egress : {
-          key      = "${nacl_key}-egress-${index}"
-          nacl_key = nacl_key
-          rule     = rule
         }
       ]
     ]) : item.key => item
