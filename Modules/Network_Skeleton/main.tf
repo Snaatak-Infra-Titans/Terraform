@@ -193,8 +193,7 @@ resource "aws_security_group" "this" {
 
   name        = "${local.name_prefix}-${each.key}-sg"
   description = each.value.description
-
-  vpc_id = aws_vpc.this.id
+  vpc_id      = aws_vpc.this.id
 
   tags = merge(
     local.common_tags,
@@ -276,10 +275,6 @@ resource "aws_network_acl" "this" {
 
   vpc_id = aws_vpc.this.id
 
-  ##########################################
-  # Dynamic Ingress Rules
-  ##########################################
-
   dynamic "ingress" {
     for_each = each.value.ingress
 
@@ -295,10 +290,6 @@ resource "aws_network_acl" "this" {
       to_port   = ingress.value.to_port
     }
   }
-
-  ##########################################
-  # Dynamic Egress Rules
-  ##########################################
 
   dynamic "egress" {
     for_each = each.value.egress
@@ -339,4 +330,105 @@ resource "aws_network_acl_association" "this" {
   network_acl_id = aws_network_acl.this[
     each.value.nacl_key
   ].id
+}
+
+############################################
+# Application Load Balancer
+############################################
+
+resource "aws_lb" "this" {
+  count = var.enable_alb ? 1 : 0
+
+  name = "${local.name_prefix}-alb"
+
+  internal           = var.alb_internal
+  load_balancer_type = "application"
+
+  security_groups = [
+    aws_security_group.this[var.alb_security_group_key].id
+  ]
+
+  subnets = [
+    for subnet_key in var.alb_subnet_keys :
+    aws_subnet.this[subnet_key].id
+  ]
+
+  enable_deletion_protection = var.enable_deletion_protection
+
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "${local.name_prefix}-alb"
+    }
+  )
+}
+
+############################################
+# HTTP Listener
+############################################
+
+resource "aws_lb_listener" "http" {
+  count = var.enable_alb ? 1 : 0
+
+  load_balancer_arn = aws_lb.this[0].arn
+
+  port     = var.http_listener_port
+  protocol = "HTTP"
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = tostring(var.https_listener_port)
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}
+
+############################################
+# HTTPS Listener
+############################################
+
+resource "aws_lb_listener" "https" {
+  count = var.enable_alb ? 1 : 0
+
+  load_balancer_arn = aws_lb.this[0].arn
+
+  port     = var.https_listener_port
+  protocol = "HTTPS"
+
+  certificate_arn = var.certificate_arn
+  ssl_policy      = var.ssl_policy
+
+  default_action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "Route not found"
+      status_code  = "404"
+    }
+  }
+}
+
+############################################
+# Route53 Alias Records
+############################################
+
+resource "aws_route53_record" "alb_alias" {
+  for_each = var.enable_route53 ? var.route53_records : toset([])
+
+  zone_id = var.route53_zone_id
+
+  name = each.value
+  type = "A"
+
+  alias {
+    name = aws_lb.this[0].dns_name
+
+    zone_id = aws_lb.this[0].zone_id
+
+    evaluate_target_health = true
+  }
 }
