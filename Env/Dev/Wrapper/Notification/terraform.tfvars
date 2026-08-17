@@ -12,7 +12,7 @@ subnet_ids = [
 ami_id                    = "<NOTIFICATION_GOLDEN_AMI_ID>"
 instance_type             = "t3.small"
 security_group_id         = "<NOTIFICATION_SECURITY_GROUP_ID>"
-iam_instance_profile_name = "dev-otms-ssm-role"
+iam_instance_profile_name = "otms-ssm-role"
 
 application_port      = 8085
 target_group_protocol = "HTTP"
