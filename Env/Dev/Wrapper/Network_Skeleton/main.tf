@@ -1,5 +1,6 @@
 module "network_skeleton" {
-  source = "../../../../Modules/Network_Skeleton"
+  # Pinned source from SCRUM-481-ankita. Update deliberately and create a new plan.
+  source = "git::https://github.com/Snaatak-Infra-Titans/Terraform.git//Modules/Network_Skeleton?ref=8084ea231e7a6b9b3fcedda3a62da895b47f622e"
 
   application            = var.application
   environment            = var.environment
