@@ -1,158 +1,80 @@
 ############################################
-# Common / Naming Variables
+# Application Load Balancer
 ############################################
 
-variable "application" {
-  description = "Application name used for naming and tagging resources"
-  type        = string
-}
-
-variable "environment" {
-  description = "Deployment environment such as dev, qa, stage, or prod"
-  type        = string
-}
-
-variable "owner" {
-  description = "Owner of the infrastructure resources"
-  type        = string
-}
-
-variable "cost_center" {
-  description = "Cost center tag"
-  type        = string
-}
-
-variable "tags" {
-  description = "Additional custom tags to apply to resources"
-  type        = map(string)
-  default     = {}
-}
-
-############################################
-# VPC
-############################################
-
-variable "vpc_cidr" {
-  description = "CIDR block for the VPC"
-  type        = string
-}
-
-variable "enable_dns_support" {
-  description = "Enable DNS support in the VPC"
+variable "enable_alb" {
+  description = "Whether to create the shared Application Load Balancer"
   type        = bool
   default     = true
 }
 
-variable "enable_dns_hostnames" {
-  description = "Enable DNS hostnames in the VPC"
+variable "alb_security_group_key" {
+  description = "Key of the Security Group used by the Application Load Balancer"
+  type        = string
+  default     = "alb"
+}
+
+variable "alb_subnet_keys" {
+  description = "Keys of the public subnets where the ALB will be created"
+  type        = list(string)
+}
+
+variable "alb_internal" {
+  description = "Whether the Application Load Balancer is internal"
   type        = bool
-  default     = true
+  default     = false
 }
 
-############################################
-# Subnets
-############################################
-
-variable "subnets" {
-  description = "Map of subnet configurations"
-
-  type = map(object({
-    cidr_block              = string
-    availability_zone       = string
-    map_public_ip_on_launch = bool
-    route_table_type        = string
-    additional_tags         = map(string)
-  }))
-
-  validation {
-    condition = alltrue([
-      for subnet in values(var.subnets) :
-      contains(["public", "private"], subnet.route_table_type)
-    ])
-
-    error_message = "route_table_type must be either public or private."
-  }
-}
-
-############################################
-# NAT Gateway
-############################################
-
-variable "enable_nat_gateway" {
-  description = "Whether to create a NAT Gateway"
+variable "enable_deletion_protection" {
+  description = "Enable deletion protection on the Application Load Balancer"
   type        = bool
-  default     = true
+  default     = false
 }
 
-variable "nat_gateway_subnet_key" {
-  description = "Key of the public subnet where the NAT Gateway will be created"
+############################################
+# ALB Listeners
+############################################
+
+variable "http_listener_port" {
+  description = "HTTP listener port"
+  type        = number
+  default     = 80
+}
+
+variable "https_listener_port" {
+  description = "HTTPS listener port"
+  type        = number
+  default     = 443
+}
+
+variable "certificate_arn" {
+  description = "ACM certificate ARN used by the HTTPS listener"
   type        = string
 }
 
-############################################
-# Security Groups
-############################################
-
-variable "security_groups" {
-  description = "Map of Security Groups with ingress and egress rules"
-
-  type = map(object({
-    description = string
-
-    ingress = list(object({
-      description               = string
-      from_port                 = number
-      to_port                   = number
-      protocol                  = string
-      cidr_ipv4                 = string
-      source_security_group_key = string
-    }))
-
-    egress = list(object({
-      description               = string
-      from_port                 = number
-      to_port                   = number
-      protocol                  = string
-      cidr_ipv4                 = string
-      source_security_group_key = string
-    }))
-
-    additional_tags = map(string)
-  }))
-
-  default = {}
+variable "ssl_policy" {
+  description = "SSL policy used by the HTTPS listener"
+  type        = string
+  default     = "ELBSecurityPolicy-TLS13-1-2-2021-06"
 }
 
 ############################################
-# Network ACLs
+# Route53
 ############################################
 
-variable "network_acls" {
-  description = "Map of Network ACLs, subnet associations and rules"
+variable "enable_route53" {
+  description = "Whether to create Route53 alias records for the ALB"
+  type        = bool
+  default     = true
+}
 
-  type = map(object({
-    subnet_keys = list(string)
+variable "route53_zone_id" {
+  description = "Existing Route53 hosted zone ID"
+  type        = string
+}
 
-    ingress = list(object({
-      rule_number = number
-      protocol    = string
-      rule_action = string
-      cidr_block  = string
-      from_port   = number
-      to_port     = number
-    }))
-
-    egress = list(object({
-      rule_number = number
-      protocol    = string
-      rule_action = string
-      cidr_block  = string
-      from_port   = number
-      to_port     = number
-    }))
-
-    additional_tags = map(string)
-  }))
-
-  default = {}
+variable "route53_records" {
+  description = "DNS record names that should point to the shared ALB"
+  type        = set(string)
+  default     = []
 }
