@@ -413,22 +413,58 @@ resource "aws_lb_listener" "https" {
 }
 
 ############################################
-# Route53 Alias Records
+# Public Route53 Alias Records
 ############################################
 
-resource "aws_route53_record" "alb_alias" {
-  for_each = var.enable_route53 ? var.route53_records : toset([])
+resource "aws_route53_record" "public_alb_alias" {
+  for_each = (
+    var.enable_public_route53 && var.enable_alb
+    ? var.public_route53_records
+    : toset([])
+  )
 
-  zone_id = var.route53_zone_id
+  zone_id = var.public_route53_zone_id
 
   name = each.value
   type = "A"
 
   alias {
-    name = aws_lb.this[0].dns_name
-
-    zone_id = aws_lb.this[0].zone_id
-
+    name                   = aws_lb.this[0].dns_name
+    zone_id                = aws_lb.this[0].zone_id
     evaluate_target_health = true
   }
+}
+
+############################################
+# Private Hosted Zone VPC Association
+############################################
+
+resource "aws_route53_zone_association" "private" {
+  count = var.enable_private_route53 ? 1 : 0
+
+  zone_id = var.private_route53_zone_id
+  vpc_id  = aws_vpc.this.id
+}
+
+############################################
+# Private Route53 Records
+############################################
+
+resource "aws_route53_record" "private" {
+  for_each = (
+    var.enable_private_route53
+    ? var.private_dns_records
+    : {}
+  )
+
+  zone_id = var.private_route53_zone_id
+
+  name    = each.value.name
+  type    = each.value.type
+  ttl     = each.value.ttl
+  records = each.value.records
+
+  depends_on = [
+    aws_route53_zone_association.private
+  ]
 }
