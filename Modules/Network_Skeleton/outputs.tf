@@ -61,3 +61,13 @@ output "private_route53_record_names" {
     key => record.fqdn
   }
 }
+
+############################################
+# Private Hosted Zone Association Output
+############################################
+
+output "private_route53_zone_association_id" {
+  description = "ID of the private Route53 hosted zone VPC association"
+
+  value = var.enable_private_route53 ? aws_route53_zone_association.private[0].id : null
+}
