@@ -1,4 +1,4 @@
-bucket       = "<YOUR-EXISTING-TERRAFORM-STATE-BUCKET>"
+bucket       = "saransh-terraform-wrapper-poc-state"
 key          = "wrapper-poc/dev/terraform.tfstate"
 region       = "ap-south-1"
 encrypt      = true
