@@ -37,14 +37,27 @@ output "https_listener_arn" {
 }
 
 ############################################
-# Route53 Outputs
+# Public Route53 Outputs
 ############################################
 
-output "route53_record_names" {
-  description = "Route53 record names created for the ALB"
+output "public_route53_record_names" {
+  description = "Public Route53 DNS records created for the Application Load Balancer"
 
   value = {
-    for key, record in aws_route53_record.alb_alias :
+    for key, record in aws_route53_record.public_alb_alias :
+    key => record.fqdn
+  }
+}
+
+############################################
+# Private Route53 Outputs
+############################################
+
+output "private_route53_record_names" {
+  description = "Private Route53 DNS records created for internal services"
+
+  value = {
+    for key, record in aws_route53_record.private :
     key => record.fqdn
   }
 }
