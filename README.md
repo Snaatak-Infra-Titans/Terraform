@@ -230,10 +230,10 @@ The Terraform Wrapper Code CI POC validates that the same reusable module can be
 
 | **Reference**                  | **Description**                            |
 | ------------------------------ | ------------------------------------------ |
-| Terraform Documentation        | Terraform configuration and CLI reference. |
-| Terraform Modules              | Reusable Terraform module concepts.        |
-| Terraform Validate             | Terraform configuration validation.        |
-| Terraform Plan                 | Terraform execution planning.              |
-| TFLint Documentation           | Terraform linting and static analysis.     |
-| Jenkins Pipeline Documentation | Jenkins CI pipeline implementation.        |
+| [Terraform Documentation](https://developer.hashicorp.com/terraform) | Terraform configuration and CLI reference. |
+| [Terraform Modules](https://developer.hashicorp.com/terraform/language/modules) | Reusable Terraform module concepts. |
+| [Terraform Validate](https://developer.hashicorp.com/terraform/cli/commands/validate) | Terraform configuration validation. |
+| [Terraform Plan](https://developer.hashicorp.com/terraform/cli/commands/plan) | Terraform execution planning. |
+| [TFLint Documentation](https://github.com/terraform-linters/tflint) | Terraform linting and static analysis. |
+| [Jenkins Pipeline Documentation](https://www.jenkins.io/doc/book/pipeline/) | Jenkins CI pipeline implementation. |
 
