@@ -242,12 +242,12 @@ listener_rules = {
 
 # Hosted zones are persistent and are not created or destroyed by this environment wrapper.
 # Set each enable flag to true and provide its zone ID after creating the zones.
-enable_public_route53  = false
-public_route53_zone_id = null
+enable_public_route53  = true
+public_route53_zone_id = "Z10193732GFA7IQJG6O66"
 public_route53_records = ["otms.online", "www.otms.online"]
 
-enable_private_route53  = false
-private_route53_zone_id = null
+enable_private_route53  = true
+private_route53_zone_id = "Z02725882WKXUB55ZATU0"
 private_dns_records     = {}
 
 enable_ssm_instance_profile = true
