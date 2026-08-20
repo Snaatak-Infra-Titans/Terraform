@@ -15,7 +15,7 @@ module "network_skeleton" {
   security_groups        = var.security_groups
   network_acls           = var.network_acls
 
-  enable_alb                = var.enable_alb
+  enable_alb                 = var.enable_alb
   alb_security_group_key     = var.alb_security_group_key
   alb_subnet_keys            = var.alb_subnet_keys
   alb_internal               = var.alb_internal
@@ -26,11 +26,11 @@ module "network_skeleton" {
   certificate_arn            = var.certificate_arn
   ssl_policy                 = var.ssl_policy
 
-  enable_public_route53      = var.enable_public_route53
-  public_route53_zone_id     = var.public_route53_zone_id
-  public_route53_records     = var.public_route53_records
-  enable_private_route53     = var.enable_private_route53
-  private_route53_zone_id    = var.private_route53_zone_id
-  private_dns_records        = var.private_dns_records
+  enable_public_route53       = var.enable_public_route53
+  public_route53_zone_id      = var.public_route53_zone_id
+  public_route53_records      = var.public_route53_records
+  enable_private_route53      = var.enable_private_route53
+  private_route53_zone_id     = var.private_route53_zone_id
+  private_dns_records         = var.private_dns_records
   enable_ssm_instance_profile = var.enable_ssm_instance_profile
 }

@@ -214,14 +214,14 @@ network_acls = {
   }
 }
 
-enable_alb                = true
+enable_alb                 = true
 alb_security_group_key     = "alb"
 alb_subnet_keys            = ["public-subnet-1", "public-subnet-2"]
 alb_internal               = false
 enable_deletion_protection = false
 
 certificate_arn = "arn:aws:acm:us-east-1:738385003498:certificate/c444fe92-a4bd-4eea-967b-72b4dde70ef8"
-ssl_policy     = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+ssl_policy      = "ELBSecurityPolicy-TLS13-1-2-2021-06"
 
 target_groups = {
   frontend     = { port = 3000, protocol = "HTTP", target_type = "instance", health_check_path = "/", health_check_matcher = "200-399" }
