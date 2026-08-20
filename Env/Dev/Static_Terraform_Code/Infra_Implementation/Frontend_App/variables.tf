@@ -6,10 +6,4 @@ variable "ami_id" {
 variable "common_tags" {
   description = "Standard resource tags"
   type        = map(string)
-  default = {
-    Application = "otms"
-    Owner       = "Infra-Titans"
-    Environment = "dev"
-    CostCenter  = "Snaatak"
-  }
 }
