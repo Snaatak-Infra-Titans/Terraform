@@ -1,7 +1,3 @@
-############################################
-# Common Naming and Tags
-############################################
-
 locals {
   name_prefix = "${var.environment}-${var.application}"
 
@@ -11,16 +7,11 @@ locals {
       Environment = var.environment
       Owner       = var.owner
       CostCenter  = var.cost_center
+      ManagedBy   = "Terraform"
     },
     var.tags
   )
-}
 
-############################################
-# Security Group Rules
-############################################
-
-locals {
   security_group_ingress_rules = {
     for item in flatten([
       for sg_key, sg in var.security_groups : [
@@ -44,13 +35,7 @@ locals {
       ]
     ]) : item.key => item
   }
-}
 
-############################################
-# NACL Associations
-############################################
-
-locals {
   nacl_associations = {
     for item in flatten([
       for nacl_key, nacl in var.network_acls : [
