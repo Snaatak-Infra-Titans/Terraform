@@ -220,7 +220,7 @@ alb_subnet_keys            = ["public-subnet-1", "public-subnet-2"]
 alb_internal               = false
 enable_deletion_protection = false
 
-certificate_arn = "arn:aws:acm:us-east-1:738385003498:certificate/be269c4a-5da5-4f55-9299-f7668ef31805"
+certificate_arn = "arn:aws:acm:us-east-1:738385003498:certificate/c444fe92-a4bd-4eea-967b-72b4dde70ef8"
 ssl_policy     = "ELBSecurityPolicy-TLS13-1-2-2021-06"
 
 target_groups = {
