@@ -10,17 +10,7 @@ security_group_id = "sg-0a59207236aaa1692"
 
 application_port = 8080
 
-listener_arn = "<DEV_HTTPS_LISTENER_ARN>"
-
-listener_rule_priority = 100
-
-listener_rule_paths = [
-  "/employee/*",
-  "/attendance/*",
-  "/salary/*"
-]
-
-ami_id = ""
+ami_id = "ami-07883087af6c03650"
 
 instance_type = "t3.small"
 
