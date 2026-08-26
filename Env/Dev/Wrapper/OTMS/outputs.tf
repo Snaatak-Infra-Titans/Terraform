@@ -31,6 +31,16 @@ output "ssm_instance_profile_name" {
   value       = data.aws_iam_instance_profile.ssm.name
 }
 
+output "ansible_ssm_transfer_bucket_name" {
+  description = "Dedicated non-versioned bucket used for temporary Ansible module transfer over SSM."
+  value       = aws_s3_bucket.ansible_ssm_transfer.id
+}
+
+output "database_client_cidr" {
+  description = "Backend application subnet allowed to connect to the database services."
+  value       = local.subnets.backend.cidr_block
+}
+
 output "deployment_phase" {
   description = "Selected deployment phase for this plan or apply."
   value       = var.deployment_phase

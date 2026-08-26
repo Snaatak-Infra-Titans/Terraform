@@ -9,6 +9,90 @@ resource "terraform_data" "account_guardrail" {
   }
 }
 
+resource "aws_s3_bucket" "ansible_ssm_transfer" {
+  bucket        = var.ansible_ssm_transfer_bucket_name
+  force_destroy = true
+
+  tags = merge(
+    local.common_tags,
+    {
+      Name    = var.ansible_ssm_transfer_bucket_name
+      Purpose = "AnsibleSSMTransfer"
+    }
+  )
+
+  depends_on = [terraform_data.account_guardrail]
+}
+
+resource "aws_s3_bucket_public_access_block" "ansible_ssm_transfer" {
+  bucket = aws_s3_bucket.ansible_ssm_transfer.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "ansible_ssm_transfer" {
+  bucket = aws_s3_bucket.ansible_ssm_transfer.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "ansible_ssm_transfer" {
+  bucket = aws_s3_bucket.ansible_ssm_transfer.id
+
+  rule {
+    id     = "expire-temporary-ansible-objects"
+    status = "Enabled"
+
+    filter {}
+
+    expiration {
+      days = 1
+    }
+
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 1
+    }
+  }
+}
+
+data "aws_iam_policy_document" "ansible_ssm_transfer" {
+  statement {
+    sid    = "DenyInsecureTransport"
+    effect = "Deny"
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+
+    actions   = ["s3:*"]
+    resources = [
+      aws_s3_bucket.ansible_ssm_transfer.arn,
+      "${aws_s3_bucket.ansible_ssm_transfer.arn}/*"
+    ]
+
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values   = ["false"]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "ansible_ssm_transfer" {
+  bucket = aws_s3_bucket.ansible_ssm_transfer.id
+  policy = data.aws_iam_policy_document.ansible_ssm_transfer.json
+
+  depends_on = [aws_s3_bucket_public_access_block.ansible_ssm_transfer]
+}
+
 module "network_skeleton" {
   source = "../../../../Modules/Network_Skeleton"
 

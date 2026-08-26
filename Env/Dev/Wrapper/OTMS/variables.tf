@@ -74,6 +74,16 @@ variable "ssm_instance_profile_name" {
   default     = "dev-otms-ssm-instance-profile"
 }
 
+variable "ansible_ssm_transfer_bucket_name" {
+  description = "Dedicated non-versioned S3 bucket used temporarily by the Ansible SSM connection plugin."
+  type        = string
+
+  validation {
+    condition     = can(regex("^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$", var.ansible_ssm_transfer_bucket_name))
+    error_message = "ansible_ssm_transfer_bucket_name must be a valid lowercase S3 bucket name."
+  }
+}
+
 variable "application_instance_type" {
   description = "Instance type used by application Auto Scaling groups."
   type        = string
