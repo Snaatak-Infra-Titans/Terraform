@@ -21,7 +21,7 @@ application_instance_type = "t3.micro"
 database_instance_types = {
   postgresql = "t3.micro"
   redis      = "t3.micro"
-  scylladb   = "t3.small"
+  scylladb   = "t3.medium"
 }
 
 tags = {
