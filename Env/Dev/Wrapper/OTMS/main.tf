@@ -72,7 +72,7 @@ data "aws_iam_policy_document" "ansible_ssm_transfer" {
       identifiers = ["*"]
     }
 
-    actions   = ["s3:*"]
+    actions = ["s3:*"]
     resources = [
       aws_s3_bucket.ansible_ssm_transfer.arn,
       "${aws_s3_bucket.ansible_ssm_transfer.arn}/*"
