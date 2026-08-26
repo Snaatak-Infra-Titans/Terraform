@@ -2,9 +2,10 @@ expected_aws_account_id = "036253061030"
 owner                   = "Infra-Titans"
 cost_center             = "Snaatak"
 
-certificate_arn        = "arn:aws:acm:us-east-1:036253061030:certificate/83fa1207-8938-4873-a7cf-045e73a3877f"
-public_route53_zone_id  = "Z025384421USMW8AP0CZK"
-private_route53_zone_id = "Z02920991W3G787FRHSN9"
+certificate_arn           = "arn:aws:acm:us-east-1:036253061030:certificate/83fa1207-8938-4873-a7cf-045e73a3877f"
+public_route53_zone_id    = "Z025384421USMW8AP0CZK"
+private_route53_zone_id   = "Z02920991W3G787FRHSN9"
+ssm_instance_profile_name = "dev-otms-ssm-instance-profile"
 
 application_amis = {
   attendance   = "ami-0135aa785d1932dbe"

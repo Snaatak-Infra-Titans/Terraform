@@ -9,7 +9,8 @@ This wrapper produces one plan and one state for the complete Dev environment:
 - application ASGs using the previously tested application AMIs;
 - Ubuntu 24.04 standalone database VMs with fixed private IPs;
 - public `otms.online` aliases and association of the existing `internal` private zone;
-- SSM-only instance access through `dev-otms-ssm-instance-profile`.
+- SSM-only instance access through the existing
+  `dev-otms-ssm-instance-profile`.
 
 The frontend target group uses port `3000`, matching the AMI systemd service:
 `npx serve -s build -l 3000`.

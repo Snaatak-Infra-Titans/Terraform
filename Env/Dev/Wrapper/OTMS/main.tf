@@ -38,7 +38,8 @@ module "network_skeleton" {
   enable_private_route53  = true
   private_route53_zone_id = var.private_route53_zone_id
 
-  enable_ssm_instance_profile = true
+  # Reuse the existing account-level profile shown in the approved design.
+  enable_ssm_instance_profile = false
 
   depends_on = [terraform_data.account_guardrail]
 }
@@ -60,7 +61,7 @@ module "application" {
   listener_rule_paths       = each.value.listener_paths
   ami_id                    = each.value.ami_id
   instance_type             = var.application_instance_type
-  iam_instance_profile_name = module.network_skeleton.ssm_instance_profile_name
+  iam_instance_profile_name = data.aws_iam_instance_profile.ssm.name
   desired_capacity          = 1
   min_size                  = 1
   max_size                  = 2
@@ -79,7 +80,7 @@ module "database" {
   subnet_id            = module.network_skeleton.subnet_ids["database"]
   private_ip           = each.value.private_ip
   security_group_ids   = [module.network_skeleton.security_group_ids[each.value.security_group]]
-  iam_instance_profile = module.network_skeleton.ssm_instance_profile_name
+  iam_instance_profile = data.aws_iam_instance_profile.ssm.name
   root_volume_size     = each.value.root_volume_gib
   tags                 = var.tags
 }

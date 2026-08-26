@@ -57,6 +57,12 @@ variable "application_amis" {
   type        = map(string)
 }
 
+variable "ssm_instance_profile_name" {
+  description = "Existing SSM-enabled EC2 instance profile reused by all OTMS instances."
+  type        = string
+  default     = "dev-otms-ssm-instance-profile"
+}
+
 variable "application_instance_type" {
   description = "Instance type used by application Auto Scaling groups."
   type        = string

@@ -8,6 +8,10 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
+data "aws_iam_instance_profile" "ssm" {
+  name = var.ssm_instance_profile_name
+}
+
 data "aws_ami" "ubuntu_2404" {
   most_recent = true
   owners      = ["099720109477"]

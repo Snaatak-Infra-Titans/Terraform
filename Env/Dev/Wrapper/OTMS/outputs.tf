@@ -27,8 +27,8 @@ output "public_urls" {
 }
 
 output "ssm_instance_profile_name" {
-  description = "SSM-only EC2 instance profile used by applications and databases."
-  value       = module.network_skeleton.ssm_instance_profile_name
+  description = "Existing SSM-only EC2 instance profile reused by applications and databases."
+  value       = data.aws_iam_instance_profile.ssm.name
 }
 
 output "application_autoscaling_groups" {
