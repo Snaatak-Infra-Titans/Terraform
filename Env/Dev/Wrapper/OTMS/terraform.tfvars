@@ -1,6 +1,7 @@
 expected_aws_account_id = "036253061030"
 owner                   = "Infra-Titans"
 cost_center             = "Snaatak"
+deployment_phase         = "foundation"
 
 certificate_arn           = "arn:aws:acm:us-east-1:036253061030:certificate/83fa1207-8938-4873-a7cf-045e73a3877f"
 public_route53_zone_id    = "Z025384421USMW8AP0CZK"

@@ -15,6 +15,17 @@ variable "environment" {
   default     = "dev"
 }
 
+variable "deployment_phase" {
+  description = "Controls whether application Auto Scaling groups remain empty for database preparation or launch application instances."
+  type        = string
+  default     = "foundation"
+
+  validation {
+    condition     = contains(["foundation", "application"], var.deployment_phase)
+    error_message = "deployment_phase must be either foundation or application."
+  }
+}
+
 variable "application" {
   description = "Application name used in resource names and tags."
   type        = string

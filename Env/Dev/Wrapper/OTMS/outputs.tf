@@ -31,9 +31,24 @@ output "ssm_instance_profile_name" {
   value       = data.aws_iam_instance_profile.ssm.name
 }
 
+output "deployment_phase" {
+  description = "Selected deployment phase for this plan or apply."
+  value       = var.deployment_phase
+}
+
+output "application_capacity" {
+  description = "Application Auto Scaling group capacity selected by the deployment phase."
+  value       = local.application_capacity
+}
+
 output "application_autoscaling_groups" {
   description = "Application name to Auto Scaling group name mapping."
   value       = { for name, application in module.application : name => application.autoscaling_group_name }
+}
+
+output "database_instance_ids" {
+  description = "Database name to EC2 instance ID mapping for SSM-based Ansible inventory."
+  value       = { for name, database in module.database : name => database.instance_id }
 }
 
 output "database_private_ips" {

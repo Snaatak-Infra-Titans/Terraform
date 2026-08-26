@@ -62,9 +62,9 @@ module "application" {
   ami_id                    = each.value.ami_id
   instance_type             = var.application_instance_type
   iam_instance_profile_name = data.aws_iam_instance_profile.ssm.name
-  desired_capacity          = 1
-  min_size                  = 1
-  max_size                  = 2
+  desired_capacity          = local.application_capacity.desired
+  min_size                  = local.application_capacity.min
+  max_size                  = local.application_capacity.max
 }
 
 module "database" {

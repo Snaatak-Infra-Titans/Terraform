@@ -1,4 +1,14 @@
 locals {
+  application_capacity = var.deployment_phase == "application" ? {
+    desired = 1
+    min     = 1
+    max     = 2
+  } : {
+    desired = 0
+    min     = 0
+    max     = 2
+  }
+
   common_tags = merge(
     {
       Application = var.application
