@@ -9,9 +9,9 @@ private_route53_zone_id   = "Z02920991W3G787FRHSN9"
 ssm_instance_profile_name = "dev-otms-ssm-instance-profile"
 
 application_amis = {
-  attendance   = "ami-0135aa785d1932dbe"
+  attendance   = "ami-0c6514a2163fe82c2"
   notification = "ami-07883087af6c03650"
-  salary       = "ami-04d65ee2125cec9bb"
+  salary       = "ami-07c5f7c1a4a9dcb98"
   employee     = "ami-04eb19e6c6c1fa284"
   frontend     = "ami-01fb6ae81a5bf5665"
 }
