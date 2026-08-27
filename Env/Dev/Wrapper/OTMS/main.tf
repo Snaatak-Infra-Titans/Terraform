@@ -132,18 +132,18 @@ module "application" {
   for_each = local.application_services
   source   = "../../../../Modules/Auto_Scaling"
 
-  environment               = var.environment
-  application               = each.key
-  common_tags               = local.common_tags
-  vpc_id                    = module.network_skeleton.vpc_id
-  subnet_ids                = [module.network_skeleton.subnet_ids[each.value.subnet_key]]
-  security_group_id         = module.network_skeleton.security_group_ids[each.value.security_group]
-  application_port          = each.value.port
-  health_check_path         = each.value.health_check_path
-  listener_arn              = module.network_skeleton.https_listener_arn
-  listener_rule_priority    = each.value.listener_priority
-  listener_rule_paths       = each.value.listener_paths
-  ami_id                    = each.value.ami_id
+  environment            = var.environment
+  application            = each.key
+  common_tags            = local.common_tags
+  vpc_id                 = module.network_skeleton.vpc_id
+  subnet_ids             = [module.network_skeleton.subnet_ids[each.value.subnet_key]]
+  security_group_id      = module.network_skeleton.security_group_ids[each.value.security_group]
+  application_port       = each.value.port
+  health_check_path      = each.value.health_check_path
+  listener_arn           = module.network_skeleton.https_listener_arn
+  listener_rule_priority = each.value.listener_priority
+  listener_rule_paths    = each.value.listener_paths
+  ami_id                 = each.value.ami_id
   instance_type = lookup(
     var.application_instance_type_overrides,
     each.key,
