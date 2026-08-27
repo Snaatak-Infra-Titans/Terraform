@@ -144,7 +144,7 @@ module "application" {
   listener_rule_priority    = each.value.listener_priority
   listener_rule_paths       = each.value.listener_paths
   ami_id                    = each.value.ami_id
-  instance_type             = lookup(
+  instance_type = lookup(
     var.application_instance_type_overrides,
     each.key,
     var.application_instance_type
