@@ -144,7 +144,11 @@ module "application" {
   listener_rule_priority    = each.value.listener_priority
   listener_rule_paths       = each.value.listener_paths
   ami_id                    = each.value.ami_id
-  instance_type             = var.application_instance_type
+  instance_type             = lookup(
+    var.application_instance_type_overrides,
+    each.key,
+    var.application_instance_type
+  )
   iam_instance_profile_name = data.aws_iam_instance_profile.ssm.name
   desired_capacity          = local.application_capacity.desired
   min_size                  = local.application_capacity.min

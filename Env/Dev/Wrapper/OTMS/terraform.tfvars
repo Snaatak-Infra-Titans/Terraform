@@ -19,6 +19,10 @@ application_amis = {
 
 application_instance_type = "t3.micro"
 
+application_instance_type_overrides = {
+  notification = "t3.medium"
+}
+
 database_instance_types = {
   postgresql = "t3.micro"
   redis      = "t3.micro"

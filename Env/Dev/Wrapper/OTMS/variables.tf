@@ -90,6 +90,12 @@ variable "application_instance_type" {
   default     = "t3.micro"
 }
 
+variable "application_instance_type_overrides" {
+  description = "Optional application-specific instance types that override application_instance_type."
+  type        = map(string)
+  default     = {}
+}
+
 variable "database_instance_types" {
   description = "Instance type for each standalone database VM."
   type        = map(string)
