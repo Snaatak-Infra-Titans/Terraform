@@ -122,7 +122,7 @@ module "network_skeleton" {
   enable_private_route53  = true
   private_route53_zone_id = var.private_route53_zone_id
 
-  # Reuse the existing account-level profile shown in the approved design.
+  
   enable_ssm_instance_profile = false
 
   depends_on = [terraform_data.account_guardrail]
