@@ -1,4 +1,4 @@
-# Pin the AWS provider at the Dev root so clean CI agents use the tested release.
+
 terraform {
   required_version = ">= 1.10.0, < 2.0.0"
 
